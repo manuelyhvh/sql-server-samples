@@ -121,7 +121,7 @@ Our connection string for our application now contains `Column Encryption Settin
 ### Row Level Security (RLS) 
 
 #### Login to the application 
-Sign in using (Rachel@contoso.com/Password1!) or (alice@contoso.com/Password1!)
+Sign in using (Rachel@contoso.com/Password!1) or (alice@contoso.com/Password!1)
 
 #### Enable Row Level Security (RLS) 
 + Connect to your database using SSMS: 
