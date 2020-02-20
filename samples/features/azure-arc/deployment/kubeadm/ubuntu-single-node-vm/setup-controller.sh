@@ -208,9 +208,9 @@ for i in $(seq 1 $PV_COUNT); do
 
   vol="vol$i"
 
-  sudo mkdir -p /mnt/local-storage/$vol
+  sudo mkdir -p /azurearc/local-storage/$vol
 
-  sudo mount --bind /mnt/local-storage/$vol /mnt/local-storage/$vol
+  sudo mount --bind /azurearc/local-storage/$vol /azurearc/local-storage/$vol
 
 done
 echo "Kubernetes pre-requisites have been completed." 
