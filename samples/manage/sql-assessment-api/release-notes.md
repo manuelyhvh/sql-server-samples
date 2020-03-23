@@ -8,6 +8,32 @@ Download: [SMO NuGet Package](https://www.nuget.org/packages/Microsoft.SqlServer
 
 You can use GitHub issues to provide feedback to the product team.
 
+## March 2020 - 21.1.18221
+
+Version: SqlServer module 21.1.18221, SqlManagementObjects (SMO) package wasn't updated
+
+### What's new
+
+- Platform, Name, and engineEdition fields can now contain usual comma-separated lists ("platform": \["Windows", "Linux"\]), not only regular expressions ("platform": "/Windows|Linux/")
+- Added rule "Database files have a growth ratio set in percentage"
+- Added rule "STRelate and STAsBinary functions unexpected results due to TF 6533 enabled"
+- Added rule "Database Integrity Checks"
+- Added rule "Direct Catalog Updates"
+- Added rule "Data Purity Check"
+- Added rule "MaxDOP should be less or equal number of CPUs"
+- Added rule "MaxDOP should equal number of CPUs for single NUMA node"
+- Added rule "MaxDOP should be less 8 for single NUMA node"
+- Added rule "MaxDOP should be according to processor count ratio"
+- Added rule "Pending disk I/O requests"
+- Added rule "Index Fragmentation"
+- Added rule "Untrusted Constraints"
+- Added rule "Statistics need to be updated"
+
+### Bug fixes
+
+- Wrong help link in XTPHashAvgChainBuckets rule
+- Occasional error "There is already an open DataReader associated with this Command which must be closed first" on PowerShell 7
+
 ## December 2019 - 21.1.18218
 
 Version: SqlServer module 21.1.18206, SqlManagementObjects (SMO) package wasn't updated
@@ -15,7 +41,7 @@ Version: SqlServer module 21.1.18206, SqlManagementObjects (SMO) package wasn't 
 ### What's new
 
 - Added .DLL with types to get rid of recompilation of CLR probes assemblies every time when new version of solution is released
-- Updated Deprecated Fetures rules and Index rules to not run them against system DBs
+- Updated Deprecated Features rules and Index rules to not run them against system DBs
 - Updated rules High CPU Usage: kept only one, added overridable threshold
 - Updated some rules to not run them against SQL Server 2008
 - Added timestamp property to rule object
@@ -52,5 +78,3 @@ Version: SqlServer module 21.1.18206, SqlManagementObjects (SMO) package 150.208
 - Invoke-SqlAssessment may crash with message "Missing data item 'FilterDefinition'" on some databases. If you face this issue, create a customization to disable the RedundantIndexes rule to disable it. See README.md to learn how to disable rules. We'll fix this issue with the next release.
 
 - Assemblies providing methods for CLR probes should be recompiled for each new release of SQL Assessment API.
-
-
