@@ -1,6 +1,6 @@
-{
+﻿{
   "schemaVersion": "1.0",
-  "version": "1.0.10",
+  "version": "1.0.18",
   "name": "Microsoft Ruleset",
   "rules": [
     {
@@ -8,13 +8,13 @@
       "itemType": "definition",
       "target": {
         "type": "Database",
-        "platform": "/^(Windows|Linux)$/",
+        "platform": ["Windows", "Linux"],
         "engineEdition": "OnPremises, ManagedInstance",
         "version": "[11.0,)"
       },
       "tags": [ "DefaultRuleset", "Performance", "Statistics", "QueryOptimizer" ],
       "displayName": "Auto-Create Statistics should be on",
-      "description": "The Query Optimizer determines whether an index is useful for a specific query by evaluating the stored statistics. If the statistics become out of date and significant changes have occurred against the underlying data, this can result in less than optimal query performance. In most cases, it's best to let SQL Server maintain the statistics. If you turn 'Auto Create Stats' and 'Auto Update Stats' off, then it is up to you to keep the statistics up-to-date somehow. Failure to do so will lead to poor query performance. Most applications should have these options ON.\n \n When the Auto Create statistics setting is ON, the Query Optimizer creates statistics on one or more columns of a table or an indexed view, as necessary, to improve query plans and query performance.",
+      "description": "The Query Optimizer determines whether an index is useful for a specific query by evaluating the stored statistics. If the statistics become out of date and significant changes have occurred against the underlying data, this can result in less than optimal query performance. In most cases, it's best to let SQL Server maintain the statistics. If you turn 'Auto Create Stats' and 'Auto Update Stats' off, then it is up to you to keep the statistics up-to-date somehow. Failure to do so will lead to poor query performance. Most applications should have these options ON. When the Auto Create statistics setting is ON, the Query Optimizer creates statistics on one or more columns of a table or an indexed view, as necessary, to improve query plans and query performance.",
       "message": "Turn Auto-Create Statistics option on to improve query performance.",
       "helpLink": "https://docs.microsoft.com/sql/relational-databases/statistics/statistics#CreateStatistics",
       "probes": [ "DatabaseConfiguration" ],
@@ -25,13 +25,13 @@
       "itemType": "definition",
       "target": {
         "type": "Database",
-        "platform": "/^(Windows|Linux)$/",
+        "platform": ["Windows", "Linux"],
         "engineEdition": "OnPremises, ManagedInstance",
         "version": "[11.0,)"
       },
       "tags": [ "DefaultRuleset", "Performance", "Statistics", "QueryOptimizer" ],
       "displayName": "Auto-Update Statistics should be on",
-      "description": "The Query Optimizer determines whether an index is useful for a specific query by evaluating the stored statistics. If the statistics become out of date and significant changes have occurred against the underlying data, this can result in less than optimal query performance. In most cases, it's best to let SQL Server maintain the statistics. If you turn 'Auto Create Stats' and 'Auto Update Stats' off, then it is up to you to keep the statistics up-to-date somehow. Failure to do so will lead to poor query performance. Most applications should have these options ON.\n \n When the Auto Update Statistics setting is ON, the Query Optimizer updates statistics when they are used by a query and when they might be out-of-date. Statistics become out-of-date after insert, update, delete, or merge operations change the data distribution in the table or indexed view. The Query Optimizer determines when statistics might be out-of-date by counting the number of data modifications since the last statistics update and comparing the number of modifications to a threshold. The threshold is based on the number of rows in the table or indexed view. The Query Optimizer checks for out-of-date statistics before compiling a query and before executing a cached query plan. Before compiling a query, the Query Optimizer uses the columns, tables, and indexed views in the query predicate to determine which statistics might be out-of-date. Before executing a cached query plan, the Database Engine verifies that the query plan references up-to-date statistics. The AUTO_UPDATE_STATISTICS option applies to statistics created for indexes, single-columns in query predicates, and statistics that are created by using the CREATE STATISTICS statement. This option also applies to filtered statistics.",
+      "description": "The Query Optimizer determines whether an index is useful for a specific query by evaluating the stored statistics. If the statistics become out of date and significant changes have occurred against the underlying data, this can result in less than optimal query performance. In most cases, it's best to let SQL Server maintain the statistics. If you turn 'Auto Create Stats' and 'Auto Update Stats' off, then it is up to you to keep the statistics up-to-date somehow. Failure to do so will lead to poor query performance. Most applications should have these options ON. When the Auto Update Statistics setting is ON, the Query Optimizer updates statistics when they are used by a query and when they might be out-of-date. Statistics become out-of-date after insert, update, delete, or merge operations change the data distribution in the table or indexed view. The Query Optimizer determines when statistics might be out-of-date by counting the number of data modifications since the last statistics update and comparing the number of modifications to a threshold. The threshold is based on the number of rows in the table or indexed view. The Query Optimizer checks for out-of-date statistics before compiling a query and before executing a cached query plan. Before compiling a query, the Query Optimizer uses the columns, tables, and indexed views in the query predicate to determine which statistics might be out-of-date. Before executing a cached query plan, the Database Engine verifies that the query plan references up-to-date statistics. The AUTO_UPDATE_STATISTICS option applies to statistics created for indexes, single-columns in query predicates, and statistics that are created by using the CREATE STATISTICS statement. This option also applies to filtered statistics.",
       "message": "Turn Auto-Update Statistics option on to improve query performance.",
       "helpLink": "https://docs.microsoft.com/sql/relational-databases/statistics/statistics#UpdateStatistics",
       "probes": [ "DatabaseConfiguration" ],
@@ -43,9 +43,9 @@
       "target": {
         "type": "Database",
         "version": "[13.0,)",
-        "platform": "/^(Windows|Linux)$/",
+        "platform": ["Windows", "Linux"],
         "engineEdition": "OnPremises, ManagedInstance",
-        "name": { "not": "/^(master|tempdb|model)$/" }
+        "name": { "not": ["master", "tempdb", "model"] }
       },
       "tags": [ "DefaultRuleset", "Performance", "QueryStore", "Statistics" ],
       "displayName": "Query Store should be active",
@@ -67,7 +67,7 @@
           "[12.0.2480,13.0)",
           "[13.0,)"
         ],
-        "platform": "/^(Windows|Linux)$/",
+        "platform": ["Windows", "Linux"],
         "engineEdition": "OnPremises"
       },
       "tags": [ "DefaultRuleset", "TraceFlag", "Memory", "Performance" ],
@@ -86,7 +86,7 @@
       "itemType": "definition",
       "target": {
         "type": "Server",
-        "platform": "/^(Windows|Linux)$/",
+        "platform": ["Windows", "Linux"],
         "engineEdition": "OnPremises",
         "version": "[11.0,)"
       },
@@ -152,7 +152,7 @@
       "itemType": "definition",
       "target": {
         "type": "Server",
-        "platform": "/^(Windows|Linux)$/",
+        "platform": ["Windows", "Linux"],
         "engineEdition": "OnPremises",
         "version": "[11.0,)"
       },
@@ -286,7 +286,7 @@
       "itemType": "definition",
       "target": {
         "type": "Server",
-        "platform": "/^(Windows|Linux)$/",
+        "platform": ["Windows", "Linux"],
         "engineEdition": "OnPremises",
         "version": "[11.0,)"
       },
@@ -308,7 +308,7 @@
       "itemType": "definition",
       "target": {
         "type": "Server",
-        "platform": "/^(Windows|Linux)$/",
+        "platform": ["Windows", "Linux"],
         "engineEdition": "OnPremises",
         "version": "[11.0,)"
       },
@@ -329,7 +329,7 @@
       "itemType": "definition",
       "target": {
         "type": "Server",
-        "platform": "/^(Windows|Linux)$/",
+        "platform": ["Windows", "Linux"],
         "engineEdition": "OnPremises",
         "version": "[11.0,)"
       },
@@ -351,7 +351,7 @@
       "itemType": "definition",
       "target": {
         "type": "Server",
-        "platform": "/^(Windows|Linux)$/",
+        "platform": ["Windows", "Linux"],
         "engineEdition": "OnPremises",
         "version": "[11.0,)"
       },
@@ -372,7 +372,7 @@
       "itemType": "definition",
       "target": {
         "type": "Server",
-        "platform": "/^(Windows|Linux)$/",
+        "platform": ["Windows", "Linux"],
         "engineEdition": "OnPremises",
         "version": "[11.0,)"
       },
@@ -427,7 +427,7 @@
       "itemType": "definition",
       "target": {
         "type": "Server",
-        "platform": "/^(Windows|Linux)$/",
+        "platform": ["Windows", "Linux"],
         "engineEdition": "OnPremises",
         "version": "[11.0,)"
       },
@@ -490,7 +490,7 @@
       "target": {
         "type": "Server",
         "version": "[11.0,)",
-        "platform": "/^(Windows|Linux)$/",
+        "platform": ["Windows", "Linux"],
         "engineEdition": "OnPremises"
       },
       "tags": [ "DefaultRuleset", "TraceFlag", "Performance", "Indexes" ],
@@ -511,7 +511,7 @@
       "itemType": "definition",
       "target": {
         "type": "Server",
-        "platform": "/^(Windows|Linux)$/",
+        "platform": ["Windows", "Linux"],
         "engineEdition": "OnPremises",
         "version": "[11.0,)"
       },
@@ -568,7 +568,7 @@
       "itemType": "definition",
       "target": {
         "type": "Server",
-        "platform": "/^(Windows|Linux)$/",
+        "platform": ["Windows", "Linux"],
         "engineEdition": "OnPremises, ManagedInstance",
         "version": "[11.0,)"
       },
@@ -590,7 +590,7 @@
       "itemType": "definition",
       "target": {
         "type": "Server",
-        "platform": "/^(Windows|Linux)$/",
+        "platform": ["Windows", "Linux"],
         "engineEdition": "OnPremises, ManagedInstance",
         "version": "[11.0,)"
       },
@@ -612,7 +612,7 @@
       "itemType": "definition",
       "target": {
         "type": "Server",
-        "platform": "/^(Windows|Linux)$/",
+        "platform": ["Windows", "Linux"],
         "engineEdition": "OnPremises",
         "version": "[11.0,)"
       },
@@ -632,7 +632,7 @@
       "itemType": "definition",
       "target": {
         "type": "Server",
-        "platform": "/^(Windows|Linux)$/",
+        "platform": ["Windows", "Linux"],
         "engineEdition": "OnPremises",
         "version": "[11.0,)"
       },
@@ -652,7 +652,7 @@
       "itemType": "definition",
       "target": {
         "type": "Server",
-        "platform": "/^(Windows|Linux)$/",
+        "platform": ["Windows", "Linux"],
         "engineEdition": "OnPremises",
         "version": "[11.0,)"
       },
@@ -672,7 +672,7 @@
       "itemType": "definition",
       "target": {
         "type": "Server",
-        "platform": "/^(Windows|Linux)$/",
+        "platform": ["Windows", "Linux"],
         "engineEdition": "OnPremises",
         "version": "[11.0,)"
       },
@@ -712,7 +712,7 @@
       "itemType": "definition",
       "target": {
         "type": "Server",
-        "platform": "/^(Windows|Linux)$/",
+        "platform": ["Windows", "Linux"],
         "engineEdition": "OnPremises",
         "version": "[11.0,)"
       },
@@ -732,7 +732,7 @@
       "itemType": "definition",
       "target": {
         "type": "Server",
-        "platform": "/^(Windows|Linux)$/",
+        "platform": ["Windows", "Linux"],
         "engineEdition": "OnPremises",
         "version": "[11.0,)"
       },
@@ -762,7 +762,7 @@
       "itemType": "definition",
       "target": {
         "type": "Server",
-        "platform": "/^(Windows|Linux)$/",
+        "platform": ["Windows", "Linux"],
         "engineEdition": "OnPremises",
         "version": "[11.0,)"
       },
@@ -791,7 +791,7 @@
       "itemType": "definition",
       "target": {
         "type": "Server",
-        "platform": "/^(Windows|Linux)$/",
+        "platform": ["Windows", "Linux"],
         "engineEdition": "OnPremises",
         "version": "[11.0,)"
       },
@@ -820,7 +820,7 @@
       "itemType": "definition",
       "target": {
         "type": "Server",
-        "platform": "/^(Windows|Linux)$/",
+        "platform": ["Windows", "Linux"],
         "engineEdition": "OnPremises",
         "version": "[11.0,)"
       },
@@ -852,7 +852,7 @@
       "itemType": "definition",
       "target": {
         "type": "Server",
-        "platform": "/^(Windows|Linux)$/",
+        "platform": ["Windows", "Linux"],
         "engineEdition": "OnPremises",
         "version": "[11.0,)"
       },
@@ -872,7 +872,7 @@
       "target": {
         "type": "Server",
         "version": "[11.0, 14.0)",
-        "platform": "/^(Windows|Linux)$/",
+        "platform": ["Windows", "Linux"],
         "engineEdition": "OnPremises"
       },
       "tags": [ "DefaultRuleset", "TraceFlag", "QueryOptimizer" ],
@@ -1034,7 +1034,7 @@
       "target": {
         "type": "Server",
         "version": "[13.0.4001,15.0)",
-        "platform": "/^(Windows|Linux)$/",
+        "platform": ["Windows", "Linux"],
         "engineEdition": "OnPremises"
       },
       "tags": [ "DefaultRuleset", "TraceFlag", "Performance" ],
@@ -1151,8 +1151,8 @@
       "itemType": "definition",
       "target": {
         "type": "Server",
-        "platform": "/^(Windows|Linux)$/",
-        "name": { "not": "/^(master|tempdb|model|msdb)$/" },
+        "platform": ["Windows", "Linux"],
+        "name": { "not": ["master", "tempdb", "model", "msdb"] },
         "engineEdition": "OnPremises, ManagedInstance",
         "version": "[11.0,)"
       },
@@ -1171,7 +1171,7 @@
       "itemType": "definition",
       "target": {
         "type": "Server",
-        "platform": "/^(Windows|Linux)$/",
+        "platform": ["Windows", "Linux"],
         "engineEdition": "OnPremises, ManagedInstance",
         "version": "[11.0,)"
       },
@@ -1189,7 +1189,7 @@
       "itemType": "definition",
       "target": {
         "type": "Server",
-        "platform": "/^(Windows|Linux)$/",
+        "platform": ["Windows", "Linux"],
         "engineEdition": "OnPremises",
         "version": "[11.0,)"
       },
@@ -1207,7 +1207,7 @@
       "itemType": "definition",
       "target": {
         "type": "Server",
-        "platform": "/^(Windows|Linux)$/",
+        "platform": ["Windows", "Linux"],
         "engineEdition": "OnPremises",
         "version": "[11.0,)"
       },
@@ -1225,7 +1225,7 @@
       "itemType": "definition",
       "target": {
         "type": "Server",
-        "platform": "/^(Windows|Linux)$/",
+        "platform": ["Windows", "Linux"],
         "engineEdition": "OnPremises, ManagedInstance",
         "version": "[11.0,)"
       },
@@ -1243,7 +1243,7 @@
       "itemType": "definition",
       "target": {
         "type": "Server",
-        "platform": "/^(Windows|Linux)$/",
+        "platform": ["Windows", "Linux"],
         "engineEdition": "OnPremises, ManagedInstance",
         "version": "[11.0,)"
       },
@@ -1261,7 +1261,7 @@
       "itemType": "definition",
       "target": {
         "type": "Database",
-        "platform": "/^(Windows|Linux)$/",
+        "platform": ["Windows", "Linux"],
         "engineEdition": "OnPremises, ManagedInstance",
         "version": "[11.0,)"
       },
@@ -1279,7 +1279,7 @@
       "itemType": "definition",
       "target": {
         "type": "Server",
-        "platform": "/^(Windows|Linux)$/",
+        "platform": ["Windows", "Linux"],
         "engineEdition": "OnPremises, ManagedInstance",
         "version": "[11.0,)"
       },
@@ -1297,8 +1297,8 @@
       "itemType": "definition",
       "target": {
         "type": "Database",
-        "platform": "/^(Windows|Linux)$/",
-        "name": { "not": "/^(master|model|msdb|tempdb)$/" },
+        "platform": ["Windows", "Linux"],
+        "name": { "not": ["master", "model", "msdb", "tempdb"] },
         "engineEdition": "OnPremises, ManagedInstance",
         "version": "[11.0,)"
       },
@@ -1315,7 +1315,7 @@
       "itemType": "definition",
       "target": {
         "type": "Database",
-        "platform": "/^(Windows|Linux)$/",
+        "platform": ["Windows", "Linux"],
         "engineEdition": "OnPremises, ManagedInstance",
         "version": "[11.0,)"
       },
@@ -1332,7 +1332,7 @@
       "itemType": "definition",
       "target": {
         "type": "Server",
-        "platform": "/^(Windows|Linux)$/",
+        "platform": ["Windows", "Linux"],
         "engineEdition": "OnPremises",
         "version": "[11.0,)"
       },
@@ -1340,7 +1340,7 @@
       "displayName": "SQL Server instance is not up to date",
       "description": "On an installed instance of SQL Server, we recommend that you apply the latest security updates and critical updates including general distribution releases (GDRs), service packs (SPs), and cumulative updates (CUs).",
       "message": "Product version @{ProductVersion} is not the latest available. We recommend keeping your SQL Server up to date and install Service Packs and Cumulative Updates as they are released.",
-      "helpLink": "https://support.microsoft.com/help/321185/how-to-determine-the-version-edition-and-update-level-of-sql-server-an, https://docs.microsoft.com/sql/database-engine/install-windows/install-sql-server-servicing-updates",
+      "helpLink": "https://support.microsoft.com/help/321185/how-to-determine-the-version-edition-and-update-level-of-sql-server-an",
       "probes": [ "SQLServerVersion" ]
     },
     {
@@ -1357,7 +1357,7 @@
       },
       "displayName": "SQL Server instance is up to date",
       "message": "Product version @{ProductVersion} is the latest available.",
-      "helpLink": "https://support.microsoft.com/help/321185/how-to-determine-the-version-edition-and-update-level-of-sql-server-an, https://docs.microsoft.com/sql/database-engine/install-windows/install-sql-server-servicing-updates",
+      "helpLink": "https://support.microsoft.com/help/321185/how-to-determine-the-version-edition-and-update-level-of-sql-server-an",
       "condition": true
     },
     {
@@ -1366,8 +1366,8 @@
       "target": {
         "type": "Database",
         "engineEdition": "OnPremises, ManagedInstance",
-        "platform": "/^(Windows|Linux)$/",
-        "name": { "not": "/^(master|model|msdb|tempdb)$/" },
+        "platform": ["Windows", "Linux"],
+        "name": { "not": ["master", "model", "msdb", "tempdb"] },
         "version": "[11.0,)"
       },
       "tags": [ "DefaultRuleset", "Performance", "Indexes" ],
@@ -1384,8 +1384,8 @@
       "itemType": "definition",
       "target": {
         "type": "Database",
-        "platform": "/^(Windows|Linux)$/",
-        "name": { "not": "/^(master|model|msdb|tempdb)$/" },
+        "platform": ["Windows", "Linux"],
+        "name": { "not": ["master", "model", "msdb", "tempdb"] },
         "engineEdition": "OnPremises, ManagedInstance",
         "version": "[11.0,)"
       },
@@ -1402,8 +1402,8 @@
       "itemType": "definition",
       "target": {
         "type": "Database",
-        "name": { "not": "/^(model|tempdb)$/" },
-        "platform": "/^(Windows|Linux)$/",
+        "name": { "not": ["model", "tempdb"] },
+        "platform": ["Windows", "Linux"],
         "engineEdition": "OnPremises",
         "version": "[11.0,)"
       },
@@ -1428,8 +1428,8 @@
       "itemType": "definition",
       "target": {
         "type": "Database",
-        "name": { "not": "/^(master|model|msdb|tempdb)$/" },
-        "platform": "/^(Windows|Linux)$/",
+        "name": { "not": ["master", "model", "msdb", "tempdb"] },
+        "platform": ["Windows", "Linux"],
         "engineEdition": "OnPremises",
         "version": "[11.0,)"
       },
@@ -1451,7 +1451,7 @@
       "itemType": "definition",
       "target": {
         "type": "Database",
-        "platform": "/^(Windows|Linux)$/",
+        "platform": ["Windows", "Linux"],
         "engineEdition": "OnPremises, ManagedInstance",
         "version": "[11.0,)"
       },
@@ -1472,9 +1472,9 @@
       "itemType": "definition",
       "target": {
         "type": "Database",
-        "platform": "/^(Windows|Linux)$/",
+        "platform": ["Windows", "Linux"],
         "engineEdition": "OnPremises",
-        "name": { "not": "/^(master|msdb|tempdb)$/" },
+        "name": { "not": ["master", "msdb", "tempdb"] },
         "version": "[11.0,)"
       },
       "tags": [ "DefaultRuleset", "Performance", "DBConfiguration" ],
@@ -1492,14 +1492,14 @@
       "itemType": "definition",
       "target": {
         "type": "Database",
-        "platform": "/^(Windows|Linux)$/",
+        "platform": ["Windows", "Linux"],
         "engineEdition": "OnPremises, ManagedInstance",
-        "name": { "not": "/^(master|msdb|tempdb)$/" },
+        "name": { "not": ["master", "msdb", "tempdb"] },
         "version": "[11.0,)"
       },
       "tags": [ "DefaultRuleset", "DBConfiguration", "Performance" ],
       "displayName": "Auto Shrink Option should be OFF",
-      "description": "Shrinking databases is the fastest way to achieve fragmentation.  SQL Server goes to the last page in the database, moves it to the first free available space, and then repeats the process again. This shuffles the deck, putting your pages out of order.",
+      "description": "Shrinking databases is the fastest way to achieve fragmentation. SQL Server goes to the last page in the database, moves it to the first free available space, and then repeats the process again. This shuffles the deck, putting your pages out of order.",
       "message": "Set AUTO_SHRINK option to OFF",
       "helpLink": "https://blogs.msdn.microsoft.com/buckwoody/2009/07/01/sql-server-best-practices-auto-shrink-should-be-off",
       "level": "Warning",
@@ -1512,9 +1512,9 @@
       "itemType": "definition",
       "target": {
         "type": "Database",
-        "platform": "/^(Windows|Linux)$/",
+        "platform": ["Windows", "Linux"],
         "engineEdition": "OnPremises",
-        "name": { "not": "/^(master|msdb|tempdb)$/" },
+        "name": { "not": ["master", "msdb", "tempdb"] },
         "version": "[11.0,)"
       },
       "tags": [ "DefaultRuleset", "DBConfiguration", "DataIntegrity" ],
@@ -1532,9 +1532,9 @@
       "itemType": "definition",
       "target": {
         "type": "Database",
-        "platform": "/^(Windows|Linux)$/",
+        "platform": ["Windows", "Linux"],
         "engineEdition": "OnPremises, ManagedInstance",
-        "name": { "not": "/^(master|msdb|tempdb)$/" },
+        "name": { "not": ["master", "msdb", "tempdb"] },
         "version": "[11.0,)"
       },
       "tags": [ "DefaultRuleset", "DBConfiguration", "Security" ],
@@ -1552,10 +1552,10 @@
       "itemType": "definition",
       "target": {
         "type": "Database",
-        "platform": "/^(Windows|Linux)$/",
+        "platform": ["Windows", "Linux"],
         "engineEdition": "OnPremises, ManagedInstance",
         "version": "[12.0,)",
-        "name": { "not": "/^(master|msdb|tempdb)$/" }
+        "name": { "not": ["master", "msdb", "tempdb"] }
       },
       "tags": [ "DefaultRuleset", "DBConfiguration", "Statistics", "Performance" ],
       "displayName": "Incremental option of auto stats should be ON",
@@ -1572,9 +1572,9 @@
       "itemType": "definition",
       "target": {
         "type": "Database",
-        "platform": "/^(Windows|Linux)$/",
+        "platform": ["Windows", "Linux"],
         "engineEdition": "OnPremises",
-        "name": { "not": "/^(master|msdb|tempdb)$/" },
+        "name": { "not": ["master", "msdb", "tempdb"] },
         "version": "[11.0,)"
       },
       "tags": [ "DefaultRuleset", "DBConfiguration", "Security" ],
@@ -1592,14 +1592,14 @@
       "itemType": "definition",
       "target": {
         "type": "Database",
-        "platform": "/^(Windows|Linux)$/",
+        "platform": ["Windows", "Linux"],
         "engineEdition": "OnPremises, ManagedInstance",
-        "name": { "not": "/^(master|msdb|tempdb)$/" },
+        "name": { "not": ["master", "msdb", "tempdb"] },
         "version": "[11.0,)"
       },
       "tags": [ "DefaultRuleset", "DBConfiguration", "Performance", "QueryOptimizer" ],
       "displayName": "PARAMETERIZATION should be SIMPLE",
-      "description": "When the PARAMETERIZATION database option is set to SIMPLE, the SQL Server query optimizer may choose to parameterize the queries. This means that any literal values that are contained in a query are substituted with parameters. This process is referred to as simple parameterization. When SIMPLE parameterization is in effect, you cannot control which queries are parameterized and which queries are not. However, you can specify that all queries in a database be parameterized by setting the PARAMETERIZATION database option to FORCED.\n \n Regardless of whether you have a Plan-Stability or not, SQL Server will always auto parameterize your SQL Statements, and reuse the cached execution plan over and over again. It doesn't matter how terrible the execution plan is. Therefore you have to know in exact detail the shape of your execution plans, and whether they can lead to some performance related problems.",
+      "description": "When the PARAMETERIZATION database option is set to SIMPLE, the SQL Server query optimizer may choose to parameterize the queries. This means that any literal values that are contained in a query are substituted with parameters. This process is referred to as simple parameterization. When SIMPLE parameterization is in effect, you cannot control which queries are parameterized and which queries are not. However, you can specify that all queries in a database be parameterized by setting the PARAMETERIZATION database option to FORCED. Regardless of whether you have a Plan-Stability or not, SQL Server will always auto parameterize your SQL Statements, and reuse the cached execution plan over and over again. It doesn't matter how terrible the execution plan is. Therefore you have to know in exact detail the shape of your execution plans, and whether they can lead to some performance related problems.",
       "message": "Set PARAMETERIZATION = SIMPLE and use forced parameterization only on a certain class of queries, instead of all queries",
       "helpLink": "https://docs.microsoft.com/sql/relational-databases/performance/specify-query-parameterization-behavior-by-using-plan-guides",
       "level": "Warning",
@@ -1612,7 +1612,7 @@
       "itemType": "definition",
       "target": {
         "type": "Server",
-        "platform": "/^(Windows|Linux)$/",
+        "platform": ["Windows", "Linux"],
         "engineEdition": "OnPremises",
         "version": "[11.0,)"
       },
@@ -1631,7 +1631,7 @@
       "itemType": "definition",
       "target": {
         "type": "Server",
-        "platform": "/^(Windows|Linux)$/",
+        "platform": ["Windows", "Linux"],
         "engineEdition": "OnPremises",
         "version": "[11.0,)"
       },
@@ -1673,7 +1673,7 @@
       "itemType": "definition",
       "target": {
         "type": "Server",
-        "platform": "/^(Windows|Linux)$/",
+        "platform": ["Windows", "Linux"],
         "engineEdition": "OnPremises",
         "version": "[11.0,)"
       },
@@ -1710,7 +1710,7 @@
       "itemType": "definition",
       "target": {
         "type": "Server",
-        "platform": "/^(Windows|Linux)$/",
+        "platform": ["Windows", "Linux"],
         "engineEdition": "OnPremises",
         "version": "[11.0,)"
       },
@@ -1747,7 +1747,7 @@
       "itemType": "definition",
       "target": {
         "type": "Server",
-        "platform": "/^(Windows|Linux)$/",
+        "platform": ["Windows", "Linux"],
         "engineEdition": "OnPremises",
         "version": "[11.0,)"
       },
@@ -1787,7 +1787,7 @@
       "target": {
         "type": "Database",
         "version": "[13.0.4001,)",
-        "platform": "/^(Windows|Linux)$/",
+        "platform": ["Windows", "Linux"],
         "engineEdition": "OnPremises, ManagedInstance"
       },
       "tags": [ "DefaultRuleset", "Performance", "DBFileConfiguration" ],
@@ -1805,8 +1805,8 @@
       "itemType": "definition",
       "target": {
         "type": "Database",
-        "platform": "/^(Windows|Linux)$/",
-        "name": { "not": "/^(master|model|msdb|tempdb)$/" },
+        "platform": ["Windows", "Linux"],
+        "name": { "not": ["master", "model", "msdb", "tempdb"] },
         "engineEdition": "OnPremises, ManagedInstance",
         "version": "[11.0,)"
       },
@@ -1831,8 +1831,8 @@
       "itemType": "definition",
       "target": {
         "type": "Database",
-        "platform": "/^(Windows|Linux)$/",
-        "name": { "not": "/^(master|model|msdb|tempdb)$/" },
+        "platform": ["Windows", "Linux"],
+        "name": { "not": ["master", "model", "msdb", "tempdb"] },
         "engineEdition": "OnPremises, ManagedInstance",
         "version": "[11.0,)"
       },
@@ -1856,7 +1856,7 @@
       "itemType": "definition",
       "target": {
         "type": "Database",
-        "platform": "/^(Windows|Linux)$/",
+        "platform": ["Windows", "Linux"],
         "engineEdition": "OnPremises, ManagedInstance",
         "name": "master",
         "version": "[11.0,)"
@@ -1899,7 +1899,7 @@
       "itemType": "definition",
       "target": {
         "type": "Server",
-        "platform": "/^(Windows|Linux)$/",
+        "platform": ["Windows", "Linux"],
         "engineEdition": "OnPremises, ManagedInstance",
         "version": "[11.0,)"
       },
@@ -1918,7 +1918,7 @@
       "itemType": "definition",
       "target": {
         "type": "Server",
-        "platform": "/^(Windows|Linux)$/",
+        "platform": ["Windows", "Linux"],
         "engineEdition": "OnPremises, ManagedInstance",
         "version": "[11.0,)"
       },
@@ -1942,7 +1942,7 @@
       "itemType": "definition",
       "target": {
         "type": "Server",
-        "platform": "/^(Windows|Linux)$/",
+        "platform": ["Windows", "Linux"],
         "engineEdition": "OnPremises, ManagedInstance",
         "version": "[11.0,)"
       },
@@ -1966,7 +1966,7 @@
       "itemType": "definition",
       "target": {
         "type": "Server",
-        "platform": "/^(Windows|Linux)$/",
+        "platform": ["Windows", "Linux"],
         "engineEdition": "OnPremises, ManagedInstance",
         "version": "[11.0,)"
       },
@@ -1990,7 +1990,7 @@
       "itemType": "definition",
       "target": {
         "type": "Server",
-        "platform": "/^(Windows|Linux)$/",
+        "platform": ["Windows", "Linux"],
         "engineEdition": "OnPremises, ManagedInstance",
         "version": "[11.0,)"
       },
@@ -2014,7 +2014,7 @@
       "itemType": "definition",
       "target": {
         "type": "Server",
-        "platform": "/^(Windows|Linux)$/",
+        "platform": ["Windows", "Linux"],
         "engineEdition": "OnPremises, ManagedInstance",
         "version": "[11.0,)"
       },
@@ -2038,7 +2038,7 @@
       "itemType": "definition",
       "target": {
         "type": "Server",
-        "platform": "/^(Windows|Linux)$/",
+        "platform": ["Windows", "Linux"],
         "engineEdition": "OnPremises, ManagedInstance",
         "version": "[11.0,)"
       },
@@ -2062,7 +2062,7 @@
       "itemType": "definition",
       "target": {
         "type": "Server",
-        "platform": "/^(Windows|Linux)$/",
+        "platform": ["Windows", "Linux"],
         "engineEdition": "OnPremises, ManagedInstance",
         "version": "[11.0,)"
       },
@@ -2086,7 +2086,7 @@
       "itemType": "definition",
       "target": {
         "type": "Server",
-        "platform": "/^(Windows|Linux)$/",
+        "platform": ["Windows", "Linux"],
         "engineEdition": "OnPremises, ManagedInstance",
         "version": "[11.0,)"
       },
@@ -2110,7 +2110,7 @@
       "itemType": "definition",
       "target": {
         "type": "Server",
-        "platform": "/^(Windows|Linux)$/",
+        "platform": ["Windows", "Linux"],
         "engineEdition": "OnPremises, ManagedInstance",
         "version": "[11.0,)"
       },
@@ -2134,7 +2134,7 @@
       "itemType": "definition",
       "target": {
         "type": "Server",
-        "platform": "/^(Windows|Linux)$/",
+        "platform": ["Windows", "Linux"],
         "engineEdition": "OnPremises, ManagedInstance",
         "version": "[11.0,)"
       },
@@ -2150,13 +2150,13 @@
       "itemType": "definition",
       "target": {
         "type": "Database",
-        "platform": "/^(Windows|Linux)$/",
+        "platform": ["Windows", "Linux"],
         "engineEdition": "OnPremises, ManagedInstance",
         "version": "[11.0,)"
       },
       "tags": [ "DefaultRuleset", "Backup", "Performance" ],
       "displayName": "VLF count",
-      "description": "The SQL Server Database Engine divides each physical log file internally into a number of virtual log files (VLFs). Virtual log files have no fixed size, and there is no fixed number of virtual log files for a physical log file. The Database Engine chooses the size of the virtual log files dynamically while it is creating or extending log files. The Database Engine tries to maintain a small number of virtual files. The size of the virtual files after a log file has been extended is the sum of the size of the existing log and the size of the new file increment. The size or number of virtual log files cannot be configured or set by administrators.\n \n If the log files grow to a large size in many small increments, they will have many virtual log files. This can slow down database startup and also log backup and restore operations. Conversely, if the log files are set to a large size with few or just one increment, they will have few very large virtual log files.\n \n We recommend that you assign log files a size value close to the final size required, using the required increments to achieve optimal VLF distribution, and also have a relatively large growth_increment value.",
+      "description": "The SQL Server Database Engine divides each physical log file internally into a number of virtual log files (VLFs). Virtual log files have no fixed size, and there is no fixed number of virtual log files for a physical log file. The Database Engine chooses the size of the virtual log files dynamically while it is creating or extending log files. The Database Engine tries to maintain a small number of virtual files. The size of the virtual files after a log file has been extended is the sum of the size of the existing log and the size of the new file increment. The size or number of virtual log files cannot be configured or set by administrators. If the log files grow to a large size in many small increments, they will have many virtual log files. This can slow down database startup and also log backup and restore operations. Conversely, if the log files are set to a large size with few or just one increment, they will have few very large virtual log files. We recommend that you assign log files a size value close to the final size required, using the required increments to achieve optimal VLF distribution, and also have a relatively large growth_increment value.",
       "message": "Update transaction log settings to reduce the number of VLFs (current number is: @{RecoveryUnitId})",
       "helpLink": "https://docs.microsoft.com/sql/relational-databases/sql-server-transaction-log-architecture-and-management-guide",
       "probes": [
@@ -2298,7 +2298,7 @@
         "engineEdition": "OnPremises"
       },
       "tags": [ "DefaultRuleset", "TraceFlag", "Performance", "QueryOptimizer" ],
-      "displayName": "TF 9476 causes SQL Server to generate a plan using the Simple Containment instead of the default Base Containment under New CE",
+      "displayName": "TF 9476 causes SQL Server to generate a plan using Simple Containment assumption",
       "description": "Trace flag 9476 causes SQL Server to generate a plan using the Simple Containment assumption instead of the default Base Containment assumption, under the query optimizer cardinality estimation model of SQL Server 2014 (12.x) through SQL Server 2017 versions.",
       "message": "Disable trace flag 9476 for this SQL Server instance. The TF does not apply to this SQL Server version",
       "probes": [ "EnabledGlobalTraceFlags" ],
@@ -2347,7 +2347,7 @@
       "itemType": "definition",
       "target": {
         "type": "Database",
-        "platform": "/^(Windows|Linux)$/",
+        "platform": ["Windows", "Linux"],
         "engineEdition": "OnPremises, ManagedInstance",
         "version": "[11.0,)"
       },
@@ -2365,7 +2365,7 @@
       "itemType": "definition",
       "target": {
         "type": "Database",
-        "platform": "/^(Windows|Linux)$/",
+        "platform": ["Windows", "Linux"],
         "engineEdition": "OnPremises, ManagedInstance",
         "version": "[11.0,)"
       },
@@ -2383,7 +2383,7 @@
       "itemType": "definition",
       "target": {
         "type": "Database",
-        "platform": "/^(Windows|Linux)$/",
+        "platform": ["Windows", "Linux"],
         "engineEdition": "OnPremises, ManagedInstance",
         "version": "[11.0,)"
       },
@@ -2401,7 +2401,7 @@
       "itemType": "definition",
       "target": {
         "type": "Database",
-        "platform": "/^(Windows|Linux)$/",
+        "platform": ["Windows", "Linux"],
         "engineEdition": "OnPremises, ManagedInstance",
         "version": "[11.0,)"
       },
@@ -2419,7 +2419,7 @@
       "itemType": "definition",
       "target": {
         "type": "Database",
-        "platform": "/^(Windows|Linux)$/",
+        "platform": ["Windows", "Linux"],
         "engineEdition": "OnPremises, ManagedInstance",
         "version": "[11.0,)"
       },
@@ -2437,8 +2437,8 @@
       "itemType": "definition",
       "target": {
         "type": "Database",
-        "platform": "/^(Windows|Linux)$/",
-        "name": { "not": "/^(master|tempdb|model|msdb)$/" },
+        "platform": ["Windows", "Linux"],
+        "name": { "not": ["master", "tempdb", "model", "msdb"] },
         "engineEdition": "OnPremises, ManagedInstance",
         "version": "[11.0,)"
       },
@@ -2455,7 +2455,7 @@
       "itemType": "definition",
       "target": {
         "type": "Server",
-        "platform": "/^(Windows|Linux)$/",
+        "platform": ["Windows", "Linux"],
         "engineEdition": "OnPremises, ManagedInstance",
         "version": "[11.0,)"
       },
@@ -2508,9 +2508,9 @@
       "itemType": "definition",
       "target": {
         "type": "Database",
-        "platform": "/^(Windows|Linux)$/",
+        "platform": ["Windows", "Linux"],
         "engineEdition": "OnPremises, ManagedInstance",
-        "name": { "not": "/^(master|tempdb|model|msdb)$/" },
+        "name": { "not": ["master", "tempdb", "model", "msdb"] },
         "version": "[11.0,)"
       },
       "tags": [ "DefaultRuleset", "Indexes", "Performance" ],
@@ -2526,8 +2526,8 @@
       "itemType": "definition",
       "target": {
         "type": "Database",
-        "platform": "/^(Windows|Linux)$/",
-        "name": { "not": "/^(master|model|msdb|tempdb)$/" },
+        "platform": ["Windows", "Linux"],
+        "name": { "not": ["master", "model", "msdb", "tempdb"] },
         "engineEdition": "OnPremises, ManagedInstance",
         "version": "[11.0,13.0)"
       },
@@ -2545,8 +2545,8 @@
       "itemType": "definition",
       "target": {
         "type": "Database",
-        "platform": "/^(Windows|Linux)$/",
-        "name": { "not": "/^(master|model|msdb|tempdb)$/" },
+        "platform": ["Windows", "Linux"],
+        "name": { "not": ["master", "model", "msdb", "tempdb"] },
         "engineEdition": "OnPremises, ManagedInstance",
         "version": "[13.0,)"
       },
@@ -2574,8 +2574,8 @@
       "itemType": "definition",
       "target": {
         "type": "Database",
-        "platform": "/^(Windows|Linux)$/",
-        "name": { "not": "/^(master|model|msdb|tempdb)$/" },
+        "platform": ["Windows", "Linux"],
+        "name": { "not": ["master", "model", "msdb", "tempdb"] },
         "engineEdition": "OnPremises, ManagedInstance",
         "version": "[13.0,)"
       },
@@ -2603,8 +2603,8 @@
       "itemType": "definition",
       "target": {
         "type": "Database",
-        "platform": "/^(Windows|Linux)$/",
-        "name": { "not": "/^(master|model|msdb|tempdb)$/" },
+        "platform": ["Windows", "Linux"],
+        "name": { "not": ["master", "model", "msdb", "tempdb"] },
         "engineEdition": "OnPremises, ManagedInstance",
         "version": "[11.0,)"
       },
@@ -2622,8 +2622,8 @@
       "itemType": "definition",
       "target": {
         "type": "Database",
-        "platform": "/^(Windows|Linux)$/",
-        "name": { "not": "/^(master|model|msdb|tempdb)$/" },
+        "platform": ["Windows", "Linux"],
+        "name": { "not": ["master", "model", "msdb", "tempdb"] },
         "engineEdition": "OnPremises, ManagedInstance",
         "version": "[11.0,)"
       },
@@ -2644,8 +2644,8 @@
       "itemType": "definition",
       "target": {
         "type": "Database",
-        "platform": "/^(Windows|Linux)$/",
-        "name": { "not": "/^(master|model|msdb|tempdb)$/" },
+        "platform": ["Windows", "Linux"],
+        "name": { "not": ["master", "model", "msdb", "tempdb"] },
         "engineEdition": "OnPremises, ManagedInstance",
         "version": "[11.0,)"
       },
@@ -2666,7 +2666,7 @@
       "itemType": "definition",
       "target": {
         "type": "Database",
-        "platform": "/^(Windows|Linux)$/",
+        "platform": ["Windows", "Linux"],
         "version": "[11.0,)"
       },
       "tags": [ "DefaultRuleSet", "Pages", "DataIntegrity" ],
@@ -2682,14 +2682,14 @@
       "itemType": "definition",
       "target": {
         "type": "Database",
-        "platform": "/^(Windows|Linux)$/",
+        "platform": ["Windows", "Linux"],
         "version": "[11.0,)"
       },
       "tags": [ "DefaultRuleSet", "Snapshots", "Backup", "DataIntegrity" ],
       "displayName": "Sparse files",
       "description": "If the file is sparse or compressed, the NTFS file system may deallocate disk space in the file. This sets the range of bytes to zeroes (0) without extending the file size.",
       "message": "Get rid of sparse files: @{SparseFiles}",
-      "helpLink": "https://blogs.msdn.microsoft.com/jorgepc/2010/11/25/what-are-sparse-files-and-why-should-i-care-as-sql-server-dba/, https://techcommunity.microsoft.com/t5/SQL-Server-Support/Did-your-backup-program-utility-leave-your-SQL-Server-running-in/ba-p/315840",
+      "helpLink": "https://blogs.msdn.microsoft.com/jorgepc/2010/11/25/what-are-sparse-files-and-why-should-i-care-as-sql-server-dba/",
       "level": "Warning",
       "probes": [ "SparseFilesValidation" ]
     },
@@ -2698,9 +2698,9 @@
       "itemType": "definition",
       "target": {
         "type": "Database",
-        "platform": "/^(Windows|Linux)$/",
+        "platform": ["Windows", "Linux"],
         "engineEdition": "OnPremises, ManagedInstance",
-        "name": { "not": "/^(master|tempdb|model|msdb)$/" },
+        "name": { "not": ["master", "tempdb", "model", "msdb"] },
         "version": "[11.0,)"
       },
       "tags": [ "DefaultRuleset", "Indexes", "Performance" ],
@@ -2720,9 +2720,9 @@
       "itemType": "definition",
       "target": {
         "type": "Database",
-        "platform": "/^(Windows|Linux)$/",
+        "platform": ["Windows", "Linux"],
         "engineEdition": "OnPremises, ManagedInstance",
-        "name": { "not": "/^(master|tempdb|model|msdb)$/" },
+        "name": { "not": ["master", "tempdb", "model", "msdb"] },
         "version": "[11.0,)"
       },
       "tags": [ "DefaultRuleset", "Indexes", "Performance" ],
@@ -2742,9 +2742,9 @@
       "itemType": "definition",
       "target": {
         "type": "Database",
-        "platform": "/^(Windows|Linux)$/",
+        "platform": ["Windows", "Linux"],
         "engineEdition": "OnPremises, ManagedInstance",
-        "name": { "not": "/^(master|tempdb|model|msdb)$/" },
+        "name": { "not": ["master", "tempdb", "model", "msdb"] },
         "version": "[11.0,)"
       },
       "tags": [ "DefaultRuleset", "Indexes", "Performance" ],
@@ -2760,7 +2760,7 @@
       "itemType": "definition",
       "target": {
         "type": "Server",
-        "platform": "/^(Windows|Linux)$/",
+        "platform": ["Windows", "Linux"],
         "engineEdition": "OnPremises, ManagedInstance",
         "version": "[11.0,)"
       },
@@ -2776,7 +2776,7 @@
       "itemType": "definition",
       "target": {
         "type": "Server",
-        "platform": "/^(Windows|Linux)$/",
+        "platform": ["Windows", "Linux"],
         "engineEdition": "OnPremises, ManagedInstance",
         "version": "[11.0,)"
       },
@@ -2792,7 +2792,7 @@
       "itemType": "definition",
       "target": {
         "type": "Server",
-        "platform": "/^(Windows|Linux)$/",
+        "platform": ["Windows", "Linux"],
         "engineEdition": "OnPremises, ManagedInstance",
         "version": "[11.0,)"
       },
@@ -2809,8 +2809,8 @@
       "itemType": "definition",
       "target": {
         "type": "Database",
-        "platform": "/^(Windows|Linux)$/",
-        "name": { "not": "/^(master|model|msdb|tempdb)$/" },
+        "platform": ["Windows", "Linux"],
+        "name": { "not": ["master", "model", "msdb", "tempdb"] },
         "engineEdition": "OnPremises, ManagedInstance",
         "version": "[11.0,)"
       },
@@ -2833,8 +2833,8 @@
       "itemType": "definition",
       "target": {
         "type": "Database",
-        "platform": "/^(Windows|Linux)$/",
-        "name": { "not": "/^(master|model|msdb|tempdb)$/" },
+        "platform": ["Windows", "Linux"],
+        "name": { "not": ["master", "model", "msdb", "tempdb"] },
         "engineEdition": "OnPremises, ManagedInstance",
         "version": "[11.0,)"
       },
@@ -2861,7 +2861,7 @@
       "itemType": "definition",
       "target": {
         "type": "Database",
-        "platform": "/^(Windows|Linux)$/",
+        "platform": ["Windows", "Linux"],
         "version": "[11.0,)"
       },
       "tags": [ "DefaultRuleset", "CompatibilityLevel", "Security", "Performance", "UpdateIssues" ],
@@ -2883,9 +2883,581 @@
       "itemType": "override",
       "targetFilter": {
         "type": "Database",
-        "name": "/^(virtualmanagerdb|scspfdb|semanticsdb|servicemanager|service manager|dwstagingandconfig|dwrepository|dwdatamart|dwasdatabase|omdwdatamart|cmdwdatamart|ssodb|bamanalysis|bamarchive|bamalertsapplication|bamalertsnsmain|bamprimaryimport|bamstarschema|biztalkmgmtdb|biztalkmsgboxdb|biztalkdtadb|biztalkruleenginedb|bamprimaryimport|biztalkedidb|biztalkhwsdb|tpm|biztalkanalysisdb|bamprimaryimportsuccessfully|aspstate|aspnet|mscrm_config|cpsdyn|lcslog|lcscdr|lis|lyss|mgc|qoemetrics|rgsconfig|rgsdyn|rtc|rtcab|rtcab1|rtcdyn|rtcshared|rtcxds|xds|activitylog|branchdb|clienttracelog|eventlog|listingssettings|servicegroupdb|tservercontroller|vodbackend|operationsmanager|operationsmanagerdw|operationsmanagerac|orchestrator|sso|wss_search|wss_search_config|sharedservices_db|sharedservices_search_db|wss_content|profiledb|social db|sync db|susdb|projectserver_archive|projectserver_draft|projectserver_published|projectserver_reporting|reportserver|reportservertempdb|rsdb|rstempdb|fastsearchadmindatabase|ppsmonitoring|ppsplanningservice|ppsplanningsystem|dynamics|microsoftdynamicsax|microsoftdynamicsaxbaseline|fimservice|fimsynchronizationservice|sbgatewaydatabase|sbmanagementdb|wfinstancemanagementdb|wfmanagementdb|wfresourcemanagementdb)$/"
+        "name": [ "virtualmanagerdb", "scspfdb", "semanticsdb", "servicemanager", "service manager", "dwstagingandconfig", "dwrepository", "dwdatamart", "dwasdatabase", "omdwdatamart", "cmdwdatamart", "ssodb", "bamanalysis", "bamarchive", "bamalertsapplication", "bamalertsnsmain", "bamprimaryimport", "bamstarschema", "biztalkmgmtdb", "biztalkmsgboxdb", "biztalkdtadb", "biztalkruleenginedb", "bamprimaryimport", "biztalkedidb", "biztalkhwsdb", "tpm", "biztalkanalysisdb", "bamprimaryimportsuccessfully", "aspstate", "aspnet", "mscrm_config", "cpsdyn", "lcslog", "lcscdr", "lis", "lyss", "mgc", "qoemetrics", "rgsconfig", "rgsdyn", "rtc", "rtcab", "rtcab1", "rtcdyn", "rtcshared", "rtcxds", "xds", "activitylog", "branchdb", "clienttracelog", "eventlog", "listingssettings", "servicegroupdb", "tservercontroller", "vodbackend", "operationsmanager", "operationsmanagerdw", "operationsmanagerac", "orchestrator", "sso", "wss_search", "wss_search_config", "sharedservices_db", "sharedservices_search_db", "wss_content", "profiledb", "social db", "sync db", "susdb", "projectserver_archive", "projectserver_draft", "projectserver_published", "projectserver_reporting", "reportserver", "reportservertempdb", "rsdb", "rstempdb", "fastsearchadmindatabase", "ppsmonitoring", "ppsplanningservice", "ppsplanningsystem", "dynamics", "microsoftdynamicsax", "microsoftdynamicsaxbaseline", "fimservice", "fimsynchronizationservice", "sbgatewaydatabase", "sbmanagementdb", "wfinstancemanagementdb", "wfmanagementdb", "wfresourcemanagementdb" ]
       },
       "enabled": false
+    },
+    {
+      "id": "PendingDiskIORequests",
+      "itemType": "definition",
+      "target": {
+        "type": "Server",
+        "platform": ["Windows", "Linux"],
+        "version": "[11.0,)"
+      },
+      "tags": [ "DefaultRuleset", "IO", "Performance" ],
+      "displayName": "Pending disk I/O requests",
+      "description": "A database management system (DBMS), such as SQL Server, relies on the timeliness of file input and output (I/O) operations. The proper configuration and maintenance of the I/O subsystem is critical to a successful SQL Server deployment.",
+      "message": "Investigate and solve I/O related issues to get rid of pending requests",
+      "helpLink": "https://support.microsoft.com/en-sg/help/897284/diagnostics-in-sql-server-help-detect-stalled-and-stuck-i-o-operations",
+      "level": "Warning",
+      "probes": [
+        {
+          "id": "PendingIORequests",
+          "params": {
+            "io_type": "disk"
+          }
+        }
+      ]
+    },
+    {
+      "id": "MaxDOP",
+      "itemType": "definition",
+      "target": {
+        "type": "Server",
+        "platform": ["Windows", "Linux"],
+        "version": "[11.0,)"
+      },
+      "tags": [ "DefaultRuleset", "MaxDOP", "Performance", "Configuration", "NUMA", "CPU" ],
+      "displayName": "MaxDOP should be less or equal number of CPUs",
+      "description": "The Microsoft SQL Server max degree of parallelism (MAXDOP) configuration option controls the number of processors that are used for the execution of a query in a parallel plan. This option determines the number of threads that are used for the query plan operators that perform the work in parallel. Depending on whether SQL Server is set up on a symmetric multiprocessing (SMP) computer, a non-uniform memory access (NUMA) computer, or hyperthreading-enabled processors, the max degree of parallelism option should be configured appropriately.",
+      "message": "Update MaxDOP configuration option – it shouldn't exceed the number of processors that SQL Server uses",
+      "helpLink": "https://support.microsoft.com/kb/2806535",
+      "level": "Warning",
+      "probes": [ "ServerInstanceConfiguration" ],
+      "condition": {
+        "le": [ "@MaxDOP", "@online_logical_processors" ]
+      }
+    },
+    {
+      "id": "MaxDOPOver8CPU1NUMA",
+      "itemType": "definition",
+      "target": {
+        "type": "Server",
+        "platform": ["Windows", "Linux"],
+        "version": "[11.0,)"
+      },
+      "tags": [ "DefaultRuleset", "MaxDOP", "Performance", "Configuration", "NUMA", "CPU" ],
+      "displayName": "MaxDOP should equal number of CPUs for single NUMA node",
+      "description": "The Microsoft SQL Server max degree of parallelism (MAXDOP) configuration option controls the number of processors that are used for the execution of a query in a parallel plan. This option determines the number of threads that are used for the query plan operators that perform the work in parallel. Depending on whether SQL Server is set up on a symmetric multiprocessing (SMP) computer, a non-uniform memory access (NUMA) computer, or hyperthreading-enabled processors, the max degree of parallelism option should be configured appropriately.",
+      "message": "Update MaxDOP configuration option – it should equal the number of processors that SQL Server uses",
+      "helpLink": "https://support.microsoft.com/kb/2806535",
+      "level": "Warning",
+      "probes": [ "ServerInstanceConfiguration" ],
+      "condition": [
+        { "ne": [ "@numa_nodes", 1 ] },
+        { "gt": [ "@online_logical_processors", 8 ] },
+        { "@MaxDOP": 0 },
+        { "@MaxDOP": "@online_logical_processors" }
+      ]
+    },
+    {
+      "id": "MaxDOP8CPU1NUMA",
+      "itemType": "definition",
+      "target": {
+        "type": "Server",
+        "platform": ["Windows", "Linux"],
+        "version": "[11.0,)"
+      },
+      "tags": ["DefaultRuleset", "MaxDOP", "Performance", "Configuration", "NUMA", "CPU"],
+      "displayName": "MaxDOP should be less 8 for single NUMA node",
+      "description": "The Microsoft SQL Server max degree of parallelism (MAXDOP) configuration option controls the number of processors that are used for the execution of a query in a parallel plan. This option determines the number of threads that are used for the query plan operators that perform the work in parallel. Depending on whether SQL Server is set up on a symmetric multiprocessing (SMP) computer, a non-uniform memory access (NUMA) computer, or hyperthreading-enabled processors, the max degree of parallelism option should be configured appropriately.",
+      "message": "Update MaxDOP configuration option – it shouldn't exceed 8",
+      "helpLink": "https://support.microsoft.com/kb/2806535",
+      "level": "Warning",
+      "probes": [ "ServerInstanceConfiguration" ],
+      "condition": [
+        { "ne": [ "@numa_nodes", 1 ] },
+        { "le": [ "@online_logical_processors", 8 ] },
+        {
+          "gt": [ "@MaxDOP", 0 ],
+          "le": [ "@MaxDOP", 8 ]
+        }
+      ]
+    },
+    {
+      "id": "MaxDOPFewNUMA",
+      "itemType": "definition",
+      "target": {
+        "type": "Server",
+        "platform": ["Windows", "Linux"],
+        "version": "[11.0,)"
+      },
+      "tags": [ "DefaultRuleset", "MaxDOP", "Performance", "Configuration", "NUMA", "CPU" ],
+      "displayName": "MaxDOP should be according to processor count ratio",
+      "description": "The Microsoft SQL Server max degree of parallelism (MAXDOP) configuration option controls the number of processors that are used for the execution of a query in a parallel plan. This option determines the number of threads that are used for the query plan operators that perform the work in parallel. Depending on whether SQL Server is set up on a symmetric multiprocessing (SMP) computer, a non-uniform memory access (NUMA) computer, or hyperthreading-enabled processors, the max degree of parallelism option should be configured appropriately.",
+      "message": "Update MaxDOP configuration option – if the number of CPUs per NUMA <= 15, then set MaxDOP the same number, if it's > 15, then set MaxDOP = half of it",
+      "helpLink": "https://support.microsoft.com/kb/2806535",
+      "level": "Warning",
+      "probes": [ "ServerInstanceConfiguration" ],
+      "condition": [
+        { "le": [ "@numa_nodes", 1 ] },
+        {
+          "and": [
+            {
+              "or": [
+                {
+                  "ge": [
+                    { "ceiling": [ { "div": [ "@total_logical_processors", "@numa_nodes" ] } ] },
+                    8
+                  ]
+                },
+                {
+                  "gt": [ "@MaxDOP", 0 ],
+                  "le": [
+                    "@MaxDOP",
+                    { "ceiling": [ { "div": [ "@total_logical_processors", "@numa_nodes" ] } ] }
+                  ]
+                }
+              ]
+            },
+            {
+              "or": [
+                {
+                  "lt": [
+                    { "ceiling": [ { "div": [ "@total_logical_processors", "@numa_nodes" ] } ] },
+                    8
+                  ]
+                },
+                {
+                  "gt": [ "@MaxDOP", 0 ],
+                  "and": [
+                    { "le": [ "@MaxDOP", 8 ] },
+                    {
+                      "le": [
+                        "@MaxDOP",
+                        { "ceiling": [ { "div": [ "@total_logical_processors", "@numa_nodes" ] } ] }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "MaxDOPFewNUMA",
+      "itemType": "override",
+      "targetFilter": {
+        "version": "[13.0,)"
+      },
+      "condition": [
+        { "le": [ "@numa_nodes", 1 ] },
+        {
+          "and": [
+            {
+              "or": [
+                {
+                  "gt": [
+                    { "ceiling": [ { "div": [ "@total_logical_processors", "@numa_nodes" ] } ] },
+                    15
+                  ]
+                },
+                {
+                  "gt": [ "@MaxDOP", 0 ],
+                  "le": [
+                    "@MaxDOP",
+                    { "ceiling": [ { "div": [ "@total_logical_processors", "@numa_nodes" ] } ] }
+                  ]
+                }
+              ]
+            },
+            {
+              "or": [
+                {
+                  "le": [
+                    { "ceiling": [ { "div": [ "@total_logical_processors", "@numa_nodes" ] } ] },
+                    15
+                  ]
+                },
+                {
+                  "gt": [ "@MaxDOP", 0 ],
+                  "le": [
+                    "@MaxDOP",
+                    {
+                      "div": [
+                        { "ceiling": [ { "div": [ "@total_logical_processors", "@numa_nodes" ] } ] },
+                        2
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "DbIntegrity",
+      "itemType": "definition",
+      "target": {
+        "type": "Database",
+        "platform": ["Windows", "Linux"],
+        "name": { "not": "tempdb" },
+        "engineEdition": "OnPremises, ManagedInstance",
+        "version": "[11.0,)"
+      },
+      "tags": [ "DefaultRuleset", "DBCC", "Performance", "DataIntegrity" ],
+      "displayName": "Database Integrity Checks",
+      "description": "The DBCC CHECKDB command checks the integrity of the objects in a database and should be run on a regular basis. This statement is used to perform different operations in your database and can be broken down into four categories: Maintenance, Miscellaneous, Informational, and Validation.",
+      "message": "Run DBCC CHECKDB since integrity checks have not been executed for over 7 days",
+      "helpLink": "https://msdn.microsoft.com/library/ms176064.aspx",
+      "level": "Warning",
+      "probes": [ "DBMetaInfo", "DatabaseConfiguration" ],
+      "condition": [
+        { "@IsReadOnly": true },
+        { "ne": [ "@DbState", 0 ] },
+        { "le": [ "@LastKnownDBCCDaysAgo", 7 ] }
+      ]
+    },
+    {
+      "id": "DirectCatalogUpdates",
+      "itemType": "definition",
+      "target": {
+        "type": "Database",
+        "platform": ["Windows", "Linux"],
+        "name": { "not": "tempdb" },
+        "engineEdition": "OnPremises, ManagedInstance",
+        "version": "[11.0,)"
+      },
+      "tags": [ "DefaultRuleset", "DBCC", "Deprecated" ],
+      "displayName": "Direct Catalog Updates",
+      "description": "'allow updates' option is still present in the sp_configure stored procedure, although its functionality is unavailable in SQL Server. The setting has no effect. Starting with SQL Server 2005, direct updates to the system tables are not supported.",
+      "message": "Do not use direct catalog update feature in new development work, and modify applications that currently use it as soon as possible",
+      "helpLink": "https://docs.microsoft.com/sql/database-engine/configure-windows/allow-updates-server-configuration-option",
+      "level": "Warning",
+      "probes": [ "DBMetaInfo", "DatabaseConfiguration" ],
+      "condition": [
+        { "@IsReadOnly": true },
+        { "ne": [ "@DbState", 0 ] },
+        { "@UpdSysCatalog": 0 }
+      ]
+    },
+    {
+      "id": "DataPurityCheck",
+      "itemType": "definition",
+      "target": {
+        "type": "Database",
+        "platform": ["Windows", "Linux"],
+        "name": { "not": ["master", "model", "msdb", "tempdb"] },
+        "engineEdition": "OnPremises, ManagedInstance",
+        "version": "[11.0,)"
+      },
+      "tags": [ "DefaultRuleset", "DBCC", "DataIntegrity" ],
+      "displayName": "Data Purity Check",
+      "description": "The DBCC CHECKDB command checks the integrity of the objects in a database and should be run on a regular basis. One thing that this command does not check in databases created in versions prior to SQL Server 2005 is the integrity of the data in the columns until it has been run once with the DATA_PURITY option. Adding the DATA_PURITY option causes the CHECKDB command to look for column values that are invalid or out of range. Any database that was created in SQL Server 2005 or later will include the DATA_PURITY check by default; but if the database is being upgraded from an earlier version, you must run the command with the DATA_PURITY option at least once using the following command and then fix any data issues.",
+      "message": "Run DBCC CHECKDB ([DatabaseName]) WITH DATA_PURITY",
+      "helpLink": "http://support.microsoft.com/kb/923247",
+      "level": "Warning",
+      "probes": [ "DBMetaInfo", "DatabaseConfiguration" ],
+      "condition": [
+        { "@IsReadOnly": true },
+        { "ne": [ "@DbState", 0 ] },
+        { "gt": [ "@CreateVersion", 611 ] },
+        { "ne": [ "@DBCCFlags", 0 ] }
+      ]
+    },
+    {
+      "id": "StatSamplingRate",
+      "itemType": "definition",
+      "target": {
+        "type": "Database",
+        "platform": ["Windows", "Linux"],
+        "engineEdition": "OnPremises, ManagedInstance",
+        "version": "[11.0,)"
+      },
+      "tags": [ "DefaultRuleset", "Performance", "Statistics" ],
+      "displayName": "Statistics sampling rate",
+      "description": "For most queries, the Query Optimizer already generates the necessary statistics for a high quality query plan; in some cases, you need to create additional statistics or modify the query design for best results.",
+      "message": "Some statistics have sampling rates less than @{threshold:P}, consider updating with a larger sample or full scan if key is not uniformly distributed. Affected tables: @{FullName}.",
+      "helpLink": "https://docs.microsoft.com/sql/t-sql/statements/update-statistics-transact-sql",
+      "level": "Warning",
+      "threshold": 0.25,
+      "probes": [
+        {
+          "id": "StatSamplingRate",
+          "params": {
+            "threshold": "@threshold"
+          },
+          "transform": {
+            "type": "aggregate",
+            "map": {
+              "FullName": "join"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "IndexFragmentation",
+      "itemType": "definition",
+      "target": {
+        "type": "Database",
+        "platform": ["Windows", "Linux"],
+        "name": { "not": ["master", "model", "msdb", "tempdb"] },
+        "engineEdition": "OnPremises, ManagedInstance",
+        "version": "[11.0,)"
+      },
+      "tags": [ "DefaultRuleset", "Index", "Performance" ],
+      "displayName": "Index Fragmentation",
+      "description": "The SQL Server Database Engine automatically modifies indexes whenever insert, update, or delete operations are made to the underlying data. Over time these modifications can cause the information in the index to become scattered in the database (fragmented). Fragmentation exists when indexes have pages in which the logical ordering, based on the key value, does not match the physical ordering inside the data file. Heavily fragmented indexes can degrade query performance and cause your application to respond slowly, especially scan operations.",
+      "message": "Remove fragmentation of index @{IndexFullName}. It's fragmentation level: @{fragmentation:#0.##}%.",
+      "helpLink": "https://docs.microsoft.com/sql/relational-databases/indexes/reorganize-and-rebuild-indexes",
+      "level": "Warning",
+      "probes": [ "IndexStatistics" ],
+      "condition": [
+        { "le": [ "@fragmentation", "@threshold" ] },
+        { "le": [ "@page_count", 8 ] }
+      ],
+      "threshold": 5
+    },
+    {
+      "id": "IndexFragmentation",
+      "itemType": "override",
+      "targetFilter": {
+        "version": "[12.0,)"
+      },
+      "condition": {
+        "and": [
+          {
+            "or": [
+              { "le": [ "@fragmentation", "@threshold" ] },
+              { "le": [ "@page_count", 8 ] }
+            ]
+          },
+          {
+            "or": [
+              {
+                "not": {
+                  "in": [
+                    "@IndexType",
+                    [ 5, 6 ]
+                  ]
+                }
+              },
+              { "le": [ "@fragmentation_CI", "@threshold" ] },
+              { "ne": [ "@state", 3 ] }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "id": "XTPHashAvgChainBuckets",
+      "itemType": "definition",
+      "target": {
+        "type": "Database",
+        "platform": ["Windows", "Linux"],
+        "name": { "not": ["master", "model", "msdb", "tempdb"] },
+        "engineEdition": "OnPremises, ManagedInstance",
+        "version": "[12.0,)"
+      },
+      "tags": [ "DefaultRuleset", "Index", "Performance", "XTP" ],
+      "displayName": "High avg chain length and empty buckets",
+      "description": "Memory-optimized HASH indexes behave different from NONCLUSTERED indexes. They are optimized for point-lookup operations, and do not support ordered scans or inequality seek operations. You should specify a value for the BUCKET_COUNT parameter when you create a memory-optimized table.",
+      "message": "Index @{IndexFullName} has @{avg_chain_length} average chain length and @{EmptyBucketPct}% empty buckets count. Verify if there are many rows with duplicate index key values or there is a skew in the key values",
+      "helpLink": "https://techcommunity.microsoft.com/t5/sql-server/in-memory-oltp-indexes-part-2-performance-troubleshooting-guide/ba-p/385725",
+      "level": "Warning",
+      "probes": [ "XTPIndexHashStatistics" ],
+      "condition": [
+        { "le": [ "@EmptyBucketPct", "@EmptyBucketsPctThreshold" ] },
+        { "le": [ "@avg_chain_length", 5 ] }
+      ],
+      "EmptyBucketsPctThreshold": 50 
+    },
+    {
+      "id": "XTPTooManyBuckets",
+      "itemType": "definition",
+      "target": {
+        "type": "Database",
+        "platform": ["Windows", "Linux"],
+        "name": { "not": ["master", "model", "msdb", "tempdb"] },
+        "engineEdition": "OnPremises, ManagedInstance",
+        "version": "[12.0,)"
+      },
+      "tags": [ "DefaultRuleset", "Index", "Performance", "XTP" ],
+      "displayName": "Too many buckets",
+      "description": "Memory-optimized HASH indexes behave different from NONCLUSTERED indexes. They are optimized for point-lookup operations, and do not support ordered scans or inequality seek operations. You must specify a value for the BUCKET_COUNT parameter when you create the memory-optimized table.",
+      "message": "Make number of buckets of index @{IndexFullName} equal to distinct rows. It has @{total_bucket_count} buckets, and there are @{DistinctCnt} in the table, which is wasting memory and marginally slowing down full table scans.",
+      "helpLink": "https://techcommunity.microsoft.com/t5/sql-server/in-memory-oltp-indexes-part-2-performance-troubleshooting-guide/ba-p/385725",
+      "level": "Warning",
+      "probes": [ "XTPIndexHashStatistics" ],
+      "condition": [
+        { "le": [ "@total_bucket_count", "@DistinctCnt" ] }
+      ]
+    },
+    {
+      "id": "XTPTooFewBuckets",
+      "itemType": "definition",
+      "target": {
+        "type": "Database",
+        "platform": ["Windows", "Linux"],
+        "name": { "not": ["master", "model", "msdb", "tempdb"] },
+        "engineEdition": "OnPremises, ManagedInstance",
+        "version": "[12.0,)"
+      },
+      "tags": [ "DefaultRuleset", "Index", "Performance", "XTP" ],
+      "displayName": "Too few buckets",
+      "description": "Memory-optimized HASH indexes behave different from NONCLUSTERED indexes. They are optimized for point-lookup operations, and do not support ordered scans or inequality seek operations. You must specify a value for the BUCKET_COUNT parameter when you create the memory-optimized table.",
+      "message": "Make number of buckets of index @{IndexFullName} equal to distinct rows. It has @{total_bucket_count} buckets, and there are @{DistinctCnt} in the table, which leads to chaining records.",
+      "helpLink": "https://techcommunity.microsoft.com/t5/sql-server/in-memory-oltp-indexes-part-2-performance-troubleshooting-guide/ba-p/385725",
+      "level": "Warning",
+      "probes": [ "XTPIndexHashStatistics" ],
+      "condition": [
+        { "ge": [ "@total_bucket_count", "@DistinctCnt" ] }
+      ]
+    },
+    {
+      "id": "XTPRangeIXHealth",
+      "itemType": "definition",
+      "target": {
+        "type": "Database",
+        "platform": ["Windows", "Linux"],
+        "name": { "not": ["master", "model", "msdb", "tempdb"] },
+        "engineEdition": "OnPremises, ManagedInstance",
+        "version": "[12.0,)"
+      },
+      "tags": [ "DefaultRuleset", "Index", "Performance", "XTP" ],
+      "displayName": "NonClustered index retry amount",
+      "description": "When a database with a memory-optimized table is restarted, the index is built by inserting one row at a time into memory. The count of page splits, merges, and consolidation can help you understand the work done to build the index when a database is brought online. Large numbers of retries are indicative of concurrency issues.",
+      "message": "Review index @{IndexFullName} as its retry count is over @{RetryCountPct}% of total, which is indicating possible concurrency issues.",
+      "helpLink": "https://docs.microsoft.com/sql/relational-databases/system-dynamic-management-views/sys-dm-db-xtp-nonclustered-index-stats-transact-sql",
+      "level": "Warning",
+      "probes": [ "XTPNonClusteredIndexHashStatistics" ],
+      "condition": {
+        "and": [
+          { "le": [ "@page_update_count_pct", "@RetryCountPct" ] },
+          { "le": [ "@page_consolidation_count_pct", "@RetryCountPct" ] },
+          { "le": [ "@page_split_count_pct", "@RetryCountPct" ] },
+          { "le": [ "@key_split_count_pct", "@RetryCountPct" ] },
+          { "le": [ "@page_merge_count_pct", "@RetryCountPct" ] },
+          { "le": [ "@key_merge_count_pct", "@RetryCountPct" ] }
+        ] 
+      },
+      "RetryCountPct": 5 
+    },
+    {
+      "id": "TF6533Misuse",
+      "itemType": "definition",
+      "target": {
+        "type": "Database",
+        "version": [
+          "[11.0.6020, 11.0.6518)"
+        ],
+        "platform": "Windows",
+        "name": { "not": ["master", "model", "msdb", "tempdb"] },
+        "engineEdition": "OnPremises"
+      },
+      "tags": [ "DefaultRuleset", "TraceFlag", "Performance", "TF6533" ],
+      "displayName": "STRelate and STAsBinary functions unexpected results due to enabled TF 6533",
+      "description": "The STRelate and STAsBinary functions may return unexpected results when trace flag 6533 is enabled. Do not use this trace flag if your workload involves either of these functions.",
+      "message": "Disable TF 6533 to avoid unexpected results of functions STRelate and STAsBinary",
+      "helpLink": "https://support.microsoft.com/help/3107399",
+      "level": "Warning",
+      "probes": [ "EnabledGlobalTraceFlags", "TF6533SpatialFunctionsUsage" ],
+      "condition": [
+        { "not": { "in": [ 6533, "@TraceFlag" ] } },
+        { "@InUse": 0 }
+      ]
+    },
+    {
+      "id": "UntrustedConstraints",
+      "itemType": "definition",
+      "target": {
+        "type": "Database",
+        "platform": ["Windows", "Linux"],
+        "name": { "not": ["master", "model", "msdb", "tempdb"] },
+        "engineEdition": "OnPremises, ManagedInstance",
+        "version": "[11.0,)"
+      },
+      "tags": [ "DefaultRuleset", "Performance", "DataIntegrity" ],
+      "displayName": "Untrusted Constraints",
+      "description": "If you need to load a lot of data quickly, you can disable keys and constraints in order to improve performance. After the data load finishes, enable them again, and SQL Server will check them behind the scenes. This technique works best in large data warehouse environments where entire dimension tables might be reloaded from scratch every night. Disabling constraints is usually safer and easier than dropping and recreating them.",
+      "message": "Execute ALTER TABLE <table name> WITH CHECK CHECK CONSTRAINT <constraint name> statement to avoid possible performance issues: @{constraint_name} constraints are not trusted for referential integrity.",
+      "helpLink": "https://docs.microsoft.com/sql/t-sql/statements/alter-table-transact-sql",
+      "level": "Warning",
+      "probes": [ "FKNotTrusted" ]
+    },
+    {
+      "id": "PercentAutogrows",
+      "itemType": "definition",
+      "target": { 
+        "type": "Database",
+        "platform": ["Windows", "Linux"],
+        "engineEdition": "OnPremises",
+        "name": { "not": ["master", "model", "msdb", "tempdb"] },
+        "version": "[11.0,)"
+      },
+      "tags": [ "DefaultRuleset", "Performance", "DBFileConfiguration", "DBConfiguration" ],
+      "displayName": "Database files have a growth ratio set in percentage",
+      "description": "Some database files have a growth ratio set in percentage. Over time, this could lead to uncontrolled disk space allocation and extended time to perform these growths",
+      "message": "Don't use \"File Growth In Percent\" for the Autogrowth setting. The following files are affected: @{fileName} have a growth ratio set in percentage.",
+      "helpLink": "https://docs.microsoft.com/sql/t-sql/statements/alter-database-transact-sql-file-and-filegroup-options",
+      "level": "Warning",
+      "probes": [
+        {
+          "id": "DatabaseMasterFiles",
+          "params": {
+            "type": null,
+            "is_percent_growth": 1
+          },
+          "transform": {
+            "type": "aggregate",
+            "map": {
+              "fileName": "join"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "StatsUpdate",
+      "itemType": "definition",
+      "target": {
+        "type": "Database",
+        "platform": ["Windows", "Linux"],
+        "engineEdition": "OnPremises, ManagedInstance",
+        "version": "[11.0,)"
+      },
+      "tags": ["DefaultRuleset", "Performance", "Statistics", "QueryOptimizer"],
+      "displayName": "Statistics needs to be updated",
+      "description": "The Query Optimizer determines whether an index is useful for a specific query by evaluating the stored statistics. If the statistics become out of date and significant changes have occurred against the underlying data, this can result in less than optimal query performance. In most cases, it's best to let SQL Server maintain the statistics. If you turn 'Auto Create Stats' and 'Auto Update Stats' off, then it is up to you to keep the statistics up-to-date somehow. Failure to do so will lead to poor query performance. Most applications should have these options ON. When the Auto Update Statistics setting is ON, the Query Optimizer updates statistics when they are used by a query and when they might be out-of-date. Statistics become out-of-date after insert, update, delete, or merge operations change the data distribution in the table or indexed view. The Query Optimizer determines when statistics might be out-of-date by counting the number of data modifications since the last statistics update and comparing the number of modifications to a threshold. The threshold is based on the number of rows in the table or indexed view. The Query Optimizer checks for out-of-date statistics before compiling a query and before executing a cached query plan. Before compiling a query, the Query Optimizer uses the columns, tables, and indexed views in the query predicate to determine which statistics might be out-of-date. Before executing a cached query plan, the Database Engine verifies that the query plan references up-to-date statistics. The AUTO_UPDATE_STATISTICS option applies to statistics created for indexes, single-columns in query predicates, and statistics that are created by using the CREATE STATISTICS statement. This option also applies to filtered statistics.",
+      "message": "Update stats in table @{TableName} to improve query performance.",
+      "helpLink": "https://docs.microsoft.com/sql/relational-databases/statistics/statistics#UpdateStatistics",
+      "probes": ["DatabaseConfiguration", "ObjectStatistics"],
+      "condition": [
+        "@is_auto_update_stats_on",
+        {
+          "and": [
+            {
+              "or": [
+                { "gt": [ "@rows", "@threshold" ] },
+                { "lt": [ "@modification_counter", "@threshold" ] }
+              ]
+            },
+            {
+              "or": [
+                { "le": [ "@rows", "@threshold" ] },
+                {
+                  "lt": [
+                    "@modification_counter",
+                    {
+                      "add": [
+                        "@threshold",
+                        { "mul": [ "@rows", 0.2 ] }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "threshold": 500
     }
   ],
   "probes": {
@@ -2984,7 +3556,7 @@
         "target": {
           "type": "Database",
           "version": "[11.0,12.0)",
-          "platform": "/^(Windows|Linux)$/",
+          "platform": ["Windows", "Linux"],
           "engineEdition": "OnPremises, ManagedInstance"
         },
         "implementation": {
@@ -2996,7 +3568,7 @@
         "target": {
           "type": "Database",
           "version": "[12.0, 13.0)",
-          "platform": "/^(Windows|Linux)$/",
+          "platform": ["Windows", "Linux"],
           "engineEdition": "OnPremises, ManagedInstance"
         },
         "implementation": {
@@ -3008,7 +3580,7 @@
         "target": {
           "type": "Database",
           "version": "[13.0,)",
-          "platform": "/^(Windows|Linux)$/",
+          "platform": ["Windows", "Linux"],
           "engineEdition": "OnPremises, ManagedInstance"
         },
         "implementation": {
@@ -3022,7 +3594,7 @@
         "type": "SQL",
         "target": {
           "type": "Database",
-          "platform": "/^(Windows|Linux)$/",
+          "platform": ["Windows", "Linux"],
           "engineEdition": "OnPremises, ManagedInstance",
           "version": "[11.0,)"
         },
@@ -3043,7 +3615,7 @@
         "type": "SQL",
         "target": {
           "type": "Server",
-          "platform": "/^(Windows|Linux)$/",
+          "platform": ["Windows", "Linux"],
           "engineEdition": "OnPremises, ManagedInstance",
           "version": "[11.0,)"
         },
@@ -3057,7 +3629,7 @@
         "type": "SQL",
         "target": {
           "type": "Database",
-          "platform": "/^(Windows|Linux)$/",
+          "platform": ["Windows", "Linux"],
           "engineEdition": "OnPremises, ManagedInstance",
           "version": "[11.0,)"
         },
@@ -3072,7 +3644,7 @@
         "type": "SQL",
         "target": {
           "type": "Server",
-          "platform": "/^(Windows|Linux)$/",
+          "platform": ["Windows", "Linux"],
           "engineEdition": "OnPremises, ManagedInstance",
           "version": "[11.0,)"
         },
@@ -3086,7 +3658,7 @@
         "type": "SQL",
         "target": {
           "type": "Database",
-          "platform": "/^(Windows|Linux)$/",
+          "platform": ["Windows", "Linux"],
           "engineEdition": "OnPremises, ManagedInstance",
           "version": "[11.0,)"
         },
@@ -3101,7 +3673,7 @@
         "type": "SQL",
         "target": {
           "type": "Database",
-          "platform": "/^(Windows|Linux)$/",
+          "platform": ["Windows", "Linux"],
           "engineEdition": "OnPremises, ManagedInstance",
           "version": "[11.0,)"
         },
@@ -3125,7 +3697,7 @@
         "type": "SQL",
         "target": {
           "type": "Database",
-          "platform": "/^(Windows|Linux)$/",
+          "platform": ["Windows", "Linux"],
           "engineEdition": "OnPremises, ManagedInstance",
           "version": "[11.0,)"
         },
@@ -3140,7 +3712,7 @@
         "type": "SQL",
         "target": {
           "type": "Database",
-          "platform": "/^(Windows|Linux)$/",
+          "platform": ["Windows", "Linux"],
           "engineEdition": "OnPremises",
           "version": "[11.0,)"
         },
@@ -3154,7 +3726,7 @@
         "type": "SQL",
         "target": {
           "type": "Server",
-          "platform": "/^(Windows|Linux)$/",
+          "platform": ["Windows", "Linux"],
           "engineEdition": "OnPremises, ManagedInstance",
           "version": "[11.0,)"
         },
@@ -3168,7 +3740,7 @@
         "type": "SQL",
         "target": {
           "type": "Server",
-          "platform": "/^(Windows|Linux)$/",
+          "platform": ["Windows", "Linux"],
           "engineEdition": "OnPremises, ManagedInstance",
           "version": "[11.0,)"
         },
@@ -3182,7 +3754,7 @@
         "type": "SQL",
         "target": {
           "type": "Server",
-          "platform": "/^(Windows|Linux)$/",
+          "platform": ["Windows", "Linux"],
           "engineEdition": "OnPremises, ManagedInstance",
           "version": "[11.0,)"
         },
@@ -3194,7 +3766,7 @@
         "type": "SQL",
         "target": {
           "type": "Database",
-          "platform": "/^(Windows|Linux)$/",
+          "platform": ["Windows", "Linux"],
           "engineEdition": "OnPremises, ManagedInstance",
           "version": "[11.0,)"
         },
@@ -3209,7 +3781,7 @@
         "target": {
           "type": "Server",
           "version": "[13.0.4001,)",
-          "platform": "/^(Windows|Linux)$/",
+          "platform": ["Windows", "Linux"],
           "engineEdition": "OnPremises"
         },
         "implementation": {
@@ -3220,7 +3792,7 @@
         "type": "SQL",
         "target": {
           "type": "Server",
-          "platform": "/^(Windows|Linux)$/",
+          "platform": ["Windows", "Linux"],
           "engineEdition": "ManagedInstance",
           "version": "[11.0,)"
         },
@@ -3235,7 +3807,7 @@
         "target": {
           "type": "Database",
           "version": "[11.0,)",
-          "platform": "/^(Windows|Linux)$/",
+          "platform": ["Windows", "Linux"],
           "engineEdition": "OnPremises, ManagedInstance"
         },
         "implementation": {
@@ -3272,7 +3844,7 @@
         "target": {
           "type": "Database",
           "version": "[13.0.4001,)",
-          "platform": "/^(Windows|Linux)$/",
+          "platform": ["Windows", "Linux"],
           "engineEdition": "OnPremises, ManagedInstance"
         },
         "implementation": {
@@ -3291,7 +3863,7 @@
         "type": "SQL",
         "target": {
           "type": "Server",
-          "platform": "/^(Windows|Linux)$/",
+          "platform": ["Windows", "Linux"],
           "engineEdition": "OnPremises, ManagedInstance",
           "version": "[11.0,)"
         },
@@ -3305,7 +3877,7 @@
         "type": "SQL",
         "target": {
           "type": "Server",
-          "platform": "/^(Windows|Linux)$/",
+          "platform": ["Windows", "Linux"],
           "engineEdition": "OnPremises, ManagedInstance",
           "version": "[11.0,)"
         },
@@ -3345,7 +3917,7 @@
         "type": "SQL",
         "target": {
           "type": "Server",
-          "platform": "/^(Windows|Linux)$/",
+          "platform": ["Windows", "Linux"],
           "engineEdition": "OnPremises, ManagedInstance",
           "version": "[11.0,)"
         },
@@ -3483,7 +4055,7 @@
         "type": "SQL",
         "target": {
           "type": "Database",
-          "platform": "/^(Windows|Linux)$/",
+          "platform": ["Windows", "Linux"],
           "engineEdition": "OnPremises, ManagedInstance",
           "version": "[11.0,)"
         },
@@ -3512,7 +4084,7 @@
         "type": "SQL",
         "target": {
           "type": "Server",
-          "platform": "/^(Windows|Linux)$/",
+          "platform": ["Windows", "Linux"],
           "engineEdition": "OnPremises, ManagedInstance",
           "version": "[11.0,)"
         },
@@ -3553,7 +4125,7 @@
         "type": "SQL",
         "target": {
           "type": "Database",
-          "platform": "/^(Windows|Linux)$/",
+          "platform": ["Windows", "Linux"],
           "engineEdition": "OnPremises, ManagedInstance",
           "version": "[11.0,)"
         },
@@ -3574,7 +4146,7 @@
         "type": "SQL",
         "target": {
           "type": "Database",
-          "platform": "/^(Windows|Linux)$/",
+          "platform": ["Windows", "Linux"],
           "version": "[11.0,)"
         },
         "implementation": {
@@ -3587,7 +4159,7 @@
         "type": "SQL",
         "target": {
           "type": "Database",
-          "platform": "/^(Windows|Linux)$/",
+          "platform": ["Windows", "Linux"],
           "version": "[11.0,)"
         },
         "implementation": {
@@ -3600,10 +4172,12 @@
         "type": "SQL",
         "target": {
           "type": "Database",
-          "platform": "/^(Windows|Linux)$/",
+          "platform": ["Windows", "Linux"],
+          "engineEdition": "OnPremises, ManagedInstance",
           "version": "[11.0,)"
         },
         "implementation": {
+          "useDatabase": true,
           "query": "SELECT s.name+'.'+t.name AS TableName, COUNT(si.index_id) AS IndexCount, MIN(si.index_id) AS MinIndexId, MAX(si.index_id) AS MaxIndexId FROM sys.indexes AS si (NOLOCK) INNER JOIN sys.tables AS t (NOLOCK) ON si.[object_id]=t.[object_id] INNER JOIN sys.schemas AS s (NOLOCK) ON s.[schema_id]=t.[schema_id] WHERE si.is_hypothetical=0 GROUP BY s.name,t.name"
         }
       }
@@ -3613,10 +4187,12 @@
         "type": "SQL",
         "target": {
           "type": "Database",
-          "platform": "/^(Windows|Linux)$/",
+          "platform": ["Windows", "Linux"],
+          "engineEdition": "OnPremises, ManagedInstance",
           "version": "[11.0,)"
         },
         "implementation": {
+          "useDatabase": true,
           "query": "SELECT DISTINCT s.name+'.'+t.name AS TableName, i.name AS IndexName FROM sys.tables AS t (NOLOCK) INNER JOIN sys.indexes AS i (NOLOCK) ON t.[object_id]=i.[object_id] INNER JOIN sys.data_spaces AS ds (NOLOCK) ON ds.data_space_id=i.data_space_id INNER JOIN sys.schemas AS s (NOLOCK) ON s.[schema_id]=t.[schema_id] WHERE t.[type]='U' AND i.[type] IN (1,2) AND i.is_hypothetical=0 AND t.name IN(SELECT ob.name FROM sys.tables AS ob (NOLOCK) INNER JOIN sys.indexes AS ind (NOLOCK) ON ind.[object_id]=ob.[object_id] INNER JOIN sys.data_spaces AS sds (NOLOCK) ON sds.data_space_id=ind.data_space_id WHERE sds.[type]='PS' GROUP BY ob.name) AND ds.[type]<>'PS'"
         }
       }
@@ -3626,7 +4202,7 @@
         "type": "SQL",
         "target": {
           "type": "Server",
-          "platform": "/^(Windows|Linux)$/",
+          "platform": ["Windows", "Linux"],
           "engineEdition": "OnPremises, ManagedInstance",
           "version": "[11.0,)"
         },
@@ -3646,7 +4222,7 @@
         "type": "SQL",
         "target": {
           "type": "Server",
-          "platform": "/^(Windows|Linux)$/",
+          "platform": ["Windows", "Linux"],
           "engineEdition": "OnPremises, ManagedInstance",
           "version": "[11.0,)"
         },
@@ -3666,7 +4242,7 @@
         "type": "SQL",
         "target": {
           "type": "Server",
-          "platform": "/^(Windows|Linux)$/",
+          "platform": ["Windows", "Linux"],
           "version": "[11.0,)"
         },
         "implementation": {
@@ -3679,7 +4255,7 @@
         "type": "SQL",
         "target": {
           "type": "Database",
-          "platform": "/^(Windows|Linux)$/",
+          "platform": ["Windows", "Linux"],
           "version": "[11.0,)"
         },
         "implementation": {
@@ -3692,7 +4268,7 @@
         "type": "SQL",
         "target": {
           "type": "Server",
-          "platform": "/^(Windows|Linux)$/",
+          "platform": ["Windows", "Linux"],
           "version": "[11.0,)"
         },
         "implementation": {
@@ -3705,7 +4281,7 @@
         "type": "SQL",
         "target": {
           "type": "Database",
-          "platform": "/^(Windows|Linux)$/",
+          "platform": ["Windows", "Linux"],
           "version": "[11.0,)"
         },
         "implementation": {
@@ -3721,7 +4297,7 @@
         "type": "SQL",
         "target": {
           "type": "Database",
-          "platform": "/^(Windows|Linux)$/",
+          "platform": ["Windows", "Linux"],
           "version": "[11.0,)"
         },
         "implementation": {
@@ -3734,7 +4310,7 @@
         "type": "SQL",
         "target": {
           "type": "Database",
-          "platform": "/^(Windows|Linux)$/",
+          "platform": ["Windows", "Linux"],
           "version": "[11.0,12.0)"
         },
         "implementation": {
@@ -3746,7 +4322,7 @@
         "type": "SQL",
         "target": {
           "type": "Database",
-          "platform": "/^(Windows|Linux)$/",
+          "platform": ["Windows", "Linux"],
           "version": "[12.0,)"
         },
         "implementation": {
@@ -3761,7 +4337,7 @@
         "type": "SQL",
         "target": {
           "type": "Database",
-          "platform": "/^(Windows|Linux)$/",
+          "platform": ["Windows", "Linux"],
           "version": "[12.0,)"
         },
         "implementation": {
@@ -3775,7 +4351,7 @@
         "type": "SQL",
         "target": {
           "type": "Database",
-          "platform": "/^(Windows|Linux)$/",
+          "platform": ["Windows", "Linux"],
           "version": "[12.0,)"
         },
         "implementation": {
@@ -3789,11 +4365,11 @@
         "type": "SQL",
         "target": {
           "type": "Server",
-          "platform": "/^(Windows|Linux)$/",
+          "platform": ["Windows", "Linux"],
           "version": "[11.0,)"
         },
         "implementation": {
-          "query": "DECLARE @ts_now bigint;SELECT @ts_now=ms_ticks FROM sys.dm_os_sys_info (NOLOCK);SELECT 100-ISNULL(SystemIdle,0) AS AVGTotalCPUUsage,AVGSQLCPUUsage,100-ISNULL(SystemIdle,0)-AVGSQLCPUUsage AS AVGCPUUsageByOther FROM(SELECT AVG(SystemIdle) AS SystemIdle,AVG(SQLProcessUtilization) AS AVGSQLCPUUsage FROM(SELECT	record.value('(./Record/SchedulerMonitorEvent/SystemHealth/SystemIdle)[1]','int') AS SystemIdle,record.value('(./Record/SchedulerMonitorEvent/SystemHealth/ProcessUtilization)[1]','int') AS SQLProcessUtilization,[TIMESTAMP] FROM (SELECT [TIMESTAMP],CONVERT(xml,record) AS record FROM sys.dm_os_ring_buffers (NOLOCK) WHERE ring_buffer_type=N'RING_BUFFER_SCHEDULER_MONITOR' AND record LIKE '%<SystemHealth>%' AND @ts_now-[TIMESTAMP]<=7200000) AS xrb ) AS si) AS a"
+          "query": "DECLARE @ts_now bigint;SELECT @ts_now=ms_ticks FROM sys.dm_os_sys_info (NOLOCK);SELECT 100-ISNULL(SystemIdle,0) AS AVGTotalCPUUsage,AVGSQLCPUUsage,100-ISNULL(SystemIdle,0)-AVGSQLCPUUsage AS AVGCPUUsageByOther FROM(SELECT AVG(SystemIdle) AS SystemIdle,AVG(SQLProcessUtilization) AS AVGSQLCPUUsage FROM(SELECT record.value('(./Record/SchedulerMonitorEvent/SystemHealth/SystemIdle)[1]','int') AS SystemIdle,record.value('(./Record/SchedulerMonitorEvent/SystemHealth/ProcessUtilization)[1]','int') AS SQLProcessUtilization,[TIMESTAMP] FROM (SELECT [TIMESTAMP],CONVERT(xml,record) AS record FROM sys.dm_os_ring_buffers (NOLOCK) WHERE ring_buffer_type=N'RING_BUFFER_SCHEDULER_MONITOR' AND record LIKE '%<SystemHealth>%' AND @ts_now-[TIMESTAMP]<=7200000) AS xrb ) AS si) AS a"
         }
       }
     ],
@@ -3802,12 +4378,18 @@
         "type": "SQL",
         "target": {
           "type": "Database",
-          "platform": "/^(Windows|Linux)$/",
+          "platform": ["Windows", "Linux"],
           "version": "[11.0,)"
         },
         "implementation": {
           "useDatabase": true,
-          "query": "SELECT DISTINCT 1 AS InUse FROM sys.sql_modules (NOLOCK) WHERE OBJECTPROPERTY([object_id],'IsMSShipped')=0 AND (PATINDEX('%.strelate(%',LOWER([definition]) COLLATE DATABASE_DEFAULT)>1 OR PATINDEX('%.stasbinary(%',LOWER([definition]) COLLATE DATABASE_DEFAULT)>1)"
+          "query": "SELECT DISTINCT 1 AS InUse FROM sys.sql_modules (NOLOCK) WHERE OBJECTPROPERTY([object_id],'IsMSShipped')=0 AND (PATINDEX('%.strelate(%',LOWER([definition]) COLLATE DATABASE_DEFAULT)>1 OR PATINDEX('%.stasbinary(%',LOWER([definition]) COLLATE DATABASE_DEFAULT)>1)",
+          "transform": {
+            "type": "noData",
+            "define": {
+              "InUse": 0
+            }
+          }
         }
       }
     ],
@@ -3816,7 +4398,7 @@
         "type": "SQL",
         "target": {
           "type": "Database",
-          "platform": "/^(Windows|Linux)$/",
+          "platform": ["Windows", "Linux"],
           "version": "[11.0,)"
         },
         "implementation": {
@@ -3828,6 +4410,32 @@
               "constraint_name": "join"
             }
           }
+        }
+      }
+    ],
+    "ObjectStatistics": [
+      {
+        "type": "SQL",
+        "target": {
+          "type": "Database",
+          "platform": ["Windows", "Linux"],
+          "version": "[11.0.3000,)"
+        },
+        "implementation": {
+          "useDatabase": true,
+          "query": "SELECT DISTINCT CONCAT(t.name,'.',OBJECT_NAME(mst.[object_id])) AS [TableName],ss.name AS [StatName],sp.[rows],sp.modification_counter,sp.rows_sampled FROM sys.objects AS o INNER JOIN sys.tables AS mst ON mst.[object_id]=o.[object_id] INNER JOIN sys.schemas AS t ON t.[schema_id]=mst.[schema_id] INNER JOIN sys.stats AS ss ON ss.[object_id]=mst.[object_id] CROSS APPLY sys.dm_db_stats_properties(ss.[object_id],ss.[stats_id]) AS sp WHERE sp.[rows]>0"
+        }
+      },
+      {
+        "type": "SQL",
+        "target": {
+          "type": "Database",
+          "platform": ["Windows", "Linux"],
+          "version": "[11.0, 11.0.3000)"
+        },
+        "implementation": {
+          "useDatabase": true,
+          "query": "SELECT DISTINCT CONCAT(t.name,'.',OBJECT_NAME(mst.[object_id])) AS [TableName],ss.name AS [StatName],SUM(p.[rows]) AS [rows],si.rowmodctr AS modification_counter,0 AS rows_sampled AS FROM sys.sysindexes AS si INNER JOIN sys.objects AS o ON si.id=o.[object_id] INNER JOIN sys.tables AS mst ON mst.[object_id]=o.[object_id] INNER JOIN sys.schemas AS t ON t.[schema_id]=mst.[schema_id] INNER JOIN sys.stats AS ss ON ss.[object_id]=o.[object_id] INNER JOIN sys.partitions AS p ON p.[object_id]=ss.[object_id] LEFT JOIN sys.indexes i ON si.id=i.[object_id] AND si.indid=i.index_id WHERE o.type<>'S' AND i.name IS NOT NULL GROUP BY mst.[object_id],t.name,rowmodctr,ss.name HAVING SUM(p.[rows])>0"
         }
       }
     ]
