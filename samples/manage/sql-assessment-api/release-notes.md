@@ -59,7 +59,7 @@ Version: SqlServer module 21.1.18206, SqlManagementObjects (SMO) package 150.208
 
 ### What's new
 
-- Added 50 assessment rules (144 rules in total so far)
+- Added 50 assessment rules
 - Added base math expressions and comparisons to rules conditions
 - Added support for RegisteredServer object
 - Updated way how rules are stored in the JSON format and also updated the mechanism of applying overrides/customizations
