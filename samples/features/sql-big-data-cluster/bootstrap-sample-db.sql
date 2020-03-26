@@ -74,9 +74,8 @@ BEGIN
 	CREATE MASTER KEY ENCRYPTION BY PASSWORD = 'sql19bigdatacluster!';
 
 	-- Create default data sources for SQL Big Data Cluster
-	IF SERVERPROPERTY('ProductLevel') <> 'RC1'	
-		CREATE EXTERNAL DATA SOURCE SqlComputePool
-		WITH (LOCATION = 'sqlcomputepool://controller-svc/default');
+	CREATE EXTERNAL DATA SOURCE SqlComputePool
+	WITH (LOCATION = 'sqlcomputepool://controller-svc/default');
 
 	CREATE EXTERNAL DATA SOURCE SqlDataPool
 	WITH (LOCATION = 'sqldatapool://controller-svc/default');
