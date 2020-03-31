@@ -22,7 +22,7 @@ BEGIN
     --                                     ORDER BY NEWID());
     DECLARE @StaffMemberPersonID INT 
     EXEC [DataLoadSimulation].[GetRandomEmployeePerson]
-      @EmployeePersonId = @StaffMemberPersonID OUTPUT
+      @EmployeePersonID = @StaffMemberPersonID OUTPUT
 
 
     DECLARE @TransactionsToReceive TABLE

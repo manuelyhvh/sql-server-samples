@@ -18,7 +18,7 @@ This folder contains two Azure Data Studio notebooks, one is for a quick start w
 
 ## DefaultRuleset.csv
 
-This is a readable version of the default ruleset so you can familiarize yourself with the existing rules. GitHub renders .csv files as an interactive table and provides convenient search and row filtering.
+This is a readable version of the default ruleset so you can familiarize yourself with the existing rules. GitHub renders .csv files as an interactive table and provides convenient search and row filtering. Scroll to the right to see all the fields.
 
 ## DisablingBuiltInChecks_sample.json
 

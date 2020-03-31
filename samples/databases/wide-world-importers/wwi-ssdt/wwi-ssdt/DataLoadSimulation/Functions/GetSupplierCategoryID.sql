@@ -17,7 +17,7 @@ Usage:
 
   DECLARE @SupCatID INT
 
-  SELECT TOP 1 @SupCatId = SupplierCategoryID 
+  SELECT TOP 1 @SupCatID = SupplierCategoryID 
     FROM Purchasing.SupplierCategories 
    WHERE SupplierCategoryName = @SupplierCategoryName
      AND ValidTo = '99991231 23:59:59.9999999'

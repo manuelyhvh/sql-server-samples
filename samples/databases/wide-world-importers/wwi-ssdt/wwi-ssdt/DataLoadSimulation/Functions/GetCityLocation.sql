@@ -17,7 +17,7 @@ Usage:
 
   SELECT TOP 1 @Loc = [Location] 
     FROM [Application].Cities 
-   WHERE CityID = @CityId
+   WHERE CityID = @CityID
 
   RETURN @Loc
   

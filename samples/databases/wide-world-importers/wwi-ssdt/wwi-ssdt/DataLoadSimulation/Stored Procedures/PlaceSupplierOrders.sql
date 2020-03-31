@@ -19,9 +19,9 @@ BEGIN
     DECLARE @SupplierPersonID INT
 
     EXEC [DataLoadSimulation].[GetRandomEmployeePerson]
-      @EmployeePersonId = @ContactPersonID OUTPUT
+      @EmployeePersonID = @ContactPersonID OUTPUT
     EXEC [DataLoadSimulation].[GetRandomEmployeePerson]
-      @EmployeePersonId = @SupplierPersonID OUTPUT
+      @EmployeePersonID = @SupplierPersonID OUTPUT
       
     DECLARE @Orders TABLE
     (

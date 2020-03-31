@@ -95,7 +95,7 @@ AS BEGIN
               + @Indent + @Indent + N'THROW 51000, ''' + QUOTENAME(@TemporalFromColumnName)
                                   + N' must be updated when simulating data loads'', 1;' + @CrLf
               + @Indent + @Indent + N'ROLLBACK TRAN;' + @CrLf
-              + @Indent + N'END;' + @Crlf + @CrLf
+              + @Indent + N'END;' + @CrLf + @CrLf
               + @Indent + N'INSERT ' + QUOTENAME(@SchemaName) + N'.' + QUOTENAME(@TableName + N'_' + @TemporalTableSuffix) + @CrLf
               + @Indent + @Indent + N'(' + @NormalColumnList + CASE WHEN COALESCE(@LastEditedByColumnName, N'') <> N'' THEN QUOTENAME(@LastEditedByColumnName) + N', ' ELSE N'' END
                                   + QUOTENAME(@TemporalFromColumnName) + N',' + QUOTENAME(@TemporalToColumnName) + N')' + @CrLf
@@ -132,7 +132,7 @@ AS BEGIN
               + @Indent + @Indent + N'THROW 51000, ''' + QUOTENAME(@TemporalFromColumnName)
                                   + N' must be updated when simulating data loads'', 1;' + @CrLf
               + @Indent + @Indent + N'ROLLBACK TRAN;' + @CrLf
-              + @Indent + N'END;' + @Crlf + @CrLf
+              + @Indent + N'END;' + @CrLf + @CrLf
               + @Indent + N'INSERT ' + QUOTENAME(@SchemaName) + N'.' + QUOTENAME(@TableName + N'_' + @TemporalTableSuffix) + @CrLf
               + @Indent + @Indent + N'(' + @NormalColumnList + CASE WHEN COALESCE(@LastEditedByColumnName, N'') <> N'' THEN QUOTENAME(@LastEditedByColumnName) + N', ' ELSE N'' END
                                   + QUOTENAME(@TemporalFromColumnName) + N',' + QUOTENAME(@TemporalToColumnName) + N')' + @CrLf
@@ -169,7 +169,7 @@ AS BEGIN
               + @Indent + @Indent + N'THROW 51000, ''' + QUOTENAME(@TemporalFromColumnName)
                                   + N' must be updated when simulating data loads'', 1;' + @CrLf
               + @Indent + @Indent + N'ROLLBACK TRAN;' + @CrLf
-              + @Indent + N'END;' + @Crlf + @CrLf
+              + @Indent + N'END;' + @CrLf + @CrLf
               + @Indent + N'INSERT ' + QUOTENAME(@SchemaName) + N'.' + QUOTENAME(@TableName + N'_' + @TemporalTableSuffix) + @CrLf
               + @Indent + @Indent + N'(' + @NormalColumnList + CASE WHEN COALESCE(@LastEditedByColumnName, N'') <> N'' THEN QUOTENAME(@LastEditedByColumnName) + N', ' ELSE N'' END
                                   + QUOTENAME(@TemporalFromColumnName) + N',' + QUOTENAME(@TemporalToColumnName) + N')' + @CrLf
@@ -206,7 +206,7 @@ AS BEGIN
               + @Indent + @Indent + N'THROW 51000, ''' + QUOTENAME(@TemporalFromColumnName)
                                   + N' must be updated when simulating data loads'', 1;' + @CrLf
               + @Indent + @Indent + N'ROLLBACK TRAN;' + @CrLf
-              + @Indent + N'END;' + @Crlf + @CrLf
+              + @Indent + N'END;' + @CrLf + @CrLf
               + @Indent + N'INSERT ' + QUOTENAME(@SchemaName) + N'.' + QUOTENAME(@TableName + N'_' + @TemporalTableSuffix) + @CrLf
               + @Indent + @Indent + N'(' + @NormalColumnList + CASE WHEN COALESCE(@LastEditedByColumnName, N'') <> N'' THEN QUOTENAME(@LastEditedByColumnName) + N', ' ELSE N'' END
                                   + QUOTENAME(@TemporalFromColumnName) + N',' + QUOTENAME(@TemporalToColumnName) + N')' + @CrLf
@@ -243,7 +243,7 @@ AS BEGIN
               + @Indent + @Indent + N'THROW 51000, ''' + QUOTENAME(@TemporalFromColumnName)
                                   + N' must be updated when simulating data loads'', 1;' + @CrLf
               + @Indent + @Indent + N'ROLLBACK TRAN;' + @CrLf
-              + @Indent + N'END;' + @Crlf + @CrLf
+              + @Indent + N'END;' + @CrLf + @CrLf
               + @Indent + N'INSERT ' + QUOTENAME(@SchemaName) + N'.' + QUOTENAME(@TableName + N'_' + @TemporalTableSuffix) + @CrLf
               + @Indent + @Indent + N'(' + @NormalColumnList + CASE WHEN COALESCE(@LastEditedByColumnName, N'') <> N'' THEN QUOTENAME(@LastEditedByColumnName) + N', ' ELSE N'' END
                                   + QUOTENAME(@TemporalFromColumnName) + N',' + QUOTENAME(@TemporalToColumnName) + N')' + @CrLf
@@ -280,7 +280,7 @@ AS BEGIN
               + @Indent + @Indent + N'THROW 51000, ''' + QUOTENAME(@TemporalFromColumnName)
                                   + N' must be updated when simulating data loads'', 1;' + @CrLf
               + @Indent + @Indent + N'ROLLBACK TRAN;' + @CrLf
-              + @Indent + N'END;' + @Crlf + @CrLf
+              + @Indent + N'END;' + @CrLf + @CrLf
               + @Indent + N'INSERT ' + QUOTENAME(@SchemaName) + N'.' + QUOTENAME(@TableName + N'_' + @TemporalTableSuffix) + @CrLf
               + @Indent + @Indent + N'(' + @NormalColumnList + CASE WHEN COALESCE(@LastEditedByColumnName, N'') <> N'' THEN QUOTENAME(@LastEditedByColumnName) + N', ' ELSE N'' END
                                   + QUOTENAME(@TemporalFromColumnName) + N',' + QUOTENAME(@TemporalToColumnName) + N')' + @CrLf
@@ -317,7 +317,7 @@ AS BEGIN
               + @Indent + @Indent + N'THROW 51000, ''' + QUOTENAME(@TemporalFromColumnName)
                                   + N' must be updated when simulating data loads'', 1;' + @CrLf
               + @Indent + @Indent + N'ROLLBACK TRAN;' + @CrLf
-              + @Indent + N'END;' + @Crlf + @CrLf
+              + @Indent + N'END;' + @CrLf + @CrLf
               + @Indent + N'INSERT ' + QUOTENAME(@SchemaName) + N'.' + QUOTENAME(@TableName + N'_' + @TemporalTableSuffix) + @CrLf
               + @Indent + @Indent + N'(' + @NormalColumnList + CASE WHEN COALESCE(@LastEditedByColumnName, N'') <> N'' THEN QUOTENAME(@LastEditedByColumnName) + N', ' ELSE N'' END
                                   + QUOTENAME(@TemporalFromColumnName) + N',' + QUOTENAME(@TemporalToColumnName) + N')' + @CrLf
@@ -354,7 +354,7 @@ AS BEGIN
               + @Indent + @Indent + N'THROW 51000, ''' + QUOTENAME(@TemporalFromColumnName)
                                   + N' must be updated when simulating data loads'', 1;' + @CrLf
               + @Indent + @Indent + N'ROLLBACK TRAN;' + @CrLf
-              + @Indent + N'END;' + @Crlf + @CrLf
+              + @Indent + N'END;' + @CrLf + @CrLf
               + @Indent + N'INSERT ' + QUOTENAME(@SchemaName) + N'.' + QUOTENAME(@TableName + N'_' + @TemporalTableSuffix) + @CrLf
               + @Indent + @Indent + N'(' + @NormalColumnList + CASE WHEN COALESCE(@LastEditedByColumnName, N'') <> N'' THEN QUOTENAME(@LastEditedByColumnName) + N', ' ELSE N'' END
                                   + QUOTENAME(@TemporalFromColumnName) + N',' + QUOTENAME(@TemporalToColumnName) + N')' + @CrLf
@@ -391,7 +391,7 @@ AS BEGIN
               + @Indent + @Indent + N'THROW 51000, ''' + QUOTENAME(@TemporalFromColumnName)
                                   + N' must be updated when simulating data loads'', 1;' + @CrLf
               + @Indent + @Indent + N'ROLLBACK TRAN;' + @CrLf
-              + @Indent + N'END;' + @Crlf + @CrLf
+              + @Indent + N'END;' + @CrLf + @CrLf
               + @Indent + N'INSERT ' + QUOTENAME(@SchemaName) + N'.' + QUOTENAME(@TableName + N'_' + @TemporalTableSuffix) + @CrLf
               + @Indent + @Indent + N'(' + @NormalColumnList + CASE WHEN COALESCE(@LastEditedByColumnName, N'') <> N'' THEN QUOTENAME(@LastEditedByColumnName) + N', ' ELSE N'' END
                                   + QUOTENAME(@TemporalFromColumnName) + N',' + QUOTENAME(@TemporalToColumnName) + N')' + @CrLf
@@ -428,7 +428,7 @@ AS BEGIN
               + @Indent + @Indent + N'THROW 51000, ''' + QUOTENAME(@TemporalFromColumnName)
                                   + N' must be updated when simulating data loads'', 1;' + @CrLf
               + @Indent + @Indent + N'ROLLBACK TRAN;' + @CrLf
-              + @Indent + N'END;' + @Crlf + @CrLf
+              + @Indent + N'END;' + @CrLf + @CrLf
               + @Indent + N'INSERT ' + QUOTENAME(@SchemaName) + N'.' + QUOTENAME(@TableName + N'_' + @TemporalTableSuffix) + @CrLf
               + @Indent + @Indent + N'(' + @NormalColumnList + CASE WHEN COALESCE(@LastEditedByColumnName, N'') <> N'' THEN QUOTENAME(@LastEditedByColumnName) + N', ' ELSE N'' END
                                   + QUOTENAME(@TemporalFromColumnName) + N',' + QUOTENAME(@TemporalToColumnName) + N')' + @CrLf
@@ -465,7 +465,7 @@ AS BEGIN
               + @Indent + @Indent + N'THROW 51000, ''' + QUOTENAME(@TemporalFromColumnName)
                                   + N' must be updated when simulating data loads'', 1;' + @CrLf
               + @Indent + @Indent + N'ROLLBACK TRAN;' + @CrLf
-              + @Indent + N'END;' + @Crlf + @CrLf
+              + @Indent + N'END;' + @CrLf + @CrLf
               + @Indent + N'INSERT ' + QUOTENAME(@SchemaName) + N'.' + QUOTENAME(@TableName + N'_' + @TemporalTableSuffix) + @CrLf
               + @Indent + @Indent + N'(' + @NormalColumnList + CASE WHEN COALESCE(@LastEditedByColumnName, N'') <> N'' THEN QUOTENAME(@LastEditedByColumnName) + N', ' ELSE N'' END
                                   + QUOTENAME(@TemporalFromColumnName) + N',' + QUOTENAME(@TemporalToColumnName) + N')' + @CrLf
@@ -502,7 +502,7 @@ AS BEGIN
               + @Indent + @Indent + N'THROW 51000, ''' + QUOTENAME(@TemporalFromColumnName)
                                   + N' must be updated when simulating data loads'', 1;' + @CrLf
               + @Indent + @Indent + N'ROLLBACK TRAN;' + @CrLf
-              + @Indent + N'END;' + @Crlf + @CrLf
+              + @Indent + N'END;' + @CrLf + @CrLf
               + @Indent + N'INSERT ' + QUOTENAME(@SchemaName) + N'.' + QUOTENAME(@TableName + N'_' + @TemporalTableSuffix) + @CrLf
               + @Indent + @Indent + N'(' + @NormalColumnList + CASE WHEN COALESCE(@LastEditedByColumnName, N'') <> N'' THEN QUOTENAME(@LastEditedByColumnName) + N', ' ELSE N'' END
                                   + QUOTENAME(@TemporalFromColumnName) + N',' + QUOTENAME(@TemporalToColumnName) + N')' + @CrLf
@@ -539,7 +539,7 @@ AS BEGIN
               + @Indent + @Indent + N'THROW 51000, ''' + QUOTENAME(@TemporalFromColumnName)
                                   + N' must be updated when simulating data loads'', 1;' + @CrLf
               + @Indent + @Indent + N'ROLLBACK TRAN;' + @CrLf
-              + @Indent + N'END;' + @Crlf + @CrLf
+              + @Indent + N'END;' + @CrLf + @CrLf
               + @Indent + N'INSERT ' + QUOTENAME(@SchemaName) + N'.' + QUOTENAME(@TableName + N'_' + @TemporalTableSuffix) + @CrLf
               + @Indent + @Indent + N'(' + @NormalColumnList + CASE WHEN COALESCE(@LastEditedByColumnName, N'') <> N'' THEN QUOTENAME(@LastEditedByColumnName) + N', ' ELSE N'' END
                                   + QUOTENAME(@TemporalFromColumnName) + N',' + QUOTENAME(@TemporalToColumnName) + N')' + @CrLf
@@ -576,7 +576,7 @@ AS BEGIN
               + @Indent + @Indent + N'THROW 51000, ''' + QUOTENAME(@TemporalFromColumnName)
                                   + N' must be updated when simulating data loads'', 1;' + @CrLf
               + @Indent + @Indent + N'ROLLBACK TRAN;' + @CrLf
-              + @Indent + N'END;' + @Crlf + @CrLf
+              + @Indent + N'END;' + @CrLf + @CrLf
               + @Indent + N'INSERT ' + QUOTENAME(@SchemaName) + N'.' + QUOTENAME(@TableName + N'_' + @TemporalTableSuffix) + @CrLf
               + @Indent + @Indent + N'(' + @NormalColumnList + CASE WHEN COALESCE(@LastEditedByColumnName, N'') <> N'' THEN QUOTENAME(@LastEditedByColumnName) + N', ' ELSE N'' END
                                   + QUOTENAME(@TemporalFromColumnName) + N',' + QUOTENAME(@TemporalToColumnName) + N')' + @CrLf
@@ -613,7 +613,7 @@ AS BEGIN
               + @Indent + @Indent + N'THROW 51000, ''' + QUOTENAME(@TemporalFromColumnName)
                                   + N' must be updated when simulating data loads'', 1;' + @CrLf
               + @Indent + @Indent + N'ROLLBACK TRAN;' + @CrLf
-              + @Indent + N'END;' + @Crlf + @CrLf
+              + @Indent + N'END;' + @CrLf + @CrLf
               + @Indent + N'INSERT ' + QUOTENAME(@SchemaName) + N'.' + QUOTENAME(@TableName + N'_' + @TemporalTableSuffix) + @CrLf
               + @Indent + @Indent + N'(' + @NormalColumnList + CASE WHEN COALESCE(@LastEditedByColumnName, N'') <> N'' THEN QUOTENAME(@LastEditedByColumnName) + N', ' ELSE N'' END
                                   + QUOTENAME(@TemporalFromColumnName) + N',' + QUOTENAME(@TemporalToColumnName) + N')' + @CrLf
@@ -650,7 +650,7 @@ AS BEGIN
               + @Indent + @Indent + N'THROW 51000, ''' + QUOTENAME(@TemporalFromColumnName)
                                   + N' must be updated when simulating data loads'', 1;' + @CrLf
               + @Indent + @Indent + N'ROLLBACK TRAN;' + @CrLf
-              + @Indent + N'END;' + @Crlf + @CrLf
+              + @Indent + N'END;' + @CrLf + @CrLf
               + @Indent + N'INSERT ' + QUOTENAME(@SchemaName) + N'.' + QUOTENAME(@TableName + N'_' + @TemporalTableSuffix) + @CrLf
               + @Indent + @Indent + N'(' + @NormalColumnList + CASE WHEN COALESCE(@LastEditedByColumnName, N'') <> N'' THEN QUOTENAME(@LastEditedByColumnName) + N', ' ELSE N'' END
                                   + QUOTENAME(@TemporalFromColumnName) + N',' + QUOTENAME(@TemporalToColumnName) + N')' + @CrLf
@@ -687,7 +687,7 @@ AS BEGIN
               + @Indent + @Indent + N'THROW 51000, ''' + QUOTENAME(@TemporalFromColumnName)
                                   + N' must be updated when simulating data loads'', 1;' + @CrLf
               + @Indent + @Indent + N'ROLLBACK TRAN;' + @CrLf
-              + @Indent + N'END;' + @Crlf + @CrLf
+              + @Indent + N'END;' + @CrLf + @CrLf
               + @Indent + N'INSERT ' + QUOTENAME(@SchemaName) + N'.' + QUOTENAME(@TableName + N'_' + @TemporalTableSuffix) + @CrLf
               + @Indent + @Indent + N'(' + @NormalColumnList + CASE WHEN COALESCE(@LastEditedByColumnName, N'') <> N'' THEN QUOTENAME(@LastEditedByColumnName) + N', ' ELSE N'' END
                                   + QUOTENAME(@TemporalFromColumnName) + N',' + QUOTENAME(@TemporalToColumnName) + N')' + @CrLf

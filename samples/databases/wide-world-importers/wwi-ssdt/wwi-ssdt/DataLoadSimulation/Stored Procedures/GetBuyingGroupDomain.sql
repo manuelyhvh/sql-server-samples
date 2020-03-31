@@ -72,7 +72,7 @@ Usage:
   SET @WebDomain = N'N/A'
   SET @EmailDomain = N'N/A'
   SELECT @WebDomain = WebDomain, @EmailDomain = EmailDomain
-    FROM @URLS
+    FROM @urls
    WHERE BuyingGroupName = @BuyingGroup
 
 END

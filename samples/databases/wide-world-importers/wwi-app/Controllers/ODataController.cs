@@ -1,5 +1,4 @@
-﻿
-using Belgrade.SqlClient;
+﻿using Belgrade.SqlClient;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using MsSql.RestApi;
@@ -20,7 +19,7 @@ namespace wwi_app.Controllers
         }
 
 
-		TableSpec salesorders = new TableSpec(schema: "WebApi", table: "SalesOrders", columns: "OrderID,OrderDate,CustomerPurchaseOrderNumber,ExpectedDeliveryDate,PickingCompletedWhen,CustomerID,CustomerName,PhoneNumber,FaxNumber,WebsiteURL,DeliveryLocation,SalesPerson,SalesPersonPhone,SalesPersonEmail");
+		TableSpec salesorders = new TableSpec("WebApi","SalesOrders", "OrderID,OrderDate,CustomerPurchaseOrderNumber,ExpectedDeliveryDate,PickingCompletedWhen,CustomerID,CustomerName,PhoneNumber,FaxNumber,WebsiteURL,DeliveryLocation,SalesPerson,SalesPersonPhone,SalesPersonEmail");
 
 		[HttpGet]
         public async Task SalesOrders(int? id)

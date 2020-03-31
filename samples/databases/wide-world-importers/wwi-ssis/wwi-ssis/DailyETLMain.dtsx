@@ -69,7 +69,7 @@
       <DTS:Variables />
       <DTS:ObjectData>
         <ExpressionTask
-          Expression="@[User::TargetETLCutoffTime] = DATEADD(&quot;Minute&quot;, -5, GETDATE()  )" />
+          Expression="@[User::TargetETLCutoffTime] = DATEADD(&quot;Minute&quot;, -5, GETUTCDATE()  )" />
       </DTS:ObjectData>
     </DTS:Executable>
     <DTS:Executable
@@ -86,7 +86,7 @@
       <DTS:ObjectData>
         <SQLTask:SqlTaskData
           SQLTask:Connection="{7C3E3ECC-C5AD-4675-9618-FC08465F8BC9}"
-          SQLTask:SqlStatementSource="DECLARE @YearNumber int =  YEAR(SYSDATETIME());&#xA;&#xA;EXEC Integration.PopulateDateDimensionForYear @YearNumber;" xmlns:SQLTask="www.microsoft.com/sqlserver/dts/tasks/sqltask" />
+          SQLTask:SqlStatementSource="DECLARE @YearNumber int =  YEAR(SYSUTCDATETIME());&#xA;&#xA;EXEC Integration.PopulateDateDimensionForYear @YearNumber;" xmlns:SQLTask="www.microsoft.com/sqlserver/dts/tasks/sqltask" />
       </DTS:ObjectData>
     </DTS:Executable>
     <DTS:Executable

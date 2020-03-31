@@ -117,7 +117,7 @@ BEGIN
         @randomSecondaryAddress = @PostalAddressLine2 OUTPUT
       
       EXEC [DataLoadSimulation].[GetBogativePostalCode] 
-          @CityID = @CityId
+          @CityID = @CityID
         , @PostalCode = @DeliveryPostalCode OUTPUT
       SET @PostalPostalCode = @DeliveryPostalCode;
 

@@ -6,7 +6,6 @@
 	var json = o["ApiModel"].ToString();
 	TableDef[] config = Newtonsoft.Json.JsonConvert.DeserializeObject<TableDef[]>(json);
 #>
-
 using Belgrade.SqlClient;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;

@@ -49,6 +49,7 @@ export DEBIAN_FRONTEND=noninteractive
 
 # Requirements file.
 export OSCODENAME=$(lsb_release -cs)
+
 export AZDATA_PRIVATE_PREVIEW_DEB_PACKAGE="https://aka.ms/mar-2020-azdata-"$OSCODENAME
 
 # Kube version.

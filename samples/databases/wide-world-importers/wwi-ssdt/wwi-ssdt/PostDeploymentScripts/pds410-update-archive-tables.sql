@@ -4,7 +4,7 @@
 
 PRINT N'Updating StockItems history...'
 GO
-EXEC DataloadSimulation.DeactivatetemporalTablesBeforeDataLoad;
+EXEC DataLoadSimulation.DeactivateTemporalTablesBeforeDataLoad;
 GO
 UPDATE Warehouse.StockItems_Archive
 SET UnitPrice = s.UnitPrice * (1 - .05 *(DATEDIFF(DAY, sa.ValidFrom, GETDATE())/365 )),
@@ -17,5 +17,5 @@ SET UnitPrice = s.UnitPrice * (1 - .05 *(DATEDIFF(DAY, sa.ValidFrom, GETDATE())/
 		JOIN Warehouse.StockItems s
 			ON sa.StockItemID = s.StockItemID;
 GO
-EXEC DataloadSimulation.ReActivatetemporalTablesAfterDataLoad;
+EXEC DataLoadSimulation.ReactivateTemporalTablesAfterDataLoad;
 GO

@@ -22,7 +22,7 @@ BEGIN
     --                                       ORDER BY NEWID());
     DECLARE @DeliveryDriverPersonID INT
     EXEC [DataLoadSimulation].[GetRandomEmployeePerson]
-      @EmployeePersonId = @DeliveryDriverPersonID OUTPUT
+      @EmployeePersonID = @DeliveryDriverPersonID OUTPUT
 
     DECLARE @ReturnedDeliveryData nvarchar(max);
     DECLARE @InvoiceID int;

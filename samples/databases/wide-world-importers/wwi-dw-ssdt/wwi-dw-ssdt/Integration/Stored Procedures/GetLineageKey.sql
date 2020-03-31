@@ -13,15 +13,11 @@ BEGIN
     INSERT Integration.Lineage
         ([Data Load Started], [Table Name], [Data Load Completed],
          [Was Successful], [Source System Cutoff Time])
+    OUTPUT
+        inserted.[Lineage Key] as LineageKey
     VALUES
         (@DataLoadStartedWhen, @TableName, NULL,
          0, @NewCutoffTime);
-
-    SELECT TOP(1) [Lineage Key] AS LineageKey
-    FROM Integration.Lineage
-    WHERE [Table Name] = @TableName
-    AND [Data Load Started] = @DataLoadStartedWhen
-    ORDER BY LineageKey DESC;
 
     RETURN 0;
 END;

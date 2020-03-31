@@ -65,7 +65,7 @@ BEGIN
     --                                 ORDER BY NEWID());
     DECLARE @PickingPersonID INT
     EXEC [DataLoadSimulation].[GetRandomEmployeePerson]
-      @EmployeePersonId = @PickingPersonID OUTPUT
+      @EmployeePersonID = @PickingPersonID OUTPUT
 
     OPEN OrderLineList;
     FETCH NEXT FROM OrderLineList INTO @OrderID, @OrderLineID, @StockItemID, @Quantity;

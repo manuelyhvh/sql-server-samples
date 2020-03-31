@@ -20,7 +20,6 @@ namespace wwi_app.Controllers
         {
             await this
 				.Table(salesorders)
-				//.OnError(e => { this.Response.Body.Dispose(); throw e; })
 				.Process(this.sqlQuery);
         }
 				
@@ -29,7 +28,6 @@ namespace wwi_app.Controllers
         {
             await this
 				.Table(purchaseorders)
-				//.OnError(e => { this.Response.Body.Dispose(); throw e; })
 				.Process(this.sqlQuery);
         }
 				
@@ -38,7 +36,6 @@ namespace wwi_app.Controllers
         {
             await this
 				.Table(invoices)
-				//.OnError(e => { this.Response.Body.Dispose(); throw e; })
 				.Process(this.sqlQuery);
         }
 				
@@ -47,7 +44,6 @@ namespace wwi_app.Controllers
         {
             await this
 				.Table(customertransactions)
-				//.OnError(e => { this.Response.Body.Dispose(); throw e; })
 				.Process(this.sqlQuery);
         }
 		
@@ -56,7 +52,6 @@ namespace wwi_app.Controllers
         {
             await this
 				.Table(suppliertransactions)
-				//.OnError(e => { this.Response.Body.Dispose(); throw e; })
 				.Process(this.sqlQuery);
         }
 		
@@ -65,7 +60,6 @@ namespace wwi_app.Controllers
         {
             await this
 				.Table(customers)
-				//.OnError(e => { this.Response.Body.Dispose(); throw e; })
 				.Process(this.sqlQuery);
         }
 		
@@ -74,7 +68,6 @@ namespace wwi_app.Controllers
         {
             await this
 				.Table(suppliers)
-				//.OnError(e => { this.Response.Body.Dispose(); throw e; })
 				.Process(this.sqlQuery);
         }
 		
@@ -83,7 +76,6 @@ namespace wwi_app.Controllers
         {
             await this
 				.Table(countries)
-				//.OnError(e => { this.Response.Body.Dispose(); throw e; })
 				.Process(this.sqlQuery);
         }
 		
@@ -92,7 +84,6 @@ namespace wwi_app.Controllers
         {
             await this
 				.Table(cities)
-				//.OnError(e => { this.Response.Body.Dispose(); throw e; })
 				.Process(this.sqlQuery);
         }
 		
@@ -101,7 +92,6 @@ namespace wwi_app.Controllers
         {
             await this
 				.Table(stateprovinces)
-				//.OnError(e => { this.Response.Body.Dispose(); throw e; })
 				.Process(this.sqlQuery);
         }
 		
@@ -110,7 +100,6 @@ namespace wwi_app.Controllers
         {
             await this
 				.Table(stockitems)
-				//.OnError(e => { this.Response.Body.Dispose(); throw e; })
 				.Process(this.sqlQuery);
         }
 																		    }

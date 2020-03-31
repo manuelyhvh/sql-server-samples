@@ -47,7 +47,7 @@ You need two machines (they can be virtual machines):
 	+ Look for the line that looks like this:
 	```csharp 
 	<connectionStrings>
-	  <add name="DefaultConnection" connectionString="Data Source=.;Initial Catalog=Clinic; Integrated Security=true; Column Encrypteiond Setting = Enabled; Enclave Attestation URL=http://YourHGSComputer/Attestation"
+	  <add name="DefaultConnection" connectionString="Data Source=.;Initial Catalog=Clinic; Integrated Security=true; Column Encryption Setting = Enabled; Enclave Attestation URL=http://YourHGSComputer/Attestation"
 	</connectionStrings>
 	```
 	+ Make sure the value of the **Data Source** key word in the database connection string is correct (identifies your instance). 

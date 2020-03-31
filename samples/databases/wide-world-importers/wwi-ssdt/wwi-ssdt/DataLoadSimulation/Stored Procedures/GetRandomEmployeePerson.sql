@@ -13,7 +13,7 @@ Notes:
 Usage:
   DECLARE @myEmployeePersonID INT
   EXEC [DataLoadSimulation].[GetRandomEmployeePerson]
-      @EmployeePersonId = @myEmployeePersonID OUTPUT
+      @EmployeePersonID = @myEmployeePersonID OUTPUT
   SELECT @myEmployeePersonID 
 
 */

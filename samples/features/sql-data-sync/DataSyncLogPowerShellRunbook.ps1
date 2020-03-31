@@ -1,4 +1,5 @@
-﻿#Data Sync OMS Integration Runbook
+#Requires -Modules @{ ModuleName="AzureRM.Sql"; ModuleVersion="4.12.1" }
+#Data Sync OMS Integration Runbook
 
 #To use this script Change all the strings below to reflect your information. 
 

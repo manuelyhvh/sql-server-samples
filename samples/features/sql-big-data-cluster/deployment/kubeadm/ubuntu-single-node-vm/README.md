@@ -10,7 +10,7 @@ Using this sample bash script, you will deploy a single node Kubernetes cluster 
 1. Update existing packages using commands below to ensure that the OS image is up to date
 
 ``` bash
-sudo apt update&&apt upgrade -y
+sudo apt update&&sudo apt upgrade -y
 sudo systemctl reboot
 ```
 

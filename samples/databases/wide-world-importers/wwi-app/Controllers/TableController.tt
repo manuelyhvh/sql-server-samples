@@ -30,7 +30,6 @@ namespace wwi_app.Controllers
         {
             await this
 				.Table(<#= t.Table.ToLower() #>)
-				//.OnError(e => { this.Response.Body.Dispose(); throw e; })
 				.Process(this.sqlQuery);
         }
 <# } #>

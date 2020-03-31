@@ -197,15 +197,15 @@ BEGIN
     @randomSecondaryAddress = @PostalAddressLine2 OUTPUT;
   
   -- Get the geography for this location
-  SET @DeliveryLocation = [DataLoadSimulation].[GetCityLocation] (@myCityId)
+  SET @DeliveryLocation = [DataLoadSimulation].[GetCityLocation] (@myCityID)
 
   -- Generate some bogative postal codes
   EXEC [DataLoadSimulation].[GetBogativePostalCode] 
-      @CityID = @myCityId
+      @CityID = @myCityID
     , @PostalCode = @DeliveryPostalCode OUTPUT
 
   EXEC [DataLoadSimulation].[GetBogativePostalCode] 
-      @CityID = @myCityId
+      @CityID = @myCityID
     , @PostalCode = @PostalPostalCode OUTPUT
   
   SET @CreditLimit = CEILING(RAND() * 30) * 100 + 1000;
@@ -335,15 +335,15 @@ BEGIN
       @randomSecondaryAddress = @PostalAddressLine2 OUTPUT;
     
     -- Get the geography for this location
-    SET @DeliveryLocation = [DataLoadSimulation].[GetCityLocation] (@myCityId)
+    SET @DeliveryLocation = [DataLoadSimulation].[GetCityLocation] (@myCityID)
     
     -- Generate some bogative postal codes
     EXEC [DataLoadSimulation].[GetBogativePostalCode] 
-        @CityID = @myCityId
+        @CityID = @myCityID
       , @PostalCode = @DeliveryPostalCode OUTPUT
     
     EXEC [DataLoadSimulation].[GetBogativePostalCode] 
-        @CityID = @myCityId
+        @CityID = @myCityID
       , @PostalCode = @PostalPostalCode OUTPUT
     
     -- Get a random customer category for this sub office
