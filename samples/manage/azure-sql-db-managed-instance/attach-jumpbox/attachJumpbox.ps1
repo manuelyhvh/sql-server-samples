@@ -11,7 +11,7 @@ $administratorLogin = $parameters['administratorLogin']
 $administratorLoginPassword = $parameters['administratorLoginPassword']
 
 if ($environmentName -eq '' -or ($null -eq $environmentName)) {
-    $environmentName = AzureCloud
+    $environmentName = 'AzureCloud'
     Write-Host "Environment: AzureCloud." -ForegroundColor Green
 }
 
