@@ -229,7 +229,8 @@ function CreateCertificate() {
 
 VerifyPSVersion
 EnsureAzModule
-EnsureLogin -environmentName $environmentNameSelectSubscriptionId -subscriptionId $subscriptionId
+EnsureLogin -environmentName $environmentName
+SelectSubscriptionId -subscriptionId $subscriptionId
 $virtualNetwork = LoadVirtualNetwork -resourceGroupName $resourceGroupName -virtualNetworkName $virtualNetworkName
 
 $subnets = $virtualNetwork.Subnets.Name
