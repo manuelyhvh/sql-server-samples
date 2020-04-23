@@ -7,10 +7,10 @@ $connectionOptions = [
     "Uid" => "sa",
     "PWD" => "your_password",
 ];
-//Establishes the connection
+// Establishes the connection
 $conn = sqlsrv_connect($serverName, $connectionOptions);
 
-//Read Query
+// Read Query
 $tsql = "SELECT SUM(Price) as sum FROM Table_with_5M_rows";
 $getResults = sqlsrv_query($conn, $tsql);
 echo("Sum: ");

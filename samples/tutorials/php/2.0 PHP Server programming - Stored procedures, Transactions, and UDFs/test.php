@@ -5,9 +5,9 @@ $connectionOptions = [
     "Uid" => "yourusername",
     "PWD" => "yourpassword",
 ];
-//Establishes the connection
+// Establishes the connection
 $conn = sqlsrv_connect($serverName, $connectionOptions);
-//////////////////STORED PROCEDURE/////////////////////////
+////////////////// STORED PROCEDURE /////////////////////////
 $tsql = "CREATE PROCEDURE sp_GetCompanies22 AS BEGIN SELECT [CompanyName] FROM SalesLT.Customer END";
 $storedProc = sqlsrv_query($conn, $tsql);
 if ($storedProc == false) {
@@ -17,9 +17,9 @@ if ($storedProc == false) {
 sqlsrv_free_stmt($storedProc);
 
 $tsql = "exec sp_GETCompanies22";
-//Executes the query
+// Executes the query
 $getProducts = sqlsrv_query($conn, $tsql);
-//Error handling
+// Error handling
 if ($getProducts == false) {
     echo "Error executing Stored Procedure";
     die(FormatErrors(sqlsrv_errors()));
@@ -30,7 +30,7 @@ $ctr = 0;
     <h1> First 10 results are after executing the stored procedure: </h1>
 <?php
 while ($row = sqlsrv_fetch_array($getProducts, SQLSRV_FETCH_ASSOC)) {
-    //Printing only the first 10 results
+    // Printing only the first 10 results
     if ($ctr > 9) {
         break;
     }
@@ -50,7 +50,7 @@ if ($storedProc == false) {
 sqlsrv_free_stmt($storedProc);
 ?>
 <?php
-//////////////////TRANSACTION/////////////////////////
+////////////////// TRANSACTION /////////////////////////
 if (sqlsrv_begin_transaction($conn) == false) {
     echo "Error opening connection";
     die(FormatErrors(sqlsrv_errors()));
@@ -85,11 +85,11 @@ sqlsrv_free_stmt($stmt2);
 
 ?>
 <?php
-//////////////////UDF/////////////////////////
-//Dropping function if it already exists
+////////////////// UDF /////////////////////////
+// Dropping function if it already exists
 $tsql1 = "IF OBJECT_ID(N'dbo.ifGetTotalItems', N'IF') IS NOT NULL DROP FUNCTION dbo.ifGetTotalItems;";
 $getProducts = sqlsrv_query($conn, $tsql1);
-//Error handling
+// Error handling
 if ($getProducts == false) {
     echo "Error deleting the UDF";
     die(FormatErrors(sqlsrv_errors()));
@@ -100,7 +100,7 @@ $tsql1 = 'CREATE FUNCTION dbo.ifGetTotalItems (@OrderID INT) RETURNS TABLE WITH 
     GROUP BY SalesOrderID
 );';
 $getProducts = sqlsrv_query($conn, $tsql1);
-//Error handling
+// Error handling
 if ($getProducts == false) {
     echo "Error creating the UDF";
     die(FormatErrors(sqlsrv_errors()));
@@ -110,7 +110,7 @@ FROM SalesLT.SalesOrderHeader s
 CROSS APPLY dbo.ifGetTotalItems(s.SalesOrderID) f
 ORDER BY SalesOrderID;";
 $getProducts = sqlsrv_query($conn, $tsql1);
-//Error handling
+// Error handling
 if ($getProducts == false) {
     echo "Error executing the UDF";
     die(FormatErrors(sqlsrv_errors()));
@@ -124,7 +124,7 @@ echo "SalesOrderID      CustomerID      TotalItems";
 echo("<br/>");
 
 while ($row = sqlsrv_fetch_array($getProducts, SQLSRV_FETCH_ASSOC)) {
-    //Printing only the top 10 results
+    // Printing only the top 10 results
     if ($ctr > 9) {
         break;
     }

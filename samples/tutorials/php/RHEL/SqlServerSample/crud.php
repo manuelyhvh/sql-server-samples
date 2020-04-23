@@ -5,10 +5,10 @@ $connectionOptions = [
     "Uid" => "sa",
     "PWD" => "your_password",
 ];
-//Establishes the connection
+// Establishes the connection
 $conn = sqlsrv_connect($serverName, $connectionOptions);
 
-//Insert Query
+// Insert Query
 echo("Inserting a new row into table" . PHP_EOL);
 $tsql = "INSERT INTO TestSchema.Employees (Name, Location) VALUES (?,?);";
 $params = ['Jake', 'United States'];
@@ -21,7 +21,7 @@ echo($rowsAffected . " row(s) inserted: " . PHP_EOL);
 
 sqlsrv_free_stmt($getResults);
 
-//Update Query
+// Update Query
 
 $userToUpdate = 'Nikita';
 $tsql = "UPDATE TestSchema.Employees SET Location = ? WHERE Name = ?";
@@ -36,7 +36,7 @@ if ($getResults == false || $rowsAffected == false) {
 echo($rowsAffected . " row(s) updated: " . PHP_EOL);
 sqlsrv_free_stmt($getResults);
 
-//Delte Query
+// Delte Query
 $userToDelete = 'Jared';
 $tsql = "DELETE FROM TestSchema.Employees WHERE Name = ?";
 $params = [$userToDelete];
@@ -49,7 +49,7 @@ if ($getResults == false || $rowsAffected == false) {
 echo($rowsAffected . " row(s) deleted: " . PHP_EOL);
 sqlsrv_free_stmt($getResults);
 
-//Read Query
+// Read Query
 $tsql = "SELECT Id, Name, Location FROM TestSchema.Employees;";
 $getResults = sqlsrv_query($conn, $tsql);
 echo("Reading data from table" . PHP_EOL);
