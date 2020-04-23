@@ -14,7 +14,7 @@ $tsql = "INSERT INTO TestSchema.Employees (Name, Location) VALUES (?,?);";
 $params = ['Jake', 'United States'];
 $getResults = sqlsrv_query($conn, $tsql, $params);
 $rowsAffected = sqlsrv_rows_affected($getResults);
-if ($getResults == false or $rowsAffected == false) {
+if ($getResults == false || $rowsAffected == false) {
     die(FormatErrors(sqlsrv_errors()));
 }
 echo($rowsAffected . " row(s) inserted: " . PHP_EOL);
@@ -30,7 +30,7 @@ echo("Updating Location for user " . $userToUpdate . PHP_EOL);
 
 $getResults = sqlsrv_query($conn, $tsql, $params);
 $rowsAffected = sqlsrv_rows_affected($getResults);
-if ($getResults == false or $rowsAffected == false) {
+if ($getResults == false || $rowsAffected == false) {
     die(FormatErrors(sqlsrv_errors()));
 }
 echo($rowsAffected . " row(s) updated: " . PHP_EOL);
@@ -43,7 +43,7 @@ $params = [$userToDelete];
 $getResults = sqlsrv_query($conn, $tsql, $params);
 echo("Deleting user " . $userToDelete . PHP_EOL);
 $rowsAffected = sqlsrv_rows_affected($getResults);
-if ($getResults == false or $rowsAffected == false) {
+if ($getResults == false || $rowsAffected == false) {
     die(FormatErrors(sqlsrv_errors()));
 }
 echo($rowsAffected . " row(s) deleted: " . PHP_EOL);
