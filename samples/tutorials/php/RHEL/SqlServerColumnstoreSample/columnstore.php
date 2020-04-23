@@ -1,19 +1,19 @@
 <?php
 $timeStart = microtime(true);
 
-$serverName = "localhost";
+$serverName = 'localhost';
 $connectionOptions = [
-    "Database" => "SampleDB",
-    "Uid" => "sa",
-    "PWD" => "your_password",
+    'Database' => 'SampleDB',
+    'Uid' => 'sa',
+    'PWD' => 'your_password',
 ];
 // Establishes the connection
 $conn = sqlsrv_connect($serverName, $connectionOptions);
 
 // Read Query
-$tsql = "SELECT SUM(Price) as sum FROM Table_with_5M_rows";
+$tsql = 'SELECT SUM(Price) as sum FROM Table_with_5M_rows';
 $getResults = sqlsrv_query($conn, $tsql);
-echo("Sum: ");
+echo('Sum: ');
 if ($getResults == false) {
     die(formatErrors(sqlsrv_errors()));
 }
@@ -25,12 +25,12 @@ sqlsrv_free_stmt($getResults);
 function formatErrors($errors)
 {
     /* Display errors. */
-    echo "Error information: ";
+    echo 'Error information: ';
 
     foreach ($errors as $error) {
-        echo "SQLSTATE: " . $error['SQLSTATE'] . "";
-        echo "Code: " . $error['code'] . "";
-        echo "Message: " . $error['message'] . "";
+        echo 'SQLSTATE: ' . $error['SQLSTATE'] . '';
+        echo 'Code: ' . $error['code'] . '';
+        echo 'Message: ' . $error['message'] . '';
     }
 }
 

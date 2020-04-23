@@ -1,16 +1,16 @@
 <?php
 echo "\n";
-$serverName = "tcp:yourserver.database.windows.net,1433";
+$serverName = 'tcp:yourserver.database.windows.net,1433';
 
 $connectionOptions = [
-    "Database" => "yourpassword",
-    "Uid" => "yourusername",
-    "PWD" => "yourpassword",
+    'Database' => 'yourpassword',
+    'Uid' => 'yourusername',
+    'PWD' => 'yourpassword',
 ];
 
 $conn = sqlsrv_connect($serverName, $connectionOptions);
 
-$tsql = "SELECT [CompanyName] FROM SalesLT.Customer";
+$tsql = 'SELECT [CompanyName] FROM SalesLT.Customer';
 
 $getProducts = sqlsrv_query($conn, $tsql);
 
@@ -23,7 +23,7 @@ $ctr = 0;
 while ($row = sqlsrv_fetch_array($getProducts, SQLSRV_FETCH_ASSOC)) {
     $ctr++;
     echo($row['CompanyName']);
-    echo("<br/>");
+    echo('<br/>');
     $productCount++;
     if ($ctr > 10) {
         break;
@@ -46,8 +46,8 @@ while ($row = sqlsrv_fetch_array($insertReview, SQLSRV_FETCH_ASSOC)) {
 }
 sqlsrv_free_stmt($insertReview);
 
-$tsql = "DELETE FROM [SalesLT].[Product] WHERE Name=?";
-$params = ["SQL Server 15"];
+$tsql = 'DELETE FROM [SalesLT].[Product] WHERE Name=?';
+$params = ['SQL Server 15'];
 
 $deleteReview = sqlsrv_prepare($conn, $tsql, $params);
 if ($deleteReview == false) {
