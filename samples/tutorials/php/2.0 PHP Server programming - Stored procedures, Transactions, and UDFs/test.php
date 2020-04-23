@@ -16,7 +16,7 @@ $tsql = "CREATE PROCEDURE sp_GetCompanies22 AS BEGIN SELECT [CompanyName] FROM S
 $storedProc = sqlsrv_query($conn, $tsql);
 if ($storedProc == false) {
     echo "Error creating Stored Procedure";
-    die(FormatErrors(sqlsrv_errors()));
+    die(formatErrors(sqlsrv_errors()));
 }
 sqlsrv_free_stmt($storedProc);
 
@@ -26,7 +26,7 @@ $getProducts = sqlsrv_query($conn, $tsql);
 // Error handling
 if ($getProducts == false) {
     echo "Error executing Stored Procedure";
-    die(FormatErrors(sqlsrv_errors()));
+    die(formatErrors(sqlsrv_errors()));
 }
 $productCount = 0;
 $ctr = 0;
@@ -49,7 +49,7 @@ $tsql = "DROP PROCEDURE sp_GETCompanies22";
 $storedProc = sqlsrv_query($conn, $tsql);
 if ($storedProc == false) {
     echo "Error dropping Stored Procedure";
-    die(FormatErrors(sqlsrv_errors()));
+    die(formatErrors(sqlsrv_errors()));
 }
 sqlsrv_free_stmt($storedProc);
 ?>
@@ -60,7 +60,7 @@ sqlsrv_free_stmt($storedProc);
 
 if (sqlsrv_begin_transaction($conn) == false) {
     echo "Error opening connection";
-    die(FormatErrors(sqlsrv_errors()));
+    die(formatErrors(sqlsrv_errors()));
 }
 
 /* Set up and execute the first query. */
@@ -101,7 +101,7 @@ $getProducts = sqlsrv_query($conn, $tsql1);
 // Error handling
 if ($getProducts == false) {
     echo "Error deleting the UDF";
-    die(FormatErrors(sqlsrv_errors()));
+    die(formatErrors(sqlsrv_errors()));
 }
 $tsql1 = 'CREATE FUNCTION dbo.ifGetTotalItems (@OrderID INT) RETURNS TABLE WITH SCHEMABINDING AS RETURN (
     SELECT SUM(OrderQty) AS TotalItems FROM SalesLT.SalesOrderDetail
@@ -112,7 +112,7 @@ $getProducts = sqlsrv_query($conn, $tsql1);
 // Error handling
 if ($getProducts == false) {
     echo "Error creating the UDF";
-    die(FormatErrors(sqlsrv_errors()));
+    die(formatErrors(sqlsrv_errors()));
 }
 $tsql1 = "SELECT s.SalesOrderID, s.OrderDate, s.CustomerID, f.TotalItems
 FROM SalesLT.SalesOrderHeader s
@@ -122,7 +122,7 @@ $getProducts = sqlsrv_query($conn, $tsql1);
 // Error handling
 if ($getProducts == false) {
     echo "Error executing the UDF";
-    die(FormatErrors(sqlsrv_errors()));
+    die(formatErrors(sqlsrv_errors()));
 }
 $productCount = 0;
 $ctr = 0;

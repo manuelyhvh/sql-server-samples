@@ -15,7 +15,7 @@ $tsql = "SELECT [CompanyName] FROM SalesLT.Customer";
 $getProducts = sqlsrv_query($conn, $tsql);
 
 if ($getProducts == false) {
-    die(FormatErrors(sqlsrv_errors()));
+    die(formatErrors(sqlsrv_errors()));
 }
 
 $productCount = 0;
@@ -38,7 +38,7 @@ VALUES ('SQL Server 15', 'SQL Server 12', 0, 0, getdate());";
 
 $insertReview = sqlsrv_query($conn, $tsql);
 if ($insertReview == false) {
-    die(FormatErrors(sqlsrv_errors()));
+    die(formatErrors(sqlsrv_errors()));
 }
 
 while ($row = sqlsrv_fetch_array($insertReview, SQLSRV_FETCH_ASSOC)) {
@@ -51,11 +51,11 @@ $params = ["SQL Server 15"];
 
 $deleteReview = sqlsrv_prepare($conn, $tsql, $params);
 if ($deleteReview == false) {
-    die(FormatErrors(sqlsrv_errors()));
+    die(formatErrors(sqlsrv_errors()));
 }
 
 if (sqlsrv_execute($deleteReview) == false) {
-    die(FormatErrors(sqlsrv_errors()));
+    die(formatErrors(sqlsrv_errors()));
 }
 
 while ($row = sqlsrv_fetch_array($deleteReview, SQLSRV_FETCH_ASSOC)) {

@@ -15,14 +15,14 @@ $tsql = "SELECT SUM(Price) as sum FROM Table_with_5M_rows";
 $getResults = sqlsrv_query($conn, $tsql);
 echo("Sum: ");
 if ($getResults == false) {
-    die(FormatErrors(sqlsrv_errors()));
+    die(formatErrors(sqlsrv_errors()));
 }
 while ($row = sqlsrv_fetch_array($getResults, SQLSRV_FETCH_ASSOC)) {
     echo($row['sum'] . PHP_EOL);
 }
 sqlsrv_free_stmt($getResults);
 
-function FormatErrors($errors)
+function formatErrors($errors)
 {
     /* Display errors. */
     echo "Error information: ";
