@@ -145,10 +145,14 @@ while ($row = sqlsrv_fetch_array($getProducts, SQLSRV_FETCH_ASSOC)) {
         break;
     }
     $ctr++;
-    echo $row['SalesOrderID'] . str_repeat('&nbsp;', 13) . $row['CustomerID'] . str_repeat(
-        '&nbsp;',
-        11
-    ) . $row['TotalItems'];
+    echo sprintf(
+        '%s%s%s%s%s',
+        $row['SalesOrderID'],
+        str_repeat('&nbsp;', 13),
+        $row['CustomerID'],
+        str_repeat('&nbsp;', 11),
+        $row['TotalItems']
+    );
     echo('<br/>');
     $productCount++;
 }
