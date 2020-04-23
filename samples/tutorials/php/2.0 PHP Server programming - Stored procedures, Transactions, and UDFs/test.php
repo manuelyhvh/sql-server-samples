@@ -94,14 +94,21 @@ if ($getProducts == false) {
     echo "Error deleting the UDF";
     die(FormatErrors(sqlsrv_errors()));
 }
-$tsql1 = "CREATE FUNCTION dbo.ifGetTotalItems (@OrderID INT) RETURNS TABLE WITH SCHEMABINDING AS RETURN (SELECT SUM(OrderQty) AS TotalItems FROM SalesLT.SalesOrderDetail WHERE SalesOrderID = @OrderID GROUP BY SalesOrderID);";
+$tsql1 = 'CREATE FUNCTION dbo.ifGetTotalItems (@OrderID INT) RETURNS TABLE WITH SCHEMABINDING AS RETURN (
+    SELECT SUM(OrderQty) AS TotalItems FROM SalesLT.SalesOrderDetail
+    WHERE SalesOrderID = @OrderID
+    GROUP BY SalesOrderID
+);';
 $getProducts = sqlsrv_query($conn, $tsql1);
 //Error handling
 if ($getProducts == false) {
     echo "Error creating the UDF";
     die(FormatErrors(sqlsrv_errors()));
 }
-$tsql1 = "SELECT s.SalesOrderID, s.OrderDate, s.CustomerID, f.TotalItems FROM SalesLT.SalesOrderHeader s CROSS APPLY dbo.ifGetTotalItems(s.SalesOrderID) f ORDER BY SalesOrderID;";
+$tsql1 = "SELECT s.SalesOrderID, s.OrderDate, s.CustomerID, f.TotalItems
+FROM SalesLT.SalesOrderHeader s
+CROSS APPLY dbo.ifGetTotalItems(s.SalesOrderID) f
+ORDER BY SalesOrderID;";
 $getProducts = sqlsrv_query($conn, $tsql1);
 //Error handling
 if ($getProducts == false) {

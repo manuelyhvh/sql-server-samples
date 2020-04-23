@@ -32,7 +32,9 @@ while ($row = sqlsrv_fetch_array($getProducts, SQLSRV_FETCH_ASSOC)) {
 
 sqlsrv_free_stmt($getProducts);
 
-$tsql = "INSERT SalesLT.Product (Name, ProductNumber, StandardCost, ListPrice, SellStartDate) OUTPUT INSERTED.ProductID VALUES ('SQL Server 15', 'SQL Server 12', 0, 0, getdate())";
+$tsql = "INSERT SalesLT.Product (Name, ProductNumber, StandardCost, ListPrice, SellStartDate)
+OUTPUT INSERTED.ProductID
+VALUES ('SQL Server 15', 'SQL Server 12', 0, 0, getdate());";
 
 $insertReview = sqlsrv_query($conn, $tsql);
 if ($insertReview == false) {
