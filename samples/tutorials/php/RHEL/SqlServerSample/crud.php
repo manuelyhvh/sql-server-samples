@@ -26,7 +26,7 @@ sqlsrv_free_stmt($getResults);
 
 $userToUpdate = 'Nikita';
 $tsql = 'UPDATE TestSchema.Employees SET Location = ? WHERE Name = ?';
-$params = ['Sweeden', $userToUpdate];
+$params = ['Sweden', $userToUpdate];
 echo('Updating Location for user ' . $userToUpdate . PHP_EOL);
 
 $getResults = sqlsrv_query($conn, $tsql, $params);
@@ -38,7 +38,7 @@ if ($getResults === false || $rowsAffected === false) {
 echo($rowsAffected . ' row(s) updated: ' . PHP_EOL);
 sqlsrv_free_stmt($getResults);
 
-// Delte Query
+//  Delete Query
 $userToDelete = 'Jared';
 $tsql = 'DELETE FROM TestSchema.Employees WHERE Name = ?';
 $params = [$userToDelete];

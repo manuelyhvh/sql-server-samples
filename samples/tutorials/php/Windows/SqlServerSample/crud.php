@@ -26,7 +26,7 @@ sqlsrv_free_stmt($getResults);
 
 $userToUpdate = 'Nikita';
 $tsql = 'UPDATE TestSchema.Employees SET Location = ? WHERE Name = ?';
-$params = ['Sweeden', $userToUpdate];
+$params = ['Sweden', $userToUpdate];
 echo('Updating Location for user ' . $userToUpdate . PHP_EOL);
 
 $getResults = sqlsrv_query($conn, $tsql, $params);

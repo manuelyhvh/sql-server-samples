@@ -82,7 +82,7 @@ $stmt2 = sqlsrv_query($conn, $tsql2);
 if ($stmt1 && $stmt2) {
     sqlsrv_commit($conn);
     ?>
-    <h1> Transaction was commited </h1>
+    <h1> Transaction was committed </h1>
 
     <?php
 } else {
