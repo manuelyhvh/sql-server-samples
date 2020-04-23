@@ -16,5 +16,4 @@ This Solution Quick Start provides a solution for a Software-as-a-Solution (SaaS
 [saas-scenario-with-elastic-pools](https://github.com/Microsoft/sql-server-samples/tree/master/samples/manage/azure-sql-db-elastic-pools-custom-dashboard) in the GitHub SQL Server samples repository provides a load generator and monitoring web app along with the documentation on what it does and how to use it.  
 
 ## Windows Containers
-This includes samples for setting up mssql-server in Windows Containers. Currently it includes the following:
-- __[windows-containers] (windows-containers/)__
+This includes samples for setting up mssql-server in Windows Containers. Currently it only includes a link to the separately maintained [mssql-docker](https://github.com/Microsoft/mssql-docker/blob/master/windows/README.md) instructions.
