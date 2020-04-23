@@ -2,41 +2,39 @@
 $time_start = microtime(true);
 
 $serverName = "localhost";
-$connectionOptions = array(
+$connectionOptions = [
     "Database" => "SampleDB",
     "Uid" => "sa",
-    "PWD" => "your_password"
-);
+    "PWD" => "your_password",
+];
 //Establishes the connection
 $conn = sqlsrv_connect($serverName, $connectionOptions);
 
 //Read Query
-$tsql= "SELECT SUM(Price) as sum FROM Table_with_5M_rows";
-$getResults= sqlsrv_query($conn, $tsql);
-echo ("Sum: ");
-if ($getResults == FALSE)
+$tsql = "SELECT SUM(Price) as sum FROM Table_with_5M_rows";
+$getResults = sqlsrv_query($conn, $tsql);
+echo("Sum: ");
+if ($getResults == false) {
     die(FormatErrors(sqlsrv_errors()));
+}
 while ($row = sqlsrv_fetch_array($getResults, SQLSRV_FETCH_ASSOC)) {
-    echo ($row['sum'] . PHP_EOL);
+    echo($row['sum'] . PHP_EOL);
 
 }
 sqlsrv_free_stmt($getResults);
 
-function FormatErrors( $errors )
+function FormatErrors($errors)
 {
     /* Display errors. */
     echo "Error information: ";
 
-    foreach ( $errors as $error )
-    {
-        echo "SQLSTATE: ".$error['SQLSTATE']."";
-        echo "Code: ".$error['code']."";
-        echo "Message: ".$error['message']."";
+    foreach ($errors as $error) {
+        echo "SQLSTATE: " . $error['SQLSTATE'] . "";
+        echo "Code: " . $error['code'] . "";
+        echo "Message: " . $error['message'] . "";
     }
 }
+
 $time_end = microtime(true);
-$execution_time = round((($time_end - $time_start)*1000),2);
-echo 'QueryTime: '.$execution_time.' ms';
-
-
-?>
+$execution_time = round((($time_end - $time_start) * 1000), 2);
+echo 'QueryTime: ' . $execution_time . ' ms';

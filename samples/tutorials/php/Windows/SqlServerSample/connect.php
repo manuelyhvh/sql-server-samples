@@ -1,12 +1,12 @@
 <?php
 $serverName = "localhost";
-$connectionOptions = array(
+$connectionOptions = [
     "Database" => "SampleDB",
     "Uid" => "sa",
-    "PWD" => "your_password"
-);
+    "PWD" => "your_password",
+];
 //Establishes the connection
 $conn = sqlsrv_connect($serverName, $connectionOptions);
-if($conn)
-    echo "Connected!"
-?>
+if ($conn) {
+    echo "Connected!";
+}
