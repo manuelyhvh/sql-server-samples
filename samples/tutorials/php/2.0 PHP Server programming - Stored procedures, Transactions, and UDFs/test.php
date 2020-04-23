@@ -14,7 +14,7 @@ $conn = sqlsrv_connect($serverName, $connectionOptions);
 
 $tsql = 'CREATE PROCEDURE sp_GetCompanies22 AS BEGIN SELECT [CompanyName] FROM SalesLT.Customer END';
 $storedProc = sqlsrv_query($conn, $tsql);
-if ($storedProc == false) {
+if ($storedProc === false) {
     echo 'Error creating Stored Procedure';
     die(formatErrors(sqlsrv_errors()));
 }
@@ -24,7 +24,7 @@ $tsql = 'exec sp_GETCompanies22';
 // Executes the query
 $getProducts = sqlsrv_query($conn, $tsql);
 // Error handling
-if ($getProducts == false) {
+if ($getProducts === false) {
     echo 'Error executing Stored Procedure';
     die(formatErrors(sqlsrv_errors()));
 }
@@ -47,7 +47,7 @@ sqlsrv_free_stmt($getProducts);
 $tsql = 'DROP PROCEDURE sp_GETCompanies22';
 
 $storedProc = sqlsrv_query($conn, $tsql);
-if ($storedProc == false) {
+if ($storedProc === false) {
     echo 'Error dropping Stored Procedure';
     die(formatErrors(sqlsrv_errors()));
 }
@@ -58,7 +58,7 @@ sqlsrv_free_stmt($storedProc);
  * Transaction
  */
 
-if (sqlsrv_begin_transaction($conn) == false) {
+if (sqlsrv_begin_transaction($conn) === false) {
     echo 'Error opening connection';
     die(formatErrors(sqlsrv_errors()));
 }
@@ -99,7 +99,7 @@ sqlsrv_free_stmt($stmt2);
 $tsql1 = "IF OBJECT_ID(N'dbo.ifGetTotalItems', N'IF') IS NOT NULL DROP FUNCTION dbo.ifGetTotalItems;";
 $getProducts = sqlsrv_query($conn, $tsql1);
 // Error handling
-if ($getProducts == false) {
+if ($getProducts === false) {
     echo 'Error deleting the UDF';
     die(formatErrors(sqlsrv_errors()));
 }
@@ -110,7 +110,7 @@ $tsql1 = 'CREATE FUNCTION dbo.ifGetTotalItems (@OrderID INT) RETURNS TABLE WITH 
 );';
 $getProducts = sqlsrv_query($conn, $tsql1);
 // Error handling
-if ($getProducts == false) {
+if ($getProducts === false) {
     echo 'Error creating the UDF';
     die(formatErrors(sqlsrv_errors()));
 }
@@ -120,7 +120,7 @@ CROSS APPLY dbo.ifGetTotalItems(s.SalesOrderID) f
 ORDER BY SalesOrderID;';
 $getProducts = sqlsrv_query($conn, $tsql1);
 // Error handling
-if ($getProducts == false) {
+if ($getProducts === false) {
     echo 'Error executing the UDF';
     die(formatErrors(sqlsrv_errors()));
 }

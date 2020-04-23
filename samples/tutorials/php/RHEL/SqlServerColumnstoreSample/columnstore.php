@@ -14,7 +14,7 @@ $conn = sqlsrv_connect($serverName, $connectionOptions);
 $tsql = 'SELECT SUM(Price) as sum FROM Table_with_5M_rows';
 $getResults = sqlsrv_query($conn, $tsql);
 echo('Sum: ');
-if ($getResults == false) {
+if ($getResults === false) {
     die(formatErrors(sqlsrv_errors()));
 }
 while ($row = sqlsrv_fetch_array($getResults, SQLSRV_FETCH_ASSOC)) {
