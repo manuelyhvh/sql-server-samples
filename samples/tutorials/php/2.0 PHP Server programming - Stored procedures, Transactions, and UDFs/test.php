@@ -7,7 +7,11 @@ $connectionOptions = [
 ];
 // Establishes the connection
 $conn = sqlsrv_connect($serverName, $connectionOptions);
-////////////////// STORED PROCEDURE /////////////////////////
+
+/*
+ * Stored Procedure
+ */
+
 $tsql = "CREATE PROCEDURE sp_GetCompanies22 AS BEGIN SELECT [CompanyName] FROM SalesLT.Customer END";
 $storedProc = sqlsrv_query($conn, $tsql);
 if ($storedProc == false) {
@@ -50,7 +54,10 @@ if ($storedProc == false) {
 sqlsrv_free_stmt($storedProc);
 ?>
 <?php
-////////////////// TRANSACTION /////////////////////////
+/*
+ * Transaction
+ */
+
 if (sqlsrv_begin_transaction($conn) == false) {
     echo "Error opening connection";
     die(FormatErrors(sqlsrv_errors()));
@@ -85,7 +92,9 @@ sqlsrv_free_stmt($stmt2);
 
 ?>
 <?php
-////////////////// UDF /////////////////////////
+/*
+ * UDF
+ */
 // Dropping function if it already exists
 $tsql1 = "IF OBJECT_ID(N'dbo.ifGetTotalItems', N'IF') IS NOT NULL DROP FUNCTION dbo.ifGetTotalItems;";
 $getProducts = sqlsrv_query($conn, $tsql1);
