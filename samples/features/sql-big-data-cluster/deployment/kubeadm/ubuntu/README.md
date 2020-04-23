@@ -31,3 +31,40 @@ In this example, we will deploy Kubernetes over multiple Linux machines (physica
 Simply type in "local-storage" twice (once for data, once for logs) when facing the following prompt by azdata :
 
 `Kubernetes Storage Class - Config Path: spec.storage.data.className - Description: This indicates the name of the Kubernetes Storage Class to use. You must pre-provision the storage class and the persistent volumes or you can use a built in storage class if the platform you are deploying provides this capability. - Please provide a value:`
+
+### local-storage clean up
+
+If you removed BDC cluster that was previously deployed on Kubernetes cluster that was built using the sample scripts in this guide, you may want to clean the local-storage before using the cluster to deploy new BDC
+
+to clean the storage you need to follow these steps
+
+1) on each worker node make sure ‘/mnt/local-storage’ has only folder structure with no files, you can run ‘tree /mnt/local-storage’ for quick check
+2) if you see any files you need to remove them
+3) remount the volumes
+
+You can use the following script to clean the volumes. 
+
+**WARNNING**: running this script will **REMOVE** all files that may exists under /mnt/local-storage folders
+
+run the following command to create the script 
+
+```sh
+cat > clean-volumes-agents.sh <<EOF
+#!/bin/bash -e
+
+# num of persistent volumes
+PV_COUNT=25
+
+for i in \$(seq 1 \$PV_COUNT); do
+
+  vol="vol\$i"
+
+  sudo rm -rf /mnt/local-storage/\$vol/*
+
+  mount --bind /mnt/local-storage/\$vol /mnt/local-storage/\$vol
+
+done
+EOF
+
+chmod +x clean-volumes-agents.sh
+```
