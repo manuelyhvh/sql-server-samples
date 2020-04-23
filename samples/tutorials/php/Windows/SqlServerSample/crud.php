@@ -15,7 +15,8 @@ $params = ['Jake', 'United States'];
 $getResults = sqlsrv_query($conn, $tsql, $params);
 $rowsAffected = sqlsrv_rows_affected($getResults);
 if ($getResults === false || $rowsAffected === false) {
-    die(format_errors(sqlsrv_errors()));
+    format_errors(sqlsrv_errors());
+    die();
 }
 echo($rowsAffected . ' row(s) inserted: ' . PHP_EOL);
 
@@ -31,7 +32,8 @@ echo('Updating Location for user ' . $userToUpdate . PHP_EOL);
 $getResults = sqlsrv_query($conn, $tsql, $params);
 $rowsAffected = sqlsrv_rows_affected($getResults);
 if ($getResults === false || $rowsAffected === false) {
-    die(format_errors(sqlsrv_errors()));
+    format_errors(sqlsrv_errors());
+    die();
 }
 echo($rowsAffected . ' row(s) updated: ' . PHP_EOL);
 sqlsrv_free_stmt($getResults);
@@ -44,7 +46,8 @@ $getResults = sqlsrv_query($conn, $tsql, $params);
 echo('Deleting user ' . $userToDelete . PHP_EOL);
 $rowsAffected = sqlsrv_rows_affected($getResults);
 if ($getResults === false || $rowsAffected === false) {
-    die(format_errors(sqlsrv_errors()));
+    format_errors(sqlsrv_errors());
+    die();
 }
 echo($rowsAffected . ' row(s) deleted: ' . PHP_EOL);
 sqlsrv_free_stmt($getResults);
@@ -54,7 +57,8 @@ $tsql = 'SELECT Id, Name, Location FROM TestSchema.Employees;';
 $getResults = sqlsrv_query($conn, $tsql);
 echo('Reading data from table' . PHP_EOL);
 if ($getResults === false) {
-    die(format_errors(sqlsrv_errors()));
+    format_errors(sqlsrv_errors());
+    die();
 }
 while ($row = sqlsrv_fetch_array($getResults, SQLSRV_FETCH_ASSOC)) {
     echo($row['Id'] . ' ' . $row['Name'] . ' ' . $row['Location'] . PHP_EOL);

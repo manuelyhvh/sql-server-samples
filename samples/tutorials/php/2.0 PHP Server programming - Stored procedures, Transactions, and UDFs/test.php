@@ -16,7 +16,8 @@ $tsql = 'CREATE PROCEDURE sp_GetCompanies22 AS BEGIN SELECT [CompanyName] FROM S
 $storedProc = sqlsrv_query($conn, $tsql);
 if ($storedProc === false) {
     echo 'Error creating Stored Procedure';
-    die(format_errors(sqlsrv_errors()));
+    format_errors(sqlsrv_errors());
+    die();
 }
 sqlsrv_free_stmt($storedProc);
 
@@ -26,7 +27,8 @@ $getProducts = sqlsrv_query($conn, $tsql);
 // Error handling
 if ($getProducts === false) {
     echo 'Error executing Stored Procedure';
-    die(format_errors(sqlsrv_errors()));
+    format_errors(sqlsrv_errors());
+    die();
 }
 $productCount = 0;
 $ctr = 0;
@@ -49,7 +51,8 @@ $tsql = 'DROP PROCEDURE sp_GETCompanies22';
 $storedProc = sqlsrv_query($conn, $tsql);
 if ($storedProc === false) {
     echo 'Error dropping Stored Procedure';
-    die(format_errors(sqlsrv_errors()));
+    format_errors(sqlsrv_errors());
+    die();
 }
 sqlsrv_free_stmt($storedProc);
 ?>
@@ -60,7 +63,8 @@ sqlsrv_free_stmt($storedProc);
 
 if (sqlsrv_begin_transaction($conn) === false) {
     echo 'Error opening connection';
-    die(format_errors(sqlsrv_errors()));
+    format_errors(sqlsrv_errors());
+    die();
 }
 
 /* Set up and execute the first query. */
@@ -101,7 +105,8 @@ $getProducts = sqlsrv_query($conn, $tsql1);
 // Error handling
 if ($getProducts === false) {
     echo 'Error deleting the UDF';
-    die(format_errors(sqlsrv_errors()));
+    format_errors(sqlsrv_errors());
+    die();
 }
 $tsql1 = 'CREATE FUNCTION dbo.ifGetTotalItems (@OrderID INT) RETURNS TABLE WITH SCHEMABINDING AS RETURN (
     SELECT SUM(OrderQty) AS TotalItems FROM SalesLT.SalesOrderDetail
@@ -112,7 +117,8 @@ $getProducts = sqlsrv_query($conn, $tsql1);
 // Error handling
 if ($getProducts === false) {
     echo 'Error creating the UDF';
-    die(format_errors(sqlsrv_errors()));
+    format_errors(sqlsrv_errors());
+    die();
 }
 $tsql1 = 'SELECT s.SalesOrderID, s.OrderDate, s.CustomerID, f.TotalItems
 FROM SalesLT.SalesOrderHeader s
@@ -122,7 +128,8 @@ $getProducts = sqlsrv_query($conn, $tsql1);
 // Error handling
 if ($getProducts === false) {
     echo 'Error executing the UDF';
-    die(format_errors(sqlsrv_errors()));
+    format_errors(sqlsrv_errors());
+    die();
 }
 $productCount = 0;
 $ctr = 0;
