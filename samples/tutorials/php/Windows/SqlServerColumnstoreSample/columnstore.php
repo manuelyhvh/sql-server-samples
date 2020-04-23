@@ -1,5 +1,5 @@
 <?php
-$time_start = microtime(true);
+$timeStart = microtime(true);
 
 $serverName = "localhost";
 $connectionOptions = [
@@ -34,6 +34,6 @@ function formatErrors($errors)
     }
 }
 
-$time_end = microtime(true);
-$execution_time = round((($time_end - $time_start) * 1000), 2);
-echo 'QueryTime: ' . $execution_time . ' ms';
+$timeEnd = microtime(true);
+$executionTime = round((($timeEnd - $timeStart) * 1000), 2);
+echo 'QueryTime: ' . $executionTime . ' ms';
