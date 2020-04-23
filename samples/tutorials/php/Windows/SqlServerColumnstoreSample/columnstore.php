@@ -19,7 +19,6 @@ if ($getResults == false) {
 }
 while ($row = sqlsrv_fetch_array($getResults, SQLSRV_FETCH_ASSOC)) {
     echo($row['sum'] . PHP_EOL);
-
 }
 sqlsrv_free_stmt($getResults);
 

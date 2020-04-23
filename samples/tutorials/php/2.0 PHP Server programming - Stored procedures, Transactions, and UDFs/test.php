@@ -74,7 +74,6 @@ if ($stmt1 && $stmt2) {
     <h1> Transaction was commited </h1>
 
     <?php
-
 } else {
     sqlsrv_rollback($conn);
     echo "Transaction was rolled back.\n";
@@ -123,10 +122,11 @@ while ($row = sqlsrv_fetch_array($getProducts, SQLSRV_FETCH_ASSOC)) {
         break;
     }
     $ctr++;
-    echo $row['SalesOrderID'] . str_repeat('&nbsp;', 13) . $row['CustomerID'] . str_repeat('&nbsp;',
-            11) . $row['TotalItems'];
+    echo $row['SalesOrderID'] . str_repeat('&nbsp;', 13) . $row['CustomerID'] . str_repeat(
+        '&nbsp;',
+        11
+    ) . $row['TotalItems'];
     echo("<br/>");
     $productCount++;
-
 }
 sqlsrv_free_stmt($getProducts);
