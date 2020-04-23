@@ -11,6 +11,11 @@
     <!-- PSR-2 base standard -->
     <rule ref="PSR2"/>
 
+    <!-- Disable code style sniff on side effects -->
+    <rule ref="PSR1">
+        <exclude name="PSR1.Files.SideEffects"/>
+    </rule>
+
     <!-- General sniffs -->
     <rule ref="Generic.Files.LineLength"/>
     <rule ref="Squiz.Arrays.ArrayBracketSpacing"/>
