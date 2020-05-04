@@ -123,6 +123,15 @@ cd -
 azdata --version
 echo "Azdata has been successfully installed."
 
+# Installing azdata extensions
+#
+echo "Installing azdata extension for postgres..."
+azdata extension add --source https://private-repo.microsoft.com/python/azure-arc-data/private-preview-apr-2020/pypi-azdata-cli-extensions/azdata_cli_postgres-0.0.1-py2.py3-none-any.whl --yes
+
+echo "Installing azdata extension for sql..."
+azdata extension add --source https://private-repo.microsoft.com/python/azure-arc-data/private-preview-apr-2020/pypi-azdata-cli-extensions/azdata_cli_hybrid-0.0.1-py2.py3-none-any.whl --yes
+echo "Azdata extensions installed successfully."
+
 # Install Azure CLI
 #
 curl -sL https://aka.ms/InstallAzureCLIDeb | sudo bash
