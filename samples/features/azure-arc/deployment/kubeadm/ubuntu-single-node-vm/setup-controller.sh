@@ -110,7 +110,7 @@ cd setupscript/
 
 # Download and install azdata prerequisites
 #
-sudo apt install -y libodbc1 odbcinst odbcinst1debian2 unixodbc apt-transport-https libkrb5-dev libdns-export162
+sudo apt install -y libodbc1 odbcinst odbcinst1debian2 unixodbc apt-transport-https libkrb5-dev
 
 # Download and install azdata package
 #
