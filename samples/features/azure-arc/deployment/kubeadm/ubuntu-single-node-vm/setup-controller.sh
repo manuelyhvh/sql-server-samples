@@ -49,7 +49,7 @@ export DEBIAN_FRONTEND=noninteractive
 
 # Requirements file.
 export OSCODENAME=$(lsb_release -cs)
-export AZDATA_PRIVATE_PREVIEW_DEB_PACKAGE="https://aka.ms/apr-2020-azdata-"$OSCODENAME
+export AZDATA_PRIVATE_PREVIEW_DEB_PACKAGE="https://aka.ms/may-2020-azdata-"$OSCODENAME
 
 # Kube version.
 #
@@ -126,10 +126,10 @@ echo "Azdata has been successfully installed."
 # Installing azdata extensions
 #
 echo "Installing azdata extension for postgres..."
-azdata extension add --source https://private-repo.microsoft.com/python/azure-arc-data/private-preview-apr-2020/pypi-azdata-cli-extensions/azdata_cli_postgres-0.0.1-py2.py3-none-any.whl --yes
+azdata extension add --source https://private-repo.microsoft.com/python/azure-arc-data/private-preview-may-2020/pypi-azdata-cli-extensions/azdata_cli_postgres-0.0.1-py2.py3-none-any.whl --yes
 
 echo "Installing azdata extension for sql..."
-azdata extension add --source https://private-repo.microsoft.com/python/azure-arc-data/private-preview-apr-2020/pypi-azdata-cli-extensions/azdata_cli_hybrid-0.0.1-py2.py3-none-any.whl --yes
+azdata extension add --source https://private-repo.microsoft.com/python/azure-arc-data/private-preview-may-2020/pypi-azdata-cli-extensions/azdata_cli_hybrid-0.0.1-py2.py3-none-any.whl --yes
 echo "Azdata extensions installed successfully."
 
 # Install Azure CLI
