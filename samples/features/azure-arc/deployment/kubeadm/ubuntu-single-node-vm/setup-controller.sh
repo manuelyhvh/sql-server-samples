@@ -125,11 +125,15 @@ echo "Azdata has been successfully installed."
 
 # Installing azdata extensions
 #
+echo "Installing azdata extension for Arc data controller..."
+azdata extension add --source https://private-repo.microsoft.com/python/azure-arc-data/private-preview-may-2020/pypi-azdata-cli-extensions/azdata_cli_dc-0.0.1-py2.py3-none-any.whl --yes
+
 echo "Installing azdata extension for postgres..."
 azdata extension add --source https://private-repo.microsoft.com/python/azure-arc-data/private-preview-may-2020/pypi-azdata-cli-extensions/azdata_cli_postgres-0.0.1-py2.py3-none-any.whl --yes
 
 echo "Installing azdata extension for sql..."
-azdata extension add --source https://private-repo.microsoft.com/python/azure-arc-data/private-preview-may-2020/pypi-azdata-cli-extensions/azdata_cli_hybrid-0.0.1-py2.py3-none-any.whl --yes
+azdata extension add --source https://private-repo.microsoft.com/python/azure-arc-data/private-preview-may-2020/pypi-azdata-cli-extensions/azdata_cli_sqlinstance-0.0.1-py2.py3-none-any.whl --yes
+
 echo "Azdata extensions installed successfully."
 
 # Install Azure CLI
@@ -299,7 +303,7 @@ echo "Starting to deploy azdata cluster..."
 
 # Command to create cluster for single node cluster.
 #
-azdata control create -n $CLUSTER_NAME -c azure-arc-kubeadm-private-preview --accept-eula $ACCEPT_EULA
+azdata arc dc create -n $CLUSTER_NAME -c azure-arc-kubeadm-private-preview --accept-eula $ACCEPT_EULA
 echo "Azure Arc Data Controller cluster created." 
 
 # Setting context to cluster.
