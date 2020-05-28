@@ -1,4 +1,4 @@
-#!/bin/bash
+    #!/bin/bash
 
 # Get controller username and password as input. It is used as default for the controller.
 #
@@ -179,8 +179,6 @@ echo "Starting to setup pre-requisites for kubernetes..."
 
 # Setup the kubernetes preprequisites.
 #
-echo $(hostname -i) $(hostname) >> sudo tee -a /etc/hosts
-
 sudo swapoff -a
 sudo sed -i '/swap/s/^\(.*\)$/#\1/g' /etc/fstab
 
