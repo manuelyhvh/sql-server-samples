@@ -6,9 +6,9 @@ sudo kubeadm reset --force
 
 # Clean up azdata-cli package.
 #
-azdata extension remove --name azdata-cli-dc
-azdata extension remove --name azdata-cli-postgres
-azdata extension remove --name azdata-cli-sqlinstance
+azdata extension remove --name azdata-cli-dc --yes
+azdata extension remove --name azdata-cli-postgres --yes
+azdata extension remove --name azdata-cli-sqlinstance --yes
 unalias azdata
 unalias az
 sudo dpkg --remove --force-all azdata-cli
