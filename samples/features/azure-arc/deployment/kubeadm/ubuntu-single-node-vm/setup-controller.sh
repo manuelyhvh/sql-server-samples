@@ -81,7 +81,7 @@ export DEBIAN_FRONTEND=noninteractive
 
 # Requirements file.
 export OSCODENAME=$(lsb_release -cs)
-export AZDATA_PRIVATE_PREVIEW_DEB_PACKAGE="https://aka.ms/may-2020-azdata-"$OSCODENAME
+export AZDATA_PRIVATE_PREVIEW_DEB_PACKAGE="https://private-repo.microsoft.com/python/azure-arc-data/private-preview-may-2020/ubuntu-"$OSCODENAME"/azdata-cli_15.0.4033-1~"$OSCODENAME"_all.deb"
 
 # Kube version.
 #
