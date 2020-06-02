@@ -64,7 +64,7 @@ RETRY_INTERVAL=5
 # Variables used for azdata cluster creation.
 #
 export ACCEPT_EULA=yes
-export CLUSTER_NAME=azure-arc-system
+export CLUSTER_NAME=arc
 export PV_COUNT="80"
 
 # Make a directory for installing the scripts and logs.
