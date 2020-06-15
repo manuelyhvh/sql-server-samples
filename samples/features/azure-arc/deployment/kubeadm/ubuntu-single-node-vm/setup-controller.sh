@@ -81,7 +81,7 @@ export DEBIAN_FRONTEND=noninteractive
 
 # Requirements file.
 export OSCODENAME=$(lsb_release -cs)
-export AZDATA_PRIVATE_PREVIEW_DEB_PACKAGE="https://private-repo.microsoft.com/python/azure-arc-data/private-preview-may-2020/ubuntu-"$OSCODENAME"/azdata-cli_15.0.4033-1~"$OSCODENAME"_all.deb"
+export AZDATA_PRIVATE_PREVIEW_DEB_PACKAGE="https://private-repo.microsoft.com/python/azure-arc-data/private-preview-jun-2020/ubuntu-"$OSCODENAME"/azdata-cli_20.0.0-1~"$OSCODENAME"_all.deb"
 
 # Kube version.
 #
@@ -158,13 +158,13 @@ echo "Azdata has been successfully installed."
 # Installing azdata extensions
 #
 echo "Installing azdata extension for Arc data controller..."
-azdata extension add --source https://private-repo.microsoft.com/python/azure-arc-data/private-preview-may-2020/pypi-azdata-cli-extensions/azdata_cli_dc-0.0.1-py2.py3-none-any.whl --yes
+azdata extension add --source https://private-repo.microsoft.com/python/azure-arc-data/private-preview-jun-2020/pypi-azdata-cli-extensions/azdata_cli_dc-0.0.1-py2.py3-none-any.whl --yes
 
 echo "Installing azdata extension for postgres..."
-azdata extension add --source https://private-repo.microsoft.com/python/azure-arc-data/private-preview-may-2020/pypi-azdata-cli-extensions/azdata_cli_postgres-0.0.1-py2.py3-none-any.whl --yes
+azdata extension add --source https://private-repo.microsoft.com/python/azure-arc-data/private-preview-jun-2020/pypi-azdata-cli-extensions/azdata_cli_postgres-0.0.1-py2.py3-none-any.whl --yes
 
 echo "Installing azdata extension for sql..."
-azdata extension add --source https://private-repo.microsoft.com/python/azure-arc-data/private-preview-may-2020/pypi-azdata-cli-extensions/azdata_cli_sqlinstance-0.0.1-py2.py3-none-any.whl --yes
+azdata extension add --source https://private-repo.microsoft.com/python/azure-arc-data/private-preview-jun-2020/pypi-azdata-cli-extensions/azdata_cli_sqlinstance-0.0.1-py2.py3-none-any.whl --yes
 
 echo "Azdata extensions installed successfully."
 
