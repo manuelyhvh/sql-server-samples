@@ -1,4 +1,4 @@
-    #!/bin/bash
+#!/bin/bash
 
 # Get controller username and password as input. It is used as default for the controller.
 #
@@ -334,12 +334,8 @@ echo "Starting to deploy azdata cluster..."
 # Command to create cluster for single node cluster.
 #
 azdata arc dc config init -s azure-arc-kubeadm-private-preview -t azure-arc-custom --force
-azdata arc dc config replace --config-file azure-arc-custom/control.json --json-values '$.spec.dataController.displayName=$ARC_DC_NAME'
-azdata arc dc config replace --config-file azure-arc-custom/control.json --json-values '$.spec.dataController.subscription=$ARC_DC_SUBSCRIPTION'
-azdata arc dc config replace --config-file azure-arc-custom/control.json --json-values '$.spec.dataController.resourceGroup=$ARC_DC_RG'
-azdata arc dc config replace --config-file azure-arc-custom/control.json --json-values '$.spec.dataController.location=$ARC_DC_REGION'
 
-azdata arc dc create -n $CLUSTER_NAME -c azure-arc-custom --accept-eula $ACCEPT_EULA
+azdata arc dc create -n $CLUSTER_NAME -c azure-arc-custom --accept-eula $ACCEPT_EULA --namespace $ARC_DC_NAME --location $ARC_DC_REGION --resource-group $ARC_DC_RG --subscription $ARC_DC_SUBSCRIPTION
 echo "Azure Arc Data Controller cluster created." 
 
 # Setting context to cluster.
