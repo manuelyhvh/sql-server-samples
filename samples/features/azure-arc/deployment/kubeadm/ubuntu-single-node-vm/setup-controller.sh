@@ -335,7 +335,7 @@ echo "Starting to deploy azdata cluster..."
 #
 azdata arc dc config init -s azure-arc-kubeadm-private-preview -t azure-arc-custom --force
 
-azdata arc dc create -n $CLUSTER_NAME -c azure-arc-custom --accept-eula $ACCEPT_EULA --namespace $ARC_DC_NAME --location $ARC_DC_REGION --resource-group $ARC_DC_RG --subscription $ARC_DC_SUBSCRIPTION
+azdata arc dc create -n $CLUSTER_NAME -c azure-arc-custom --accept-eula $ACCEPT_EULA --namespace $ARC_DC_NAME --location $ARC_DC_REGION --resource-group $ARC_DC_RG --subscription $ARC_DC_SUBSCRIPTION --connectivity-mode indirect
 echo "Azure Arc Data Controller cluster created." 
 
 # Setting context to cluster.
