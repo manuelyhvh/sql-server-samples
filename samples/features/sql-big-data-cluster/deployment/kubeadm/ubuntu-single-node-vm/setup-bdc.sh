@@ -93,7 +93,7 @@ cd $BDCDEPLOY_DIR/
 touch $LOG_FILE
 
 {
-# Install all necessary packages: kuberenetes, docker, python3, python3-pip, request, azdata.
+# Install all necessary packages: kubernetes, docker, python3, python3-pip, request, azdata.
 #
 echo ""
 echo "######################################################################################"
