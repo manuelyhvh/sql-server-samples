@@ -1,4 +1,4 @@
-    #!/bin/bash
+#!/bin/bash
 
 # Get controller username and password as input. It is used as default for the controller.
 #
@@ -62,7 +62,7 @@ fi
 
 if [ -z "$ARC_DC_REGION" ]
 then
-    read -p "Enter a region for the new Azure Arc Data Controller (eastus or eastus2): " dc_region
+    read -p "Enter a region for the new Azure Arc Data Controller (eastus, eastus2, centralus, westus2, westeurope or southeastasia): " dc_region
     echo
     export ARC_DC_REGION=$dc_region
 fi
@@ -81,7 +81,7 @@ export DEBIAN_FRONTEND=noninteractive
 
 # Requirements file.
 export OSCODENAME=$(lsb_release -cs)
-export AZDATA_PRIVATE_PREVIEW_DEB_PACKAGE="https://private-repo.microsoft.com/python/azure-arc-data/private-preview-may-2020/ubuntu-"$OSCODENAME"/azdata-cli_15.0.4033-1~"$OSCODENAME"_all.deb"
+export AZDATA_PRIVATE_PREVIEW_DEB_PACKAGE="https://private-repo.microsoft.com/python/azure-arc-data/private-preview-jun-2020/ubuntu-"$OSCODENAME"/azdata-cli_20.0.0-1~"$OSCODENAME"_all.deb"
 
 # Kube version.
 #
@@ -158,13 +158,13 @@ echo "Azdata has been successfully installed."
 # Installing azdata extensions
 #
 echo "Installing azdata extension for Arc data controller..."
-azdata extension add --source https://private-repo.microsoft.com/python/azure-arc-data/private-preview-may-2020/pypi-azdata-cli-extensions/azdata_cli_dc-0.0.1-py2.py3-none-any.whl --yes
+azdata extension add --source https://private-repo.microsoft.com/python/azure-arc-data/private-preview-jun-2020/pypi-azdata-cli-extensions/azdata_cli_dc-0.0.1-py2.py3-none-any.whl --yes
 
 echo "Installing azdata extension for postgres..."
-azdata extension add --source https://private-repo.microsoft.com/python/azure-arc-data/private-preview-may-2020/pypi-azdata-cli-extensions/azdata_cli_postgres-0.0.1-py2.py3-none-any.whl --yes
+azdata extension add --source https://private-repo.microsoft.com/python/azure-arc-data/private-preview-jun-2020/pypi-azdata-cli-extensions/azdata_cli_postgres-0.0.1-py2.py3-none-any.whl --yes
 
 echo "Installing azdata extension for sql..."
-azdata extension add --source https://private-repo.microsoft.com/python/azure-arc-data/private-preview-may-2020/pypi-azdata-cli-extensions/azdata_cli_sqlinstance-0.0.1-py2.py3-none-any.whl --yes
+azdata extension add --source https://private-repo.microsoft.com/python/azure-arc-data/private-preview-jun-2020/pypi-azdata-cli-extensions/azdata_cli_sqlinstance-0.0.1-py2.py3-none-any.whl --yes
 
 echo "Azdata extensions installed successfully."
 
@@ -334,12 +334,8 @@ echo "Starting to deploy azdata cluster..."
 # Command to create cluster for single node cluster.
 #
 azdata arc dc config init -s azure-arc-kubeadm-private-preview -t azure-arc-custom --force
-azdata arc dc config replace --config-file azure-arc-custom/control.json --json-values '$.spec.dataController.displayName=$ARC_DC_NAME'
-azdata arc dc config replace --config-file azure-arc-custom/control.json --json-values '$.spec.dataController.subscription=$ARC_DC_SUBSCRIPTION'
-azdata arc dc config replace --config-file azure-arc-custom/control.json --json-values '$.spec.dataController.resourceGroup=$ARC_DC_RG'
-azdata arc dc config replace --config-file azure-arc-custom/control.json --json-values '$.spec.dataController.location=$ARC_DC_REGION'
 
-azdata arc dc create -n $CLUSTER_NAME -c azure-arc-custom --accept-eula $ACCEPT_EULA
+azdata arc dc create -n $ARC_DC_NAME -c azure-arc-custom --namespace $CLUSTER_NAME --location $ARC_DC_REGION --resource-group $ARC_DC_RG --subscription $ARC_DC_SUBSCRIPTION --connectivity-mode indirect
 echo "Azure Arc Data Controller cluster created." 
 
 # Setting context to cluster.
