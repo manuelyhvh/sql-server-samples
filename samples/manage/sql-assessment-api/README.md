@@ -34,7 +34,7 @@ Demonstrates how to make a custom ruleset containing two checks. The sample cont
         "type": "Database",                                                          //This check targets Database object
         "version": "[13.0,)",                                                        //Applies to SQL Server 2016 and higher
                                                                                      //Another example: "[12.0,13.0)" reads as "any SQL Server version >= 12.0 and < 13.0"
-        "platform": "/^(Windows|Linux)$/",                                           //Applies to SQL Server on Windows and Linux
+        "platform": "Windows, Linux",                                           //Applies to SQL Server on Windows and Linux
         "engineEdition": "OnPremises, ManagedInstance",                              //Applies to SQL on Premises and Azure SQL Managed Instance. Here you can also filter specific editions of SQL Server
         "name": { "not": "/^(master|tempdb|model)$/" }                               //Applies to any database excluding master, tempdb, and msdb
     },
@@ -67,7 +67,7 @@ Demonstrates how to make a custom ruleset containing two checks. The sample cont
         "target": {                                                             //Probes have their own target, usually to separate implementation for different versions, editions, or platforms. Probe targets work the same way as rule targets do.
             "type": "Database",
             "version": "(,12.0)",                                               //This target is for SQL Server of versions prior to 2014
-            "platform": "/^(Windows|Linux)$/",
+            "platform": "Windows, Linux",
             "engineEdition": "OnPremises, ManagedInstance"
         },
         "implementation": {                                                     //Implementation object with a T-SQL query. This probe is used in many rules, that's why the query return so many fields
@@ -79,7 +79,7 @@ Demonstrates how to make a custom ruleset containing two checks. The sample cont
         "target": {
             "type": "Database",
             "version": "[12.0, 13.0)",
-            "platform": "/^(Windows|Linux)$/",
+            "platform": "Windows, Linux",
             "engineEdition": "OnPremises, ManagedInstance"
         },
         "implementation": {
@@ -91,7 +91,7 @@ Demonstrates how to make a custom ruleset containing two checks. The sample cont
         "target": {
         "type": "Database",
         "version": "[13.0,)",
-        "platform": "/^(Windows|Linux)$/",
+        "platform": "Windows, Linux",
         "engineEdition": "OnPremises, ManagedInstance"
         },
         "implementation": {
