@@ -28,7 +28,7 @@ You will see in the results that each rule has some properties (not the full lis
 - Message property explains the recommendation but if you need more info, there is a HelpLink property that points at documentation on the subject.
 - Origin shows which ruleset and version the recommendation is coming from
 
-See [release.json](./release.json) for a full list of rules and properties.
+See [ruleset.json](./ruleset.json) for a full list of rules and properties.
 
 If you want to get recommendations for all databases on the local instance, run this command.
 
