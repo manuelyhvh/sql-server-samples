@@ -8,6 +8,52 @@ Download: [SMO NuGet Package](https://www.nuget.org/packages/Microsoft.SqlServer
 
 You can use GitHub issues to provide feedback to the product team.
 
+## July 2020 - 21.1.18226
+
+Version: SqlServer module 21.1.18226, SqlManagementObjects (SMO) package wasn't updated
+
+### What's new
+
+- Added support for CmdShell, PowerShell, Registry and WMI probes. 
+- Enable/disable database checks for particular SQL Server instances (by instance names).
+- Minimal permissions to run SQL assessment are 'View Server state' and 'View Database state'.
+- Added rule 'Ad Hoc Distributed Queries are enabled'
+- Added rule 'Affinity Mask and Affinity I/O Mask overlapping'
+- Added rule 'Auto Soft NUMA should be enabled'
+- Added rule 'Blocking chains'
+- Added rule 'Blocked Process Threshold is set to recommended value'
+- Added rule 'Option 'cross db ownership chaining' should be disabled'
+- Added rule 'Default trace enabled'
+- Added rule 'Disk Partition alignment'
+- Added rule 'Full-text search option 'load_os_resources' set to default'
+- Added rule 'Full-text search option 'verify_signature' set to default'
+- Added rule 'HP Logical Processor issue'
+- Added rule 'Option 'index create memory' value should be greater 'min memory per query''
+- Added rule 'Lightweight pooling option disabled'
+- Added rule 'Option 'locks' should be set to default'
+- Added rule 'Option 'min memory per query' set to default'
+- Added rule 'Option 'network packet size' set to default'
+- Added rule 'NTFS block size in volumes that hold database files <> 64KB'
+- Added rule 'Option 'Ole Automation Procedures' set to default'
+- Added rule 'Page file is not automatically managed'
+- Added rule 'Page file is not automatically managed'
+- Added rule 'Insufficient page file free space'
+- Added rule 'Page file configured'
+- Added rule 'Memory paged out'
+- Added rule 'Power plan is High Performance'
+- Added rule 'Option 'priority boost' set to default'
+- Added rule 'Option 'query wait' set to default'
+- Added rule 'Option 'recovery interval' set to default'
+- Added rule 'Remote admin connections enabled on cluster (DAC)'
+- Added rule 'Option 'remote query timeout' set to default'
+- Added rule 'Option 'scan for startup procs' disabled on replication servers'
+- Added rule 'Worker thread exhaustion on CPU-bound system'
+- Added rule 'Possible worker thread exhaustion on a not-CPU-bound system'
+- Added rule 'Option 'cost threshold for parallelism' set to default'
+- Added rule 'Option 'max worker threads' set to recommended value on x64 system'
+- Added rule 'Option 'max worker threads' set to recommended value on x86 system'
+- Added rule 'Option 'xp_cmdshell' is disabled'
+
 ## March 2020 - 21.1.18221
 
 Version: SqlServer module 21.1.18221, SqlManagementObjects (SMO) package wasn't updated
