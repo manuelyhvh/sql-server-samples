@@ -4,6 +4,8 @@ SQL Assessment API provides a mechanism to evaluate the configuration of your SQ
 
 Learn more about the API on the [SQL Assessment API docs page](https://docs.microsoft.com/en-us/sql/sql-assessment-api/sql-assessment-api-overview).
 
+If you are into Azure Data Studio, you can evaluate your SQL Server right from it. Learn about SQL Assessment ADS extension [here](https://techcommunity.microsoft.com/t5/sql-server/released-sql-server-assessment-extension-for-azure-data-studio/ba-p/1470603).
+
 ## QuickStart.md
 
 Learn how to assess your SQL Server configuration for best practices in 2 simple steps.
