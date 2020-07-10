@@ -16,7 +16,7 @@ Version: SqlServer module 21.1.18226, SqlManagementObjects (SMO) package wasn't 
 
 ### What's new
 
-- Added support for system extended stored procedures (xp_cmdshell, xp_regread, etc.)
+- Added new types of probes in addition to SQL and EXTERNAL: CMDSHELL, WMI, REGISTRY, POWERSHELL
 - Enabling/disabling database checks for particular SQL Server instances (by instance name)
 - Added 40 rules, including  
   - Ad Hoc Distributed Queries are enabled
