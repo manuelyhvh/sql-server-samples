@@ -42,4 +42,4 @@ To learn more about SQL Assessment API such as customizing and extending the rul
 
 - Docs online page: https://docs.microsoft.com/sql/sql-assessment-api/sql-assessment-api-overview 
 - GitHub repo: http://aka.ms/sql-assessment-api
-- SQL Assessment API Tutorial notebook: coming soon
+- SQL Assessment API Tutorial notebook: [SQLAssessmentAPITutorialNotebook.ipynb](./notebooks/SQLAssessmentAPITutorialNotebook.ipynb)
