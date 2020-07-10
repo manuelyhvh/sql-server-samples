@@ -18,46 +18,46 @@ Version: SqlServer module 21.1.18226, SqlManagementObjects (SMO) package wasn't 
 
 - Added support for system extended stored procedures (xp_cmdshell, xp_regread, etc.)
 - Enabling/disabling database checks for particular SQL Server instances (by instance name)
-- Added rule "Ad Hoc Distributed Queries are enabled"
-- Added rule "Affinity Mask and Affinity I/O Mask overlapping"
-- Added rule "Auto Soft NUMA should be enabled"
-- Added rule "Blocking chains"
-- Added rule "Blocked Process Threshold is set to recommended value"
-- Added rule "Option 'cross db ownership chaining' should be disabled"
-- Added rule "Default trace enabled"
-- Added rule "Disk Partition alignment"
-- Added rule "Full-text search option 'load_os_resources' set to default"
-- Added rule "Full-text search option 'verify_signature' set to default"
-- Added rule "HP Logical Processor issue"
-- Added rule "Option 'index create memory' value should be greater 'min memory per query'"
-- Added rule "Lightweight pooling option disabled"
-- Added rule "Option 'locks' should be set to default"
-- Added rule "Option 'min memory per query' set to default"
-- Added rule "Option 'network packet size' set to default"
-- Added rule "NTFS block size in volumes that hold database files <> 64KB"
-- Added rule "Option 'Ole Automation Procedures' set to default"
-- Added rule "Page file is not automatically managed"
-- Added rule "Page file is not automatically managed"
-- Added rule "Insufficient page file free space"
-- Added rule "Page file configured"
-- Added rule "Memory paged out"
-- Added rule "Power plan is High Performance"
-- Added rule "Option 'priority boost' set to default"
-- Added rule "Option 'query wait' set to default"
-- Added rule "Option 'recovery interval' set to default"
-- Added rule "Remote admin connections enabled on cluster (DAC)"
-- Added rule "Option 'remote query timeout' set to default"
-- Added rule "Option 'scan for startup procs' disabled on replication servers"
-- Added rule "Worker thread exhaustion on CPU-bound system"
-- Added rule "Possible worker thread exhaustion on a not-CPU-bound system"
-- Added rule "Option 'cost threshold for parallelism' set to default"
-- Added rule "Option 'max worker threads' set to recommended value on x64 system"
-- Added rule "Option 'max worker threads' set to recommended value on x86 system"
-- Added rule "Option 'xp_cmdshell' is disabled"
+- Added 40 rules, including  
+  - Ad Hoc Distributed Queries are enabled
+  - Affinity Mask and Affinity I/O Mask overlapping
+  - Auto Soft NUMA should be enabled
+  - Blocking chains
+  - Blocked Process Threshold is set to recommended value
+  - Option 'cross db ownership chaining' should be disabled
+  - Default trace enabled
+  - Disk Partition alignment
+  - Full-text search option 'load_os_resources' set to default
+  - Full-text search option 'verify_signature' set to default
+  - HP Logical Processor issue
+  - Option 'index create memory' value should be greater 'min memory per query'
+  - Lightweight pooling option disabled
+  - Option 'locks' should be set to default
+  - Option 'min memory per query' set to default
+  - Option 'network packet size' set to default
+  - NTFS block size in volumes that hold database files <> 64KB
+  - Option 'Ole Automation Procedures' set to default
+  - Page file is not automatically managed
+  - Insufficient page file free space
+  - Page file configured
+  - Memory paged out
+  - Power plan is High Performance
+  - Option 'priority boost' set to default
+  - Option 'query wait' set to default
+  - Option 'recovery interval' set to default
+  - Remote admin connections enabled on cluster (DAC)
+  - Option 'remote query timeout' set to default
+  - Option 'scan for startup procs' disabled on replication servers
+  - Worker thread exhaustion on CPU-bound system
+  - Possible worker thread exhaustion on a not-CPU-bound system
+  - Option 'cost threshold for parallelism' set to default
+  - Option 'max worker threads' set to recommended value on x64 system
+  - Option 'max worker threads' set to recommended value on x86 system
+  - Option 'xp_cmdshell' is disabled
 
 ## March 2020 - 21.1.18221
 
-Version: SqlServer module 21.1.18221, SqlManagementObjects (SMO) package wasn't updated
+Version: SqlServer module 21.1.18221, SqlManagementObjects (SMO) package 160.2004021.0
 
 ### What's new
 
