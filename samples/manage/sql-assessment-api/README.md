@@ -10,7 +10,7 @@ If you are into Azure Data Studio, you can evaluate your SQL Server right from i
 
 Learn how to assess your SQL Server configuration for best practices in 2 simple steps.
 
-## config.json
+## ruleset.json
 
 This is the default set of rules shipped with SQL Assessment API. Feel free to open issues to have us fix or add rules. Also, we're happy to see your pull requests to this file.
 
