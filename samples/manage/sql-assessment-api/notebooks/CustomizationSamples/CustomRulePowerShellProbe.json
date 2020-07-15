@@ -14,7 +14,7 @@
       },
       "displayName": "PowerShell host information",
       "description": "Information about the PowerShell console host ",
-      "message": "Upgrade PowerShell. Installed major version is @{Output.Version}, latest available is @{latestVersion}.",
+      "message": "Upgrade PowerShell. Installed version is @{Output.Version}, latest available is @{latestVersion}.",
       "level": "Warning",
       "latestVersion": "7.0.2",
       "condition": {
