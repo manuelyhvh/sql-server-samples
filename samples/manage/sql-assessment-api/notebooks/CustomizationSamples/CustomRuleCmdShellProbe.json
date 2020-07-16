@@ -1,0 +1,46 @@
+﻿{
+  "schemaVersion": "1.0",
+  "name": "CmdShell check",
+  "version": "1.0.0",
+  "rules": [
+    {
+      "id": "DirectoryCheck",
+      "itemType": "definition",
+      "target": {
+        "type": "Server",
+        "platform": "Windows",
+        "engineEdition": "OnPremises",
+        "version": "[11.0,)"
+      },
+      "displayName": "CmdShell probe",
+      "description": "This is an example of cmdshell probe type. ",
+      "message": "Empty list",
+      "level": "Warning",
+      "condition": "@stdout",
+      "probes": [
+        "ListOfDirectoryFilesAndSubdirectories"
+      ]
+    },
+	{
+            "id": ["DefaultRuleset"],
+            "itemType": "override",
+            "enabled": false
+    }
+  ],
+  "probes": {
+    "ListOfDirectoryFilesAndSubdirectories": [
+      {
+        "type": "CmdShell",
+        "target": {
+          "type": "Server",
+          "platform": "Windows",
+          "engineEdition": "OnPremises",
+          "version": "[11.0,)"
+        },
+        "implementation": {
+          "command": "dir"
+        }
+      }
+    ]
+  }
+}
