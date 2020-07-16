@@ -14,7 +14,7 @@
       },
       "displayName": "Computer name",
       "description": "Computer name can't be empty.",
-      "message": "Computer name in HKEY_LOCAL_MACHINE:SYSTEM\CurrentControlSet cannot be empty",
+      "message": "Computer name in 'HKEY_LOCAL_MACHINE\\SYSTEM\\CurrentControlSet' cannot be empty",
       "level": "Warning",
       "condition": "@ComputerName",
       "probes": [
