@@ -1,4 +1,4 @@
-﻿{
+{
   "schemaVersion": "1.0",
   "name": "CmdShell check",
   "version": "1.0.0",
@@ -14,21 +14,30 @@
       },
       "displayName": "CmdShell probe",
       "description": "This is an example of cmdshell probe type. ",
-      "message": "Empty list",
+      "message": "File @{stdout.name} has size @{stdout.size} and it's bigger than threshold = @{threshold} bytes",
       "level": "Warning",
-      "condition": "@stdout",
+      "threshold": 1024,
+      "condition": {
+        "lt": [
+          "@stdout.size",
+          "@threshold"
+        ]
+      },
       "probes": [
-        "ListOfDirectoryFilesAndSubdirectories"
+        {
+          "id": "ListOfDirectoryFiles",
+          "transform": {
+            "type": "parse",
+            "map": {
+              "stdout": "/^(?<date>\\d\\d/\\d\\d/\\d\\d\\d\\d)\\s+(?<time>\\d\\d:\\d\\d\\s(AM|PM))\\s+(?<size>[0-9.,]+)\\s+(?<name>.+)$/ix"
+            }
+          }
+        }
       ]
-    },
-	{
-            "id": ["DefaultRuleset"],
-            "itemType": "override",
-            "enabled": false
     }
   ],
   "probes": {
-    "ListOfDirectoryFilesAndSubdirectories": [
+    "ListOfDirectoryFiles": [
       {
         "type": "CmdShell",
         "target": {
