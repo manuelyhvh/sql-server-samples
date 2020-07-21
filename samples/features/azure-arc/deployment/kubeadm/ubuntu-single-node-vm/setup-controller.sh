@@ -81,7 +81,7 @@ export DEBIAN_FRONTEND=noninteractive
 
 # Requirements file.
 export OSCODENAME=$(lsb_release -cs)
-export AZDATA_PRIVATE_PREVIEW_DEB_PACKAGE="https://private-repo.microsoft.com/python/azure-arc-data/private-preview-jul-2020/ubuntu-"$OSCODENAME"/azdata-cli_20.0.0-1~"$OSCODENAME"_all.deb"
+export AZDATA_PRIVATE_PREVIEW_DEB_PACKAGE="https://private-repo.microsoft.com/python/azure-arc-data/private-preview-jul-2020/ubuntu-"$OSCODENAME"/azdata-cli_20.0.1-1~"$OSCODENAME"_all.deb"
 
 # Kube version.
 #
@@ -335,7 +335,7 @@ echo "Starting to deploy azdata cluster..."
 #
 azdata arc dc config init -s azure-arc-kubeadm-private-preview -t azure-arc-custom --force
 
-azdata arc dc create -n $ARC_DC_NAME -c azure-arc-custom --namespace $CLUSTER_NAME --location $ARC_DC_REGION --resource-group $ARC_DC_RG --subscription $ARC_DC_SUBSCRIPTION --connectivity-mode indirect
+azdata arc dc create -n $ARC_DC_NAME -p azure-arc-kubeadm-private-preview --namespace $CLUSTER_NAME --location $ARC_DC_REGION --resource-group $ARC_DC_RG --subscription $ARC_DC_SUBSCRIPTION --connectivity-mode indirect
 echo "Azure Arc Data Controller cluster created." 
 
 # Setting context to cluster.
