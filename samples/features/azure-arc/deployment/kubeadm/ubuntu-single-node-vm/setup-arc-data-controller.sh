@@ -147,8 +147,12 @@ sudo apt install -y libodbc1 odbcinst odbcinst1debian2 unixodbc apt-transport-ht
 #
 echo ""
 
-if [[ -v AZDATA_DEB_PATH ]]; then
-  sudo dpkg -i $AZDATA_DEB_PATH
+if [[ -v AZDATA_DEB_PACKAGE_PATH ]]; then
+  sudo dpkg -i $AZDATA_DEB_PACKAGE_PATH
+elif [[ -v AZDATA_DEB_PACKAGE_URL ]]; then
+  echo "Downloading azdata installer from" $AZDATA_DEB_PACKAGE_URL 
+  curl --location $AZDATA_DEB_PACKAGE_URL --output azdata_setup.deb
+  sudo dpkg -i azdata_setup.deb
 else
   echo "Downloading azdata installer from" $AZDATA_PRIVATE_PREVIEW_DEB_PACKAGE 
   curl --location $AZDATA_PRIVATE_PREVIEW_DEB_PACKAGE --output azdata_setup.deb
@@ -325,11 +329,23 @@ echo "Starting to deploy azdata cluster..."
 
 # Command to create cluster for single node cluster.
 #
-azdata arc dc config init --source azure-arc-kubeadm-dev-test --path azure-arc-custom --force
-azdata arc dc config replace --path azure-arc-custom/control.json --json-values '$.spec.docker.registry=$DOCKER_REGISTRY'
-azdata arc dc config replace --path azure-arc-custom/control.json --json-values '$.spec.docker.repository=$DOCKER_REPOSITORY'
-azdata arc dc config replace --path azure-arc-custom/control.json --json-values '$.spec.docker.imageTag=$DOCKER_IMAGE_TAG'
-azdata arc dc config replace --path azure-arc-custom/control.json --json-values '$.spec.docker.imagePullPolicy=IfNotPresent'
+azdata arc dc config init --source azure-arc-kubeadm --path azure-arc-custom --force
+
+if [[ -v DOCKER_REGISTRY ]]; then
+    azdata arc dc config replace --path azure-arc-custom/control.json --json-values '$.spec.docker.registry=$DOCKER_REGISTRY'
+fi
+
+if [[ -v DOCKER_REPOSITORY ]]; then
+    azdata arc dc config replace --path azure-arc-custom/control.json --json-values '$.spec.docker.repository=$DOCKER_REPOSITORY'
+fi
+
+if [[ -v DOCKER_IMAGE_TAG ]]; then
+    azdata arc dc config replace --path azure-arc-custom/control.json --json-values '$.spec.docker.imageTag=$DOCKER_IMAGE_TAG'
+fi
+
+# azdata arc dc config replace --path azure-arc-custom/control.json --json-values '$.spec.docker.imagePullPolicy=IfNotPresent'
+azdata arc dc config replace --path azure-arc-custom/control.json --json-values '$.spec.storage.data.className=local-storage'
+azdata arc dc config replace --path azure-arc-custom/control.json --json-values '$.spec.storage.logs.className=local-storage'
 
 azdata arc dc create --name $ARC_DC_NAME --path azure-arc-custom --namespace $CLUSTER_NAME --location $ARC_DC_REGION --resource-group $ARC_DC_RG --subscription $ARC_DC_SUBSCRIPTION --connectivity-mode indirect
 echo "Azure Arc Data Controller cluster created." 
