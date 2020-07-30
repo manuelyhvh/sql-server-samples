@@ -86,7 +86,7 @@ sudo rm -rf ~/.kube
 
 # Clean up working folders.
 # 
-export AZUREARCDATACONTROLLER_DIR=aadatacontroller
+export AZUREARCDATACONTROLLER_DIR=arc-data
 if [ -d "$AZUREARCDATACONTROLLER_DIR" ]; then
     echo "Removing working directory $AZUREARCDATACONTROLLER_DIR."
     rm -f -r $AZUREARCDATACONTROLLER_DIR
