@@ -1,0 +1,367 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "routeTables_bdcaks_rt_name": {
+            "defaultValue": "bdcaks-rt",
+            "type": "String"
+        },
+        "virtualNetworks_bdc_vnet_name": {
+            "defaultValue": "bdc-vnet",
+            "type": "String"
+        },
+        "azureFirewalls_bdcaksazfw_name": {
+            "defaultValue": "bdcaksazfw",
+            "type": "String"
+        },
+        "publicIPAddresses_bdcaksazfw_ip_name": {
+            "defaultValue": "bdcaksazfw-ip",
+            "type": "String"
+        },
+        "managedClusters_bdcaksprivatecluster_name": {
+            "defaultValue": "bdcaksprivatecluster",
+            "type": "String"
+        }
+    },
+    "variables": {},
+    "resources": [
+        {
+            "type": "Microsoft.Network/publicIPAddresses",
+            "apiVersion": "2020-05-01",
+            "name": "[parameters('publicIPAddresses_bdcaksazfw_ip_name')]",
+            "location": "northeurope",
+            "sku": {
+                "name": "Standard"
+            },
+            "properties": {
+                "ipAddress": "51.104.159.190",
+                "publicIPAddressVersion": "IPv4",
+                "publicIPAllocationMethod": "Static",
+                "idleTimeoutInMinutes": 4,
+                "ipTags": []
+            }
+        },
+        {
+            "type": "Microsoft.Network/routeTables",
+            "apiVersion": "2020-05-01",
+            "name": "[parameters('routeTables_bdcaks_rt_name')]",
+            "location": "northeurope",
+            "properties": {
+                "disableBgpRoutePropagation": false,
+                "routes": [
+                    {
+                        "name": "bdcaksrouteinet",
+                        "properties": {
+                            "addressPrefix": "51.104.159.190/32",
+                            "nextHopType": "Internet"
+                        }
+                    },
+                    {
+                        "name": "bdcaksroute",
+                        "properties": {
+                            "addressPrefix": "0.0.0.0/0",
+                            "nextHopType": "VirtualAppliance",
+                            "nextHopIpAddress": "10.2.0.4"
+                        }
+                    }
+                ]
+            }
+        },
+        {
+            "type": "Microsoft.ContainerService/managedClusters",
+            "apiVersion": "2020-06-01",
+            "name": "[parameters('managedClusters_bdcaksprivatecluster_name')]",
+            "location": "northeurope",
+            "dependsOn": [
+                "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('virtualNetworks_bdc_vnet_name'), 'aks-subnet')]"
+            ],
+            "sku": {
+                "name": "Basic",
+                "tier": "Free"
+            },
+            "properties": {
+                "kubernetesVersion": "1.16.13",
+                "dnsPrefix": "bdcakspriv-private-bdc-rg-a00fa0",
+                "agentPoolProfiles": [
+                    {
+                        "name": "nodepool1",
+                        "count": 2,
+                        "vmSize": "Standard_D13_v2",
+                        "osDiskSizeGB": 128,
+                        "vnetSubnetID": "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('virtualNetworks_bdc_vnet_name'), 'aks-subnet')]",
+                        "maxPods": 30,
+                        "type": "VirtualMachineScaleSets",
+                        "orchestratorVersion": "1.16.13",
+                        "enableNodePublicIP": false,
+                        "nodeLabels": {},
+                        "mode": "System",
+                        "osType": "Linux",
+                        "nodeImageVersion": "AKSUbuntu-1604-2020.07.16"
+                    }
+                ],
+                "linuxProfile": {
+                    "adminUsername": "azureuser",
+                    "ssh": {
+                        "publicKeys": [
+                            {
+                                "keyData": "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQC+2Ev5GnLtDTsb/xnYFVFqyJejTQy+tH9Z5jhh4h+h1zDLZESubjzKkSIcBaUq1BDypC2HWY3GojxOW8QSKtlxdZNMBoX2/POsc+XeU/iPPYi243wMCBKOyIS5iLrT+86sDCDSVScmaFiA7fGSQOp3ghYY+517s1yWFWdbbChVP0OWjPDa8CeiMPDJFraT5stcFuEJ/ef1qidz48bvJJJKiKQ+7VS4VjqKFsM+n7uvKC0V5hZZ6WH7Ld5q1zR4OImySiYHRzNob6Q9f14MOTCu+JLbdONZLRAR83daw30fCL2V8NGqSVFAA/oRwarZpCZvrNJSCUUc6esDax36pEjx"
+                            }
+                        ]
+                    }
+                },
+                "windowsProfile": {
+                    "adminUsername": "azureuser"
+                },
+                "servicePrincipalProfile": {
+                    "clientId": "17915f2a-09da-4729-8f62-c7121f28a4f2"
+                },
+                "addonProfiles": {
+                    "KubeDashboard": {
+                        "enabled": true
+                    }
+                },
+                "nodeResourceGroup": "[concat('MC_private-bdc-rg_', parameters('managedClusters_bdcaksprivatecluster_name'), '_northeurope')]",
+                "enableRBAC": true,
+                "networkProfile": {
+                    "networkPlugin": "azure",
+                    "loadBalancerSku": "Standard",
+                    "serviceCidr": "10.3.0.0/24",
+                    "dnsServiceIP": "10.3.0.10",
+                    "dockerBridgeCidr": "172.17.0.1/16",
+                    "outboundType": "userDefinedRouting"
+                },
+                "apiServerAccessProfile": {
+                    "enablePrivateCluster": true
+                }
+            }
+        },
+        {
+            "type": "Microsoft.Network/routeTables/routes",
+            "apiVersion": "2020-05-01",
+            "name": "[concat(parameters('routeTables_bdcaks_rt_name'), '/bdcaksroute')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Network/routeTables', parameters('routeTables_bdcaks_rt_name'))]"
+            ],
+            "properties": {
+                "addressPrefix": "0.0.0.0/0",
+                "nextHopType": "VirtualAppliance",
+                "nextHopIpAddress": "10.2.0.4"
+            }
+        },
+        {
+            "type": "Microsoft.Network/routeTables/routes",
+            "apiVersion": "2020-05-01",
+            "name": "[concat(parameters('routeTables_bdcaks_rt_name'), '/bdcaksrouteinet')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Network/routeTables', parameters('routeTables_bdcaks_rt_name'))]"
+            ],
+            "properties": {
+                "addressPrefix": "51.104.159.190/32",
+                "nextHopType": "Internet"
+            }
+        },
+        {
+            "type": "Microsoft.Network/virtualNetworks",
+            "apiVersion": "2020-05-01",
+            "name": "[parameters('virtualNetworks_bdc_vnet_name')]",
+            "location": "northeurope",
+            "dependsOn": [
+                "[resourceId('Microsoft.Network/routeTables', parameters('routeTables_bdcaks_rt_name'))]"
+            ],
+            "properties": {
+                "addressSpace": {
+                    "addressPrefixes": [
+                        "10.0.0.0/8"
+                    ]
+                },
+                "dhcpOptions": {
+                    "dnsServers": []
+                },
+                "subnets": [
+                    {
+                        "name": "AzureFirewallSubnet",
+                        "properties": {
+                            "addressPrefix": "10.2.0.0/24",
+                            "delegations": [],
+                            "privateEndpointNetworkPolicies": "Enabled",
+                            "privateLinkServiceNetworkPolicies": "Enabled"
+                        }
+                    },
+                    {
+                        "name": "aks-subnet",
+                        "properties": {
+                            "addressPrefix": "10.1.0.0/16",
+                            "routeTable": {
+                                "id": "[resourceId('Microsoft.Network/routeTables', parameters('routeTables_bdcaks_rt_name'))]"
+                            },
+                            "delegations": [],
+                            "privateEndpointNetworkPolicies": "Disabled",
+                            "privateLinkServiceNetworkPolicies": "Enabled"
+                        }
+                    }
+                ],
+                "virtualNetworkPeerings": [],
+                "enableDdosProtection": false,
+                "enableVmProtection": false
+            }
+        },
+        {
+            "type": "Microsoft.Network/virtualNetworks/subnets",
+            "apiVersion": "2020-05-01",
+            "name": "[concat(parameters('virtualNetworks_bdc_vnet_name'), '/AzureFirewallSubnet')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Network/virtualNetworks', parameters('virtualNetworks_bdc_vnet_name'))]"
+            ],
+            "properties": {
+                "addressPrefix": "10.2.0.0/24",
+                "delegations": [],
+                "privateEndpointNetworkPolicies": "Enabled",
+                "privateLinkServiceNetworkPolicies": "Enabled"
+            }
+        },
+        {
+            "type": "Microsoft.ContainerService/managedClusters/agentPools",
+            "apiVersion": "2020-06-01",
+            "name": "[concat(parameters('managedClusters_bdcaksprivatecluster_name'), '/nodepool1')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.ContainerService/managedClusters', parameters('managedClusters_bdcaksprivatecluster_name'))]",
+                "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('virtualNetworks_bdc_vnet_name'), 'aks-subnet')]"
+            ],
+            "properties": {
+                "count": 2,
+                "vmSize": "Standard_D13_v2",
+                "osDiskSizeGB": 128,
+                "vnetSubnetID": "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('virtualNetworks_bdc_vnet_name'), 'aks-subnet')]",
+                "maxPods": 30,
+                "type": "VirtualMachineScaleSets",
+                "orchestratorVersion": "1.16.13",
+                "enableNodePublicIP": false,
+                "nodeLabels": {},
+                "mode": "System",
+                "osType": "Linux",
+                "nodeImageVersion": "AKSUbuntu-1604-2020.07.16"
+            }
+        },
+        {
+            "type": "Microsoft.Network/azureFirewalls",
+            "apiVersion": "2020-05-01",
+            "name": "[parameters('azureFirewalls_bdcaksazfw_name')]",
+            "location": "northeurope",
+            "dependsOn": [
+                "[resourceId('Microsoft.Network/publicIPAddresses', parameters('publicIPAddresses_bdcaksazfw_ip_name'))]",
+                "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('virtualNetworks_bdc_vnet_name'), 'AzureFirewallSubnet')]"
+            ],
+            "properties": {
+                "sku": {
+                    "name": "AZFW_VNet",
+                    "tier": "Standard"
+                },
+                "threatIntelMode": "Alert",
+                "additionalProperties": {
+                    "Network.DNS.EnableProxy": "True",
+                    "Network.DNS.RequireProxyForNetworkRules": "True"
+                },
+                "ipConfigurations": [
+                    {
+                        "name": "[concat(parameters('azureFirewalls_bdcaksazfw_name'), '-config')]",
+                        "properties": {
+                            "publicIPAddress": {
+                                "id": "[resourceId('Microsoft.Network/publicIPAddresses', parameters('publicIPAddresses_bdcaksazfw_ip_name'))]"
+                            },
+                            "subnet": {
+                                "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('virtualNetworks_bdc_vnet_name'), 'AzureFirewallSubnet')]"
+                            }
+                        }
+                    }
+                ],
+                "networkRuleCollections": [
+                    {
+                        "name": "aksfwnr",
+                        "properties": {
+                            "priority": 100,
+                            "action": {
+                                "type": "Allow"
+                            },
+                            "rules": [
+                                {
+                                    "name": "apiudp",
+                                    "protocols": [
+                                        "UDP"
+                                    ],
+                                    "sourceAddresses": [
+                                        "*"
+                                    ],
+                                    "destinationAddresses": [
+                                        "AzureCloud.northeurope"
+                                    ],
+                                    "sourceIpGroups": [],
+                                    "destinationIpGroups": [],
+                                    "destinationFqdns": [],
+                                    "destinationPorts": [
+                                        "1194"
+                                    ]
+                                },
+                                {
+                                    "name": "apitcp",
+                                    "protocols": [
+                                        "TCP"
+                                    ],
+                                    "sourceAddresses": [
+                                        "*"
+                                    ],
+                                    "destinationAddresses": [
+                                        "AzureCloud.northeurope"
+                                    ],
+                                    "sourceIpGroups": [],
+                                    "destinationIpGroups": [],
+                                    "destinationFqdns": [],
+                                    "destinationPorts": [
+                                        "9000"
+                                    ]
+                                },
+                                {
+                                    "name": "time",
+                                    "protocols": [
+                                        "UDP"
+                                    ],
+                                    "sourceAddresses": [
+                                        "*"
+                                    ],
+                                    "destinationAddresses": [],
+                                    "sourceIpGroups": [],
+                                    "destinationIpGroups": [],
+                                    "destinationFqdns": [
+                                        "ntp.ubuntu.com"
+                                    ],
+                                    "destinationPorts": [
+                                        "123"
+                                    ]
+                                }
+                            ]
+                        }
+                    }
+                ],
+                "applicationRuleCollections": [],
+                "natRuleCollections": []
+            }
+        },
+        {
+            "type": "Microsoft.Network/virtualNetworks/subnets",
+            "apiVersion": "2020-05-01",
+            "name": "[concat(parameters('virtualNetworks_bdc_vnet_name'), '/aks-subnet')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Network/virtualNetworks', parameters('virtualNetworks_bdc_vnet_name'))]",
+                "[resourceId('Microsoft.Network/routeTables', parameters('routeTables_bdcaks_rt_name'))]"
+            ],
+            "properties": {
+                "addressPrefix": "10.1.0.0/16",
+                "routeTable": {
+                    "id": "[resourceId('Microsoft.Network/routeTables', parameters('routeTables_bdcaks_rt_name'))]"
+                },
+                "delegations": [],
+                "privateEndpointNetworkPolicies": "Disabled",
+                "privateLinkServiceNetworkPolicies": "Enabled"
+            }
+        }
+    ]
+}
