@@ -67,21 +67,20 @@ then
     export ARC_DC_REGION=$dc_region
 fi
 
-
 set -Eeuo pipefail
 
 # This is a script to create single-node Kubernetes cluster and deploy Azure Arc Data Controller on it.
 #
-export AZUREARCDATACONTROLLER_DIR=aadatacontroller
+export AZUREARCDATACONTROLLER_DIR=arc-data
 
 # Name of virtualenv variable used.
 #
-export LOG_FILE="aadatacontroller.log"
+export LOG_FILE="arc-data-controller.log"
 export DEBIAN_FRONTEND=noninteractive
 
 # Requirements file.
 export OSCODENAME=$(lsb_release -cs)
-export AZDATA_PRIVATE_PREVIEW_DEB_PACKAGE="https://private-repo.microsoft.com/python/azure-arc-data/private-preview-jul-2020/ubuntu-"$OSCODENAME"/azdata-cli_20.0.1-1~"$OSCODENAME"_all.deb"
+export AZDATA_PRIVATE_PREVIEW_DEB_PACKAGE="https://aka.ms/jul-2020-arc-azdata-$OSCODENAME"
 
 # Kube version.
 #
@@ -97,7 +96,7 @@ RETRY_INTERVAL=5
 #
 export ACCEPT_EULA=yes
 export CLUSTER_NAME=arc
-export PV_COUNT="80"
+export PV_COUNT="100"
 
 # Make a directory for installing the scripts and logs.
 #
@@ -147,30 +146,27 @@ sudo apt install -y libodbc1 odbcinst odbcinst1debian2 unixodbc apt-transport-ht
 # Download and install azdata package
 #
 echo ""
-echo "Downloading azdata installer from" $AZDATA_PRIVATE_PREVIEW_DEB_PACKAGE 
-curl --location $AZDATA_PRIVATE_PREVIEW_DEB_PACKAGE --output azdata_setup.deb
-sudo dpkg -i azdata_setup.deb
+
+if [[ -v AZDATA_DEB_PACKAGE_PATH ]]; then
+  sudo dpkg -i $AZDATA_DEB_PACKAGE_PATH
+elif [[ -v AZDATA_DEB_PACKAGE_URL ]]; then
+  echo "Downloading azdata installer from" $AZDATA_DEB_PACKAGE_URL 
+  curl --location $AZDATA_DEB_PACKAGE_URL --output azdata_setup.deb
+  sudo dpkg -i azdata_setup.deb
+else
+  echo "Downloading azdata installer from" $AZDATA_PRIVATE_PREVIEW_DEB_PACKAGE 
+  curl --location $AZDATA_PRIVATE_PREVIEW_DEB_PACKAGE --output azdata_setup.deb
+  sudo dpkg -i azdata_setup.deb
+fi
+
 cd -
 
 azdata --version
 echo "Azdata has been successfully installed."
 
-# Installing azdata extensions
-#
-echo "Installing azdata extension for Arc data controller..."
-azdata extension add --source https://private-repo.microsoft.com/python/azure-arc-data/private-preview-jul-2020/pypi-azdata-cli-extensions/azdata_cli_dc-0.0.2-py2.py3-none-any.whl --yes
-
-echo "Installing azdata extension for postgres..."
-azdata extension add --source https://private-repo.microsoft.com/python/azure-arc-data/private-preview-jul-2020/pypi-azdata-cli-extensions/azdata_cli_postgres-0.0.2-py2.py3-none-any.whl --yes
-
-echo "Installing azdata extension for sql..."
-azdata extension add --source https://private-repo.microsoft.com/python/azure-arc-data/private-preview-jul-2020/pypi-azdata-cli-extensions/azdata_cli_sqlinstance-0.0.2-py2.py3-none-any.whl --yes
-
-echo "Azdata extensions installed successfully."
-
 # Install Azure CLI
 #
-curl -sL https://aka.ms/InstallAzureCLIDeb | sudo bash
+#curl -sL https://aka.ms/InstallAzureCLIDeb | sudo bash
 
 # Load all pre-requisites for Kubernetes.
 #
@@ -333,9 +329,25 @@ echo "Starting to deploy azdata cluster..."
 
 # Command to create cluster for single node cluster.
 #
-azdata arc dc config init -s azure-arc-kubeadm-private-preview -t azure-arc-custom --force
+azdata arc dc config init --source azure-arc-kubeadm --path azure-arc-custom --force
 
-azdata arc dc create -n $ARC_DC_NAME -p azure-arc-kubeadm-private-preview --namespace $CLUSTER_NAME --location $ARC_DC_REGION --resource-group $ARC_DC_RG --subscription $ARC_DC_SUBSCRIPTION --connectivity-mode indirect
+if [[ -v DOCKER_REGISTRY ]]; then
+    azdata arc dc config replace --path azure-arc-custom/control.json --json-values '$.spec.docker.registry=$DOCKER_REGISTRY'
+fi
+
+if [[ -v DOCKER_REPOSITORY ]]; then
+    azdata arc dc config replace --path azure-arc-custom/control.json --json-values '$.spec.docker.repository=$DOCKER_REPOSITORY'
+fi
+
+if [[ -v DOCKER_IMAGE_TAG ]]; then
+    azdata arc dc config replace --path azure-arc-custom/control.json --json-values '$.spec.docker.imageTag=$DOCKER_IMAGE_TAG'
+fi
+
+# azdata arc dc config replace --path azure-arc-custom/control.json --json-values '$.spec.docker.imagePullPolicy=IfNotPresent'
+azdata arc dc config replace --path azure-arc-custom/control.json --json-values '$.spec.storage.data.className=local-storage'
+azdata arc dc config replace --path azure-arc-custom/control.json --json-values '$.spec.storage.logs.className=local-storage'
+
+azdata arc dc create --name $ARC_DC_NAME --path azure-arc-custom --namespace $CLUSTER_NAME --location $ARC_DC_REGION --resource-group $ARC_DC_RG --subscription $ARC_DC_SUBSCRIPTION --connectivity-mode indirect
 echo "Azure Arc Data Controller cluster created." 
 
 # Setting context to cluster.
@@ -344,7 +356,7 @@ kubectl config set-context --current --namespace $CLUSTER_NAME
 
 # Login and get endpoint list for the cluster.
 #
-azdata login -n $CLUSTER_NAME
+azdata login --namespace $CLUSTER_NAME
 
 echo "Cluster successfully setup. Run 'azdata --help' to see all available options."
 }| tee $LOG_FILE
