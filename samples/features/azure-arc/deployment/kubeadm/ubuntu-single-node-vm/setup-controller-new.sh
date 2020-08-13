@@ -1,26 +1,5 @@
 #!/bin/bash
 
-# Get controller username and password as input. It is used as default for the controller.
-#
-if [ -z "$AZDATA_USERNAME" ]
-then
-    read -p "Create Username for Azure Arc Data Controller: " username
-    echo
-    export AZDATA_USERNAME=$username
-fi
-if [ -z "$AZDATA_PASSWORD" ]
-then
-    while true; do
-        read -s -p "Create Password for Azure Arc Data Controller: " password
-        echo
-        read -s -p "Confirm your Password: " password2
-        echo
-        [ "$password" = "$password2" ] && break
-        echo "Password mismatch. Please try again."
-    done
-    export AZDATA_PASSWORD=$password
-fi
-
 # Prompt for private preview repository username and password provided by Microsoft
 #
 if [ -z "$DOCKER_USERNAME" ]
@@ -65,6 +44,27 @@ then
     read -p "Enter a region for the new Azure Arc Data Controller (eastus, eastus2, centralus, westus2, westeurope or southeastasia): " dc_region
     echo
     export ARC_DC_REGION=$dc_region
+fi
+
+# Get controller username and password as input. It is used as default for the controller.
+#
+if [ -z "$AZDATA_USERNAME" ]
+then
+    read -p "Create Username for Azure Arc Data Controller: " username
+    echo
+    export AZDATA_USERNAME=$username
+fi
+if [ -z "$AZDATA_PASSWORD" ]
+then
+    while true; do
+        read -s -p "Create Password for Azure Arc Data Controller: " password
+        echo
+        read -s -p "Confirm your Password: " password2
+        echo
+        [ "$password" = "$password2" ] && break
+        echo "Password mismatch. Please try again."
+    done
+    export AZDATA_PASSWORD=$password
 fi
 
 set -Eeuo pipefail
