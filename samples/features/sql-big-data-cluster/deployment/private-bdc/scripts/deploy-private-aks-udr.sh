@@ -1,6 +1,19 @@
 #!/bin/bash
 
-export SUBID= <your Azure subscription ID>
+# Get Subscription ID and service principles as input. It is used as default for controller, SQL Server Master instance (sa account) and Knox.
+#
+while true; do
+    read -s -p "Your Azure Subscription: " subscription
+    echo
+    read -s -p "Your service principles ID: " sp_id
+    echo
+    read -s -p "Your service principles Password: " sp_pwd
+
+done
+
+# Define a set of environment variables to be used in resource creations.
+
+export SUBID=$subscription
 
 export REGION_NAME=northeurope
 export RESOURCE_GROUP=private-bdc-rg
@@ -16,9 +29,10 @@ export FWROUTE_NAME=bdcaksroute
 export FWROUTE_NAME_INTERNET=bdcaksrouteinet
 
 
-
+# Create Azure Resource Group
 az group create -n $RESOURCE_GROUP -l $REGION_NAME
  
+# Create Azure Virtual Network to host your AKS cluster
 az network vnet create \
     --resource-group $RESOURCE_GROUP \
     --location $REGION_NAME \
@@ -35,29 +49,34 @@ SUBNET_ID=$(az network vnet subnet show \
     --query id -o tsv)
 
 
+# Add Azure firewall extension
 az extension add --name azure-firewall
 
 # Dedicated subnet for Azure Firewall (Firewall name cannot be changed)
-
 az network vnet subnet create \
     --resource-group $RESOURCE_GROUP \
     --vnet-name $VNET_NAME \
     --name AzureFirewallSubnet \
     --address-prefix 10.2.0.0/24
 
+# Create Azure firewall 
 az network firewall create -g $RESOURCE_GROUP -n $FWNAME -l $REGION_NAME --enable-dns-proxy true
 
+# Create public IP for Azure Firewall 
 az network public-ip create -g $RESOURCE_GROUP -n $FWPUBIP -l $REGION_NAME --sku "Standard"
 
+# Create IP configurations for Azure Firewall 
 az network firewall ip-config create -g $RESOURCE_GROUP -f $FWNAME -n $FWIPCONFIG_NAME --public-ip-address $FWPUBIP --vnet-name $VNET_NAME
 
 
-
+# Getting public and private IP addresses for Azure Firewall 
 export FWPUBLIC_IP=$(az network public-ip show -g $RESOURCE_GROUP -n $FWPUBIP --query "ipAddress" -o tsv)
 export FWPRIVATE_IP=$(az network firewall show -g $RESOURCE_GROUP -n $FWNAME --query "ipConfigurations[0].privateIpAddress" -o tsv)
 
+## Create an User defined route table
 az network route-table create -g $RESOURCE_GROUP --name $FWROUTE_TABLE_NAME
 
+# Create User defined routes 
 az network route-table route create -g $RESOURCE_GROUP --name $FWROUTE_NAME --route-table-name $FWROUTE_TABLE_NAME --address-prefix 0.0.0.0/0 --next-hop-type VirtualAppliance --next-hop-ip-address $FWPRIVATE_IP --subscription $SUBID
 
 az network route-table route create -g $RESOURCE_GROUP --name $FWROUTE_NAME_INTERNET --route-table-name $FWROUTE_TABLE_NAME --address-prefix $FWPUBLIC_IP/32 --next-hop-type Internet
@@ -84,19 +103,20 @@ az network vnet subnet update -g $RESOURCE_GROUP --vnet-name $VNET_NAME --name $
 
 az ad sp create-for-rbac -n "bdcaks-sp" --skip-assignment
 
-export APPID=<your service principle ID >
-export PASSWORD=< your service principle password >
+export APPID=$sp_id
+export PASSWORD=$sp_pwd
 export VNETID=$(az network vnet show -g $RESOURCE_GROUP --name $VNET_NAME --query id -o tsv)
 
 # Assign SP Permission to VNET
 
 az role assignment create --assignee $APPID --scope $VNETID --role "Network Contributor"
 
-
+# Assign SP Permission to route table
 export RTID=$(az network route-table show -g $RESOURCE_GROUP -n $FWROUTE_TABLE_NAME --query id -o tsv)
 az role assignment create --assignee $APPID --scope $RTID --role "Network Contributor"
 
 
+# Create AKS Cluster
 az aks create \
     --resource-group $RESOURCE_GROUP \
     --location $REGION_NAME \

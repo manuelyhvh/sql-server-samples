@@ -1,7 +1,23 @@
 #!/bin/bash
 
+# Get password as input. It is used as default for controller, SQL Server Master instance (sa account) and Knox.
+#
+while true; do
+    read -s -p "Create Admin username for Big Data Cluster: " bdcadmin
+    echo
+    read -s -p "Create Password for Big Data Cluster: " password
+    echo
+    read -s -p "Confirm your Password: " password2
+    echo
+    [ "$password" = "$password2" ] && break
+    echo "Password mismatch. Please try again."
+done
+
+
+# Create BDC custom profile
 azdata bdc config init --source aks-dev-test --target private-bdc-aks --force
 
+# Configurations for private BDC deployment
 azdata bdc config replace -c private-bdc-aks/control.json -j "$.spec.docker.imageTag=2019-CU6-ubuntu-16.04"
 azdata bdc config replace -c private-bdc-aks/control.json -j "$.spec.storage.data.className=default"
 azdata bdc config replace -c private-bdc-aks/control.json -j "$.spec.storage.logs.className=default"
@@ -17,8 +33,8 @@ azdata bdc config replace -c private-bdc-aks /bdc.json -j "$.spec.resources.appp
 # azdata bdc config replace -c private-bdc-aks /bdc.json -j "$.spec.resources.master.spec.endpoints[1].serviceType= NodePort"
 
 
-export AZDATA_USERNAME=<your bdcadmin username>
-export AZDATA_PASSWORD=< your bdcadmin password>
+export AZDATA_USERNAME=$bdcadmin
+export AZDATA_PASSWORD=$password
 export ACCEPT_EULA=yes  #accept agreement
 
 azdata bdc create --config-profile private-bdc-aks --accept-eula yes
