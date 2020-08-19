@@ -1,7 +1,6 @@
 #!/bin/bash
-
 #Define a set of environment variables to be used in resource creations.
-
+#
 export REGION_NAME=northeurope
 export RESOURCE_GROUP=private-bdc-aks-rg
 export SUBNET_NAME=aks-subnet

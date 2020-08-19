@@ -1,7 +1,6 @@
 #!/bin/bash
-
 #Get Subscription ID and service principles as input. It is used as default for controller, SQL Server Master instance (sa account) and Knox.
-
+#
 while true; do
     read -s -p "Your Azure Subscription: " subscription
     echo
@@ -16,7 +15,6 @@ while true; do
 done
 
 #Define a set of environment variables to be used in resource creations.
-
 export SUBID=$subscription
 
 export REGION_NAME=$region
@@ -89,13 +87,11 @@ az network route-table route create -g $RESOURCE_GROUP --name $FWROUTE_NAME_INTE
 
 
 #Add FW Network Rules
-
 az network firewall network-rule create -g $RESOURCE_GROUP -f $FWNAME --collection-name 'aksfwnr' -n 'apiudp' --protocols 'UDP' --source-addresses '*' --destination-addresses "AzureCloud.$REGION_NAME" --destination-ports 1194 --action allow --priority 100
 az network firewall network-rule create -g $RESOURCE_GROUP -f $FWNAME --collection-name 'aksfwnr' -n 'apitcp' --protocols 'TCP' --source-addresses '*' --destination-addresses "AzureCloud.$REGION_NAME" --destination-ports 9000
 az network firewall network-rule create -g $RESOURCE_GROUP -f $FWNAME --collection-name 'aksfwnr' -n 'time' --protocols 'UDP' --source-addresses '*' --destination-fqdns 'ntp.ubuntu.com' --destination-ports 123
 
 #Add FW Application Rules
-
 az network firewall application-rule create -g $RESOURCE_GROUP -f $FWNAME --collection-name 'aksfwar' -n 'fqdn' --source-addresses '*' --protocols 'http=80' 'https=443' --fqdn-tags "AzureKubernetesService" --action allow --priority 100
 
 #Associate User defined route table (UDR) to AKS cluster where deployed BDC previsouly 
@@ -106,7 +102,6 @@ az network vnet subnet update -g $RESOURCE_GROUP --vnet-name $VNET_NAME --name $
 
 
 #Create SP and Assign Permission to Virtual Network
-
 az ad sp create-for-rbac -n "bdcaks-sp" --skip-assignment
 
 export APPID=$sp_id
