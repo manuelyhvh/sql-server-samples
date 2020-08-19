@@ -1,7 +1,7 @@
 #!/bin/bash
 
-# Get password as input. It is used as default for controller, SQL Server Master instance (sa account) and Knox.
-#
+#Get password as input. It is used as default for controller, SQL Server Master instance (sa account) and Knox.
+
 while true; do
     read -s -p "Create Admin username for Big Data Cluster: " bdcadmin
     echo
@@ -14,10 +14,10 @@ while true; do
 done
 
 
-# Create BDC custom profile
+#Create BDC custom profile
 azdata bdc config init --source aks-dev-test --target private-bdc-aks --force
 
-# Configurations for private BDC deployment
+#Configurations for private BDC deployment
 azdata bdc config replace -c private-bdc-aks/control.json -j "$.spec.docker.imageTag=2019-CU6-ubuntu-16.04"
 azdata bdc config replace -c private-bdc-aks/control.json -j "$.spec.storage.data.className=default"
 azdata bdc config replace -c private-bdc-aks/control.json -j "$.spec.storage.logs.className=default"
@@ -29,12 +29,17 @@ azdata bdc config replace -c private-bdc-aks /bdc.json -j "$.spec.resources.mast
 azdata bdc config replace -c private-bdc-aks /bdc.json -j "$.spec.resources.gateway.spec.endpoints[0].serviceType=NodePort"
 azdata bdc config replace -c private-bdc-aks /bdc.json -j "$.spec.resources.appproxy.spec.endpoints[0].serviceType=NodePort"
 
-# In case you're deploying BDC in HA mode ( aks-dev-test-ha profile ) please also use the following command 
-# azdata bdc config replace -c private-bdc-aks /bdc.json -j "$.spec.resources.master.spec.endpoints[1].serviceType= NodePort"
+#In case you're deploying BDC in HA mode ( aks-dev-test-ha profile ) please also use the following command 
+#azdata bdc config replace -c private-bdc-aks /bdc.json -j "$.spec.resources.master.spec.endpoints[1].serviceType= NodePort"
 
 
 export AZDATA_USERNAME=$bdcadmin
 export AZDATA_PASSWORD=$password
-export ACCEPT_EULA=yes  #accept agreement
 
 azdata bdc create --config-profile private-bdc-aks --accept-eula yes
+
+#Login and get endpoint list for the cluster.
+
+azdata login -n mssql-cluster
+
+azdata bdc endpoint list --output table

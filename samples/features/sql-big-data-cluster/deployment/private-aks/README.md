@@ -1,6 +1,6 @@
 # Deploy BDC in private AKS cluster with User-defined Route (UDR)
 
-This repository contains the scripts that you can use to deploy a private BDC cluster in Azure Kubernetes Service (AKS) with advanced networking ( CNI ). 
+This repository contains the scripts that you can use to deploy a BDC cluster in Azure Kubernetes Service (AKS) private cluster with advanced networking ( CNI ). 
 
 This repository contains 3 bash scripts : 
 - deploy-private-aks.sh : You can use it to deploy private AKS cluster with private endpoint, it fits the use case that you need to deploy BDC with a private endpoint with AKS private cluster. 
@@ -8,7 +8,7 @@ This repository contains 3 bash scripts :
 - deploy-private-bdc.sh : You can use it to deploy Big Data Clusters ( BDC ) in private deployment mode on private AKS cluster with or without User-defined routes based on your project requirements. 
 
 
-## Prerequisite
+## Prerequisites
 
 The following table lists common big data cluster tools and how to install them:
 

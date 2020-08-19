@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Define a set of environment variables to be used in resource creations.
+#Define a set of environment variables to be used in resource creations.
 
 export REGION_NAME=northeurope
 export RESOURCE_GROUP=private-bdc-aks-rg
@@ -9,10 +9,10 @@ export VNET_NAME=bdc-vnet
 export AKS_NAME=bdcaksprivatecluster
  
 
-# Create Azure Resource Group
+#Create Azure Resource Group
 az group create -n $RESOURCE_GROUP -l $REGION_NAME
  
-# Create Azure Virtual Network to host your AKS clus
+#Create Azure Virtual Network to host your AKS clus
 az network vnet create \
     --resource-group $RESOURCE_GROUP \
     --location $REGION_NAME \
@@ -27,7 +27,7 @@ SUBNET_ID=$(az network vnet subnet show \
     --name $SUBNET_NAME \
     --query id -o tsv)
  
-# Create AKS Cluster
+#Create AKS Cluster
 az aks create \
     --resource-group $RESOURCE_GROUP \
     --name $AKS_NAME \
