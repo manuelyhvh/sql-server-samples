@@ -17,7 +17,7 @@ done
 #Create BDC custom profile
 azdata bdc config init --source aks-dev-test --target private-bdc-aks --force
 
-#Configurations for private BDC deployment
+#Configurations for BDC deployment
 azdata bdc config replace -c private-bdc-aks/control.json -j "$.spec.docker.imageTag=2019-CU6-ubuntu-16.04"
 azdata bdc config replace -c private-bdc-aks/control.json -j "$.spec.storage.data.className=default"
 azdata bdc config replace -c private-bdc-aks/control.json -j "$.spec.storage.logs.className=default"

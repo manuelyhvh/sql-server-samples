@@ -8,6 +8,10 @@ while true; do
     read -s -p "Your service principles ID: " sp_id
     echo
     read -s -p "Your service principles Password: " sp_pwd
+    echo
+    read -s -p "Your Resource Group Name: " resourcegroup
+    echo
+    read -s -p "In which region you're deploying " region
 
 done
 
@@ -15,8 +19,8 @@ done
 
 export SUBID=$subscription
 
-export REGION_NAME=northeurope
-export RESOURCE_GROUP=private-bdc-rg
+export REGION_NAME=$region
+export RESOURCE_GROUP=$resourcegroup
 export SUBNET_NAME=aks-subnet
 export VNET_NAME=bdc-vnet
 export AKS_NAME=bdcaksprivatecluster
@@ -28,6 +32,8 @@ export FWROUTE_TABLE_NAME=bdcaks-rt
 export FWROUTE_NAME=bdcaksroute
 export FWROUTE_NAME_INTERNET=bdcaksrouteinet
 
+#Set Azure subscription current in use
+az account set --subscription $subscription
 
 #Create Azure Resource Group
 az group create -n $RESOURCE_GROUP -l $REGION_NAME
@@ -134,3 +140,6 @@ az aks create \
     --node-vm-size Standard_D13_v2 \
     --node-count 2 \
     --generate-ssh-keys
+
+
+
