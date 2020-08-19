@@ -4,14 +4,13 @@
 while true; do
     read -s -p "Your Azure Subscription: " subscription
     echo
-    read -s -p "Your service principles ID: " sp_id
-    echo
-    read -s -p "Your service principles Password: " sp_pwd
-    echo
     read -s -p "Your Resource Group Name: " resourcegroup
     echo
     read -s -p "In which region you're deploying " region
-
+    echo
+    read -s -p "Your service principles ID: " sp_id
+    echo
+    read -s -p "Your service principles Password: " sp_pwd
 done
 
 #Define a set of environment variables to be used in resource creations.

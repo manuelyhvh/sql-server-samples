@@ -17,5 +17,5 @@ Using the sample Python script in **offline** folder, you will push the necessar
 
 ## __[Deploy SQL Server big data clusters (BDC) with Azure Kubernetes service (AKS) private cluster](private-aks/)__
 
-Using the sample Python script in **private-aks** folder, you will Deploy SQL Server big data cluster in private mode with Azure Kubernetes service (AKS) private cluster.
+Using the sample Python script in **private-aks** folder, you will Deploy SQL Server big data cluster in in your private network with Azure Kubernetes service (AKS) private cluster.
 

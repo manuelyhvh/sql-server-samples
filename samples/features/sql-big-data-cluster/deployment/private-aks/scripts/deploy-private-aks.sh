@@ -1,12 +1,30 @@
 #!/bin/bash
 #Define a set of environment variables to be used in resource creations.
 #
-export REGION_NAME=northeurope
-export RESOURCE_GROUP=private-bdc-aks-rg
+
+#!/bin/bash
+#Get Subscription ID and service principles as input. It is used as default for controller, SQL Server Master instance (sa account) and Knox.
+#
+while true; do
+    read -s -p "Your Azure Subscription: " subscription
+    echo
+    read -s -p "Your Resource Group Name: " resourcegroup
+    echo
+    read -s -p "In which region you're deploying " region
+    echo
+done
+
+#Define a set of environment variables to be used in resource creations.
+export SUBID=$subscription
+
+export REGION_NAME=$region
+export RESOURCE_GROUP=$resourcegroup
 export SUBNET_NAME=aks-subnet
 export VNET_NAME=bdc-vnet
 export AKS_NAME=bdcaksprivatecluster
  
+#Set Azure subscription current in use
+az account set --subscription $subscription
 
 #Create Azure Resource Group
 az group create -n $RESOURCE_GROUP -l $REGION_NAME
