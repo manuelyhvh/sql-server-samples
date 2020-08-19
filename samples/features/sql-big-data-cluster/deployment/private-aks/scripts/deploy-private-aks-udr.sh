@@ -1,16 +1,16 @@
 #!/bin/bash
-#Get Subscription ID and service principles as input. It is used as default for controller, SQL Server Master instance (sa account) and Knox.
+#Get Subscription ID and Azure service principal as input. It is used as default for controller, SQL Server Master instance (sa account) and Knox.
 #
 while true; do
     read -s -p "Your Azure Subscription: " subscription
     echo
     read -s -p "Your Resource Group Name: " resourcegroup
     echo
-    read -s -p "In which region you're deploying " region
+    read -s -p "In which region you're deploying: " region
     echo
-    read -s -p "Your service principles ID: " sp_id
+    read -s -p "Your Azure service principal ID: " sp_id
     echo
-    read -s -p "Your service principles Password: " sp_pwd
+    read -s -p "Your Azure service principal Password: " sp_pwd
 done
 
 #Define a set of environment variables to be used in resource creations.

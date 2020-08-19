@@ -3,7 +3,7 @@
 #
 
 #!/bin/bash
-#Get Subscription ID and service principles as input. It is used as default for controller, SQL Server Master instance (sa account) and Knox.
+#Get Subscription ID and resource groups. It is used as default for controller, SQL Server Master instance (sa account) and Knox.
 #
 while true; do
     read -s -p "Your Azure Subscription: " subscription
