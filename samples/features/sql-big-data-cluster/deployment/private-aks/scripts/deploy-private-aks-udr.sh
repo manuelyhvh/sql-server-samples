@@ -109,7 +109,6 @@ export PASSWORD=$sp_pwd
 export VNETID=$(az network vnet show -g $RESOURCE_GROUP --name $VNET_NAME --query id -o tsv)
 
 #Assign SP Permission to VNET
-
 az role assignment create --assignee $APPID --scope $VNETID --role "Network Contributor"
 
 #Assign SP Permission to route table
