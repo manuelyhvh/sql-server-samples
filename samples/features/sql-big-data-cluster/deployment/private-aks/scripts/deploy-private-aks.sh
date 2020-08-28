@@ -5,14 +5,14 @@
 #!/bin/bash
 #Get Subscription ID and resource groups. It is used as default for controller, SQL Server Master instance (sa account) and Knox.
 #
-do
-    read -p "Your Azure Subscription: " subscription
-    echo
-    read -p "Your Resource Group Name: " resourcegroup
-    echo
-    read -p "In which region you're deploying " region
-    echo
-done
+
+read -p "Your Azure Subscription: " subscription
+echo
+read -p "Your Resource Group Name: " resourcegroup
+echo
+read -p "In which region you're deploying: " region
+echo
+
 
 #Define a set of environment variables to be used in resource creations.
 export SUBID=$subscription

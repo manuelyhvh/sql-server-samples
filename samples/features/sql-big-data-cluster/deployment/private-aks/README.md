@@ -24,7 +24,7 @@ https://docs.microsoft.com/en-us/sql/big-data-cluster/deploy-big-data-tools?view
 1. Download the script on the location that you are planning to use for the deployment
 
 ``` bash
-curl --output setup-bdc.sh https://raw.githubusercontent.com/microsoft/sql-server-samples/master/samples/features/sql-big-data-cluster/deployment/private-aks/scripts/deploy-private-aks.sh
+curl --output deploy-private-aks.sh https://raw.githubusercontent.com/microsoft/sql-server-samples/master/samples/features/sql-big-data-cluster/deployment/private-aks/scripts/deploy-private-aks.sh
 ```
 
 2. Make the script executable
@@ -44,7 +44,7 @@ sudo ./deploy-private-aks.sh
 1. Download the script on the location that you are planning to use for the deployment
 
 ``` bash
-curl --output setup-bdc.sh https://raw.githubusercontent.com/microsoft/sql-server-samples/master/samples/features/sql-big-data-cluster/deployment/private-aks/scripts/deploy-private-aks-udr.sh
+curl --output deploy-private-aks-udr.sh https://raw.githubusercontent.com/microsoft/sql-server-samples/master/samples/features/sql-big-data-cluster/deployment/private-aks/scripts/deploy-private-aks-udr.sh
 ```
 
 2. Make the script executable
