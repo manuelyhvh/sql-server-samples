@@ -1,19 +1,20 @@
-# Deploy BDC in private AKS cluster with User-defined Route (UDR)
+# Deploy BDC in private AKS cluster with Advanced Networking (CNI)
 
 This repository contains the scripts that you can use to deploy a BDC cluster in Azure Kubernetes Service (AKS) private cluster with advanced networking ( CNI ). 
 
 This repository contains 3 bash scripts : 
-- **deploy-private-aks.sh** : You can use it to deploy private AKS cluster with private endpoint, it fits the use case that you need to deploy BDC with a private endpoint with AKS private cluster.
+- **deploy-private-aks.sh** : You can use it to deploy private AKS cluster with private endpoint, it fits the use case that you need to deploy BDC with AKS private cluster.
 
-- **deploy-private-aks-udr.sh** : You can use it to deploy private AKS cluster with private endpoint, it fits the use case that you need to deploy BDC with a private endpoint with AKS private cluster and limit egress traffic with UDR ( User-defined Routes ). 
-- **deploy-bdc.sh** : You can use it to deploy Big Data Clusters ( BDC ) in private deployment mode on private AKS cluster with or without User-defined routes based on your project requirements.  Note : Please use this scripts in the Azure VM which manages your AKS private cluster. 
+- **deploy-private-aks-udr.sh** : You can use it to deploy private AKS cluster with private endpoint, it fits the use case that you need to deploy BDC with AKS private cluster and limit egress traffic with UDR ( User-defined Routes ). 
+
+- **deploy-bdc.sh** : You can use it to deploy Big Data Clusters ( BDC ) in private deployment mode on private AKS cluster with or without User-defined routes based on your project requirements.  **Note** : Please use this scripts in the Azure VM which manages your AKS private cluster. 
 
 
 ## Prerequisites
 
 You can run those scripts on the following client environment with Linux OS or WSL/WSL2.
 
-The following table link listed common big data cluster tools and how to install them:
+The following link listed common big data cluster tools and how to install them:
 
 https://docs.microsoft.com/en-us/sql/big-data-cluster/deploy-big-data-tools?view=sql-server-ver15
 
