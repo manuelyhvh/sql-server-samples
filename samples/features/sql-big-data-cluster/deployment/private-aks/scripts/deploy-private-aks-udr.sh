@@ -1,12 +1,9 @@
 #!/bin/bash
 #Get Subscription ID and Azure service principal as input. It is used as default for controller, SQL Server Master instance (sa account) and Knox.
-#
-
 ##
-# You can also create service principal instead of using an existing one
+#You can also create service principal instead of using an existing one
 #az ad sp create-for-rbac -n "bdcaks-sp" --skip-assignment
-##
-
+#
 read -p "Your Azure Subscription: " subscription
 echo
 read -p "Your Resource Group Name: " resourcegroup
