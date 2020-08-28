@@ -65,7 +65,7 @@ az network vnet subnet create \
     --resource-group $RESOURCE_GROUP \
     --vnet-name $VNET_NAME \
     --name AzureFirewallSubnet \
-    --address-prefix 10.2.0.0/24
+    --address-prefix 10.3.0.0/24
 
 #Create Azure firewall 
 az network firewall create -g $RESOURCE_GROUP -n $FWNAME -l $REGION_NAME --enable-dns-proxy true
