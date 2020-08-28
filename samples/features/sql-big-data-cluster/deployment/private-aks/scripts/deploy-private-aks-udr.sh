@@ -2,6 +2,11 @@
 #Get Subscription ID and Azure service principal as input. It is used as default for controller, SQL Server Master instance (sa account) and Knox.
 #
 
+##
+# You can also create service principal instead of using an existing one
+#az ad sp create-for-rbac -n "bdcaks-sp" --skip-assignment
+##
+
 read -p "Your Azure Subscription: " subscription
 echo
 read -p "Your Resource Group Name: " resourcegroup
@@ -101,8 +106,6 @@ az network vnet subnet update -g $RESOURCE_GROUP --vnet-name $VNET_NAME --name $
 
 
 #Create SP and Assign Permission to Virtual Network
-az ad sp create-for-rbac -n "bdcaks-sp" --skip-assignment
-
 export APPID=$sp_id
 export PASSWORD=$sp_pwd
 export VNETID=$(az network vnet show -g $RESOURCE_GROUP --name $VNET_NAME --query id -o tsv)
@@ -135,4 +138,4 @@ az aks create \
     --generate-ssh-keys
 
 
-
+az aks get-credentials -g $RESOURCE_GROUP -n $AKS_NAME

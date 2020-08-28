@@ -58,3 +58,5 @@ az aks create \
     --node-vm-size Standard_D13_v2 \
     --node-count 2 \
     --generate-ssh-keys
+
+az aks get-credentials -g $RESOURCE_GROUP -n $AKS_NAME

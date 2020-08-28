@@ -4,13 +4,14 @@ This repository contains the scripts that you can use to deploy a BDC cluster in
 
 This repository contains 3 bash scripts : 
 - **deploy-private-aks.sh** : You can use it to deploy private AKS cluster with private endpoint, it fits the use case that you need to deploy BDC with a private endpoint with AKS private cluster.
+
 - **deploy-private-aks-udr.sh** : You can use it to deploy private AKS cluster with private endpoint, it fits the use case that you need to deploy BDC with a private endpoint with AKS private cluster and limit egress traffic with UDR ( User-defined Routes ). 
-- **deploy-bdc.sh** : You can use it to deploy Big Data Clusters ( BDC ) in private deployment mode on private AKS cluster with or without User-defined routes based on your project requirements. 
+- **deploy-bdc.sh** : You can use it to deploy Big Data Clusters ( BDC ) in private deployment mode on private AKS cluster with or without User-defined routes based on your project requirements.  Note : Please use this scripts in the Azure VM which manages your AKS private cluster. 
 
 
 ## Prerequisites
 
-You can run those scripts on the following client envionrment with Linux OS or WSL/WSL2.
+You can run those scripts on the following client environment with Linux OS or WSL/WSL2.
 
 The following table link listed common big data cluster tools and how to install them:
 
@@ -61,10 +62,11 @@ sudo ./deploy-private-aks-udr.sh
 
 ### deploy-bdc.sh
 
+
 1. Download the script on the location that you are planning to use for the deployment
 
 ``` bash
-curl --output setup-bdc.sh https://raw.githubusercontent.com/microsoft/sql-server-samples/master/samples/features/sql-big-data-cluster/deployment/private-aks/scripts/deploy-bdc.sh
+curl --output deploy-bdc https://raw.githubusercontent.com/microsoft/sql-server-samples/master/samples/features/sql-big-data-cluster/deployment/private-aks/scripts/deploy-bdc.sh
 ```
 
 2. Make the script executable
