@@ -5,12 +5,12 @@
 #!/bin/bash
 #Get Subscription ID and resource groups. It is used as default for controller, SQL Server Master instance (sa account) and Knox.
 #
-while true; do
-    read -s -p "Your Azure Subscription: " subscription
+do
+    read -p "Your Azure Subscription: " subscription
     echo
-    read -s -p "Your Resource Group Name: " resourcegroup
+    read -p "Your Resource Group Name: " resourcegroup
     echo
-    read -s -p "In which region you're deploying " region
+    read -p "In which region you're deploying " region
     echo
 done
 
