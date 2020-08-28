@@ -41,7 +41,7 @@ fi
 
 if [ -z "$ARC_DC_REGION" ]
 then
-    read -p "Enter a region for the new Azure Arc Data Controller (eastus, eastus2, centralus, westus2, westeurope or southeastasia): " dc_region
+    read -p "Enter a region for the new Azure Arc Data Controller (eastus, eastus2, centralus, westus2, westeurope, southeastasia, japaneast, australiaeast, koreacentral, northeurope, uksouth, or francecentral): " dc_region
     echo
     export ARC_DC_REGION=$dc_region
 fi
