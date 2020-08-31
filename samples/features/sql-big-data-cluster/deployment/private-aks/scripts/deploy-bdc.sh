@@ -3,7 +3,7 @@
 #Get password as input. It is used as default for controller, SQL Server Master instance (sa account) and Knox.
 #
 while true; do
-    read -s -p "Create Admin username for Big Data Cluster: " bdcadmin
+    read -p "Create Admin username for Big Data Cluster: " bdcadmin
     echo
     read -s -p "Create Password for Big Data Cluster: " password
     echo
