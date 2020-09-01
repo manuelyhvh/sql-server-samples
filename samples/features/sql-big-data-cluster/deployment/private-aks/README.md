@@ -67,7 +67,7 @@ sudo ./deploy-private-aks-udr.sh
 1. Download the script on the location that you are planning to use for the deployment
 
 ``` bash
-curl --output deploy-bdc https://raw.githubusercontent.com/microsoft/sql-server-samples/master/samples/features/sql-big-data-cluster/deployment/private-aks/scripts/deploy-bdc.sh
+curl --output deploy-bdc.sh https://raw.githubusercontent.com/microsoft/sql-server-samples/master/samples/features/sql-big-data-cluster/deployment/private-aks/scripts/deploy-bdc.sh
 ```
 
 2. Make the script executable
