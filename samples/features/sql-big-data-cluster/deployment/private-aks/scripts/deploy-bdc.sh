@@ -25,9 +25,9 @@ azdata bdc config replace -c private-bdc-aks/control.json -j "$.spec.storage.log
 azdata bdc config replace -c private-bdc-aks/control.json -j "$.spec.endpoints[0].serviceType=NodePort"
 azdata bdc config replace -c private-bdc-aks/control.json -j "$.spec.endpoints[1].serviceType=NodePort"
 
-azdata bdc config replace -c private-bdc-aks /bdc.json -j "$.spec.resources.master.spec.endpoints[0].serviceType=NodePort"
-azdata bdc config replace -c private-bdc-aks /bdc.json -j "$.spec.resources.gateway.spec.endpoints[0].serviceType=NodePort"
-azdata bdc config replace -c private-bdc-aks /bdc.json -j "$.spec.resources.appproxy.spec.endpoints[0].serviceType=NodePort"
+azdata bdc config replace -c private-bdc-aks/bdc.json -j "$.spec.resources.master.spec.endpoints[0].serviceType=NodePort"
+azdata bdc config replace -c private-bdc-aks/bdc.json -j "$.spec.resources.gateway.spec.endpoints[0].serviceType=NodePort"
+azdata bdc config replace -c private-bdc-aks/bdc.json -j "$.spec.resources.appproxy.spec.endpoints[0].serviceType=NodePort"
 
 #In case you're deploying BDC in HA mode ( aks-dev-test-ha profile ) please also use the following command 
 #azdata bdc config replace -c private-bdc-aks /bdc.json -j "$.spec.resources.master.spec.endpoints[1].serviceType=NodePort"
