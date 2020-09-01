@@ -6,13 +6,7 @@ sudo kubeadm reset --force
 
 # Clean up azdata-cli package.
 #
-azdata extension remove --name azdata-cli-dc --yes
-azdata extension remove --name azdata-cli-postgres --yes
-azdata extension remove --name azdata-cli-sqlinstance --yes
-unalias azdata
-unalias az
 sudo dpkg --remove --force-all azdata-cli
-sudo dpkg --remove --force-all azure-cli
 
 sudo systemctl stop kubelet
 sudo rm -rf /var/lib/cni/
@@ -92,7 +86,7 @@ sudo rm -rf ~/.kube
 
 # Clean up working folders.
 # 
-export AZUREARCDATACONTROLLER_DIR=aadatacontroller
+export AZUREARCDATACONTROLLER_DIR=arc-data
 if [ -d "$AZUREARCDATACONTROLLER_DIR" ]; then
     echo "Removing working directory $AZUREARCDATACONTROLLER_DIR."
     rm -f -r $AZUREARCDATACONTROLLER_DIR

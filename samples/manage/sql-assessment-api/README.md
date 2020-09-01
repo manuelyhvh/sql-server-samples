@@ -4,11 +4,13 @@ SQL Assessment API provides a mechanism to evaluate the configuration of your SQ
 
 Learn more about the API on the [SQL Assessment API docs page](https://docs.microsoft.com/en-us/sql/sql-assessment-api/sql-assessment-api-overview).
 
+If you are into Azure Data Studio, you can evaluate your SQL Server right from it. Learn about SQL Assessment ADS extension [here](https://techcommunity.microsoft.com/t5/sql-server/released-sql-server-assessment-extension-for-azure-data-studio/ba-p/1470603).
+
 ## QuickStart.md
 
 Learn how to assess your SQL Server configuration for best practices in 2 simple steps.
 
-## config.json
+## ruleset.json
 
 This is the default set of rules shipped with SQL Assessment API. Feel free to open issues to have us fix or add rules. Also, we're happy to see your pull requests to this file.
 
@@ -34,7 +36,7 @@ Demonstrates how to make a custom ruleset containing two checks. The sample cont
         "type": "Database",                                                          //This check targets Database object
         "version": "[13.0,)",                                                        //Applies to SQL Server 2016 and higher
                                                                                      //Another example: "[12.0,13.0)" reads as "any SQL Server version >= 12.0 and < 13.0"
-        "platform": "/^(Windows|Linux)$/",                                           //Applies to SQL Server on Windows and Linux
+        "platform": "Windows, Linux",                                           //Applies to SQL Server on Windows and Linux
         "engineEdition": "OnPremises, ManagedInstance",                              //Applies to SQL on Premises and Azure SQL Managed Instance. Here you can also filter specific editions of SQL Server
         "name": { "not": "/^(master|tempdb|model)$/" }                               //Applies to any database excluding master, tempdb, and msdb
     },
@@ -67,7 +69,7 @@ Demonstrates how to make a custom ruleset containing two checks. The sample cont
         "target": {                                                             //Probes have their own target, usually to separate implementation for different versions, editions, or platforms. Probe targets work the same way as rule targets do.
             "type": "Database",
             "version": "(,12.0)",                                               //This target is for SQL Server of versions prior to 2014
-            "platform": "/^(Windows|Linux)$/",
+            "platform": "Windows, Linux",
             "engineEdition": "OnPremises, ManagedInstance"
         },
         "implementation": {                                                     //Implementation object with a T-SQL query. This probe is used in many rules, that's why the query return so many fields
@@ -79,7 +81,7 @@ Demonstrates how to make a custom ruleset containing two checks. The sample cont
         "target": {
             "type": "Database",
             "version": "[12.0, 13.0)",
-            "platform": "/^(Windows|Linux)$/",
+            "platform": "Windows, Linux",
             "engineEdition": "OnPremises, ManagedInstance"
         },
         "implementation": {
@@ -91,7 +93,7 @@ Demonstrates how to make a custom ruleset containing two checks. The sample cont
         "target": {
         "type": "Database",
         "version": "[13.0,)",
-        "platform": "/^(Windows|Linux)$/",
+        "platform": "Windows, Linux",
         "engineEdition": "OnPremises, ManagedInstance"
         },
         "implementation": {
