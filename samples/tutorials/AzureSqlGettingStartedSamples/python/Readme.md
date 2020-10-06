@@ -1,3 +1,11 @@
+---
+page_type: sample
+languages:
+- ruby
+products:
+- azure-sql-database	
+---
+
 # Developing applications with Python and Azure SQL 
 
 Pick a platform below to get started:
