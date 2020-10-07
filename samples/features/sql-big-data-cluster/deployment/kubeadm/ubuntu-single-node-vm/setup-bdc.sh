@@ -76,7 +76,6 @@ IMAGES=(
         mssql-security-domainctl
         mssql-security-knox
         mssql-security-support
-        mssql-server
         mssql-server-controller
         mssql-server-data
         mssql-ha-operator
