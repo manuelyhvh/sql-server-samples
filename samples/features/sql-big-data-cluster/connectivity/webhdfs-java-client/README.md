@@ -11,7 +11,7 @@ bash ./build.sh
 
 The App.java has hardcoded values in it mentioned in the sections below. Those should be pointed to the right values.
 
-Before running this application, the kinit which somes with the JRE needs to be run to get a kerberos token.
+On Windows, before running this application, kinit needs to be run to get a kerberos token. `kinit` is shipped with the JRE for Windows Java distributions.
 
 `<JRE_INSTALL_ROOT>\bin\kinit.exe <user>@<REALM>`
 
