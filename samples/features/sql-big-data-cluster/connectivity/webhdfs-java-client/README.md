@@ -1,4 +1,4 @@
-# Building this example in Linux
+# Building this example on Linux
 
 ## Prepare dependencies jar into work dir
 
