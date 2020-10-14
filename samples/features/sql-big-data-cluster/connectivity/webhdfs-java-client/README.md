@@ -19,7 +19,7 @@ e.g.
 
 `<JRE_INSTALL_ROOT>\bin\kinit.exe admin@ARIS.LOCAL`
 
-In Linux, you can directly using kinit in system.
+On Linux, kinit can be used. If `kinit` is not installed, then it would need to be installed to get a kerberos token.
 
 e.g.
 
