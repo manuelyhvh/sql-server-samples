@@ -1,3 +1,6 @@
+/**
+ * Copyright (c) Microsoft Corporation. All rights reserved.
+ */
 package com.microsoft.mssql;
 
 import java.security.Principal;
@@ -50,7 +53,7 @@ public class App {
 
 		@Override
 		public Credentials getCredentials(AuthScope authscope) {
-			//TODO: this can be enhanced to pass controller use name and password in case the AuthScope authscheme is basic.
+			//TODO: this can be enhanced to pass user name and password in case the AuthScope authscheme is basic.
 			return emptyCredentials;
 		}
 
@@ -61,8 +64,8 @@ public class App {
 	};
         private static void uploadResource(String inputFilePath, String outputFilePath){
         	System.out.println("Entering create resource");
-                // Construct Knox endpoint
-                String createOperationEndpoint = GW_ENDPOINT + outputFilePath + "?op=CREATE&overwrite=true"; 
+			// Construct Knox endpoint
+			String createOperationEndpoint = GW_ENDPOINT + outputFilePath + "?op=CREATE&overwrite=true"; 
 	        try (CloseableHttpClient client2 = HttpClients.custom().setDefaultCredentialsProvider(provider).build()) {
                         HttpUriRequest request = new HttpPut(createOperationEndpoint);
                         // First request to get the location in data nodes
@@ -81,7 +84,7 @@ public class App {
                                 // Second request to put the content to that location
                                 File testUploadFile = new File(inputFilePath);
                                 HttpEntity putData = MultipartEntityBuilder.create().addBinaryBody("upfile", testUploadFile).build();
-                                HttpUriRequest putRequest = RequestBuilder.put(newlocation).setEntity(putData).build();//setEntity(postData).build();
+                                HttpUriRequest putRequest = RequestBuilder.put(newlocation).setEntity(putData).build();
                                 System.out.println("Executing request " + putRequest.getRequestLine());
                                 CloseableHttpResponse response2 = client2.execute(putRequest);
                                 HttpEntity entity2 = response2.getEntity();

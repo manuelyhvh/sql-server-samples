@@ -3,6 +3,7 @@
 ## Prepare dependencies jar into work dir
 
 bash ./prepare.sh
+
 ## Building jars
 
 bash ./build.sh
