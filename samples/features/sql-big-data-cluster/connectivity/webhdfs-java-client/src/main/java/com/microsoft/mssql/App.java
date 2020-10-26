@@ -62,46 +62,45 @@ public class App {
 			// No op. Nothing to clean up.
 		}
 	};
-        private static void uploadResource(String inputFilePath, String outputFilePath){
-        	System.out.println("Entering create resource");
-			// Construct Knox endpoint
-			String createOperationEndpoint = GW_ENDPOINT + outputFilePath + "?op=CREATE&overwrite=true"; 
-	        try (CloseableHttpClient client2 = HttpClients.custom().setDefaultCredentialsProvider(provider).build()) {
-                        HttpUriRequest request = new HttpPut(createOperationEndpoint);
-                        // First request to get the location in data nodes
-                        try (CloseableHttpResponse response = client2.execute(request)) { 
-                                System.out.println("===============");
-                                String newlocation = response.getFirstHeader("Location").getValue();
-                                HttpEntity entity = response.getEntity();
-                                System.out.println("----------------------------------------");
-                                System.out.println(response.getStatusLine());
-                                System.out.println("----------------------------------------");
-                                if (entity != null) {
-                                        System.out.println(EntityUtils.toString(entity));
-                                }
-                                System.out.println("----------------------------------------");
-                                EntityUtils.consume(entity);
-                                // Second request to put the content to that location
-                                File testUploadFile = new File(inputFilePath);
-                                HttpEntity putData = MultipartEntityBuilder.create().addBinaryBody("upfile", testUploadFile).build();
-                                HttpUriRequest putRequest = RequestBuilder.put(newlocation).setEntity(putData).build();
-                                System.out.println("Executing request " + putRequest.getRequestLine());
-                                CloseableHttpResponse response2 = client2.execute(putRequest);
-                                HttpEntity entity2 = response2.getEntity();
-                                System.out.println("----------------------------------------");
-                                System.out.println(response2.getStatusLine());
-                                System.out.println("----------------------------------------");
-                                if (entity2 != null) {
-                                        System.out.println(EntityUtils.toString(entity2));
-                                }
-                                System.out.println("----------------------------------------");
-                                
-                        }
-                } catch (Exception e) {
-                	System.out.println(e);
-                }
 	
-        }
+	private static void uploadResource(String inputFilePath, String outputFilePath){
+		System.out.println("Entering create resource");
+		// Construct Knox endpoint
+		String createOperationEndpoint = GW_ENDPOINT + outputFilePath + "?op=CREATE&overwrite=true"; 
+		try (CloseableHttpClient client2 = HttpClients.custom().setDefaultCredentialsProvider(provider).build()) {
+			HttpUriRequest request = new HttpPut(createOperationEndpoint);
+			// First request to get the location in data nodes
+			try (CloseableHttpResponse response = client2.execute(request)) { 
+				System.out.println("===============");
+				String newlocation = response.getFirstHeader("Location").getValue();
+				HttpEntity entity = response.getEntity();
+				System.out.println("----------------------------------------");
+				System.out.println(response.getStatusLine());
+				System.out.println("----------------------------------------");
+				if (entity != null) {
+						System.out.println(EntityUtils.toString(entity));
+				}
+				System.out.println("----------------------------------------");
+				EntityUtils.consume(entity);
+				// Second request to put the content to that location
+				File testUploadFile = new File(inputFilePath);
+				HttpEntity putData = MultipartEntityBuilder.create().addBinaryBody("upfile", testUploadFile).build();
+				HttpUriRequest putRequest = RequestBuilder.put(newlocation).setEntity(putData).build();
+				System.out.println("Executing request " + putRequest.getRequestLine());
+				CloseableHttpResponse response2 = client2.execute(putRequest);
+				HttpEntity entity2 = response2.getEntity();
+				System.out.println("----------------------------------------");
+				System.out.println(response2.getStatusLine());
+				System.out.println("----------------------------------------");
+				if (entity2 != null) {
+						System.out.println(EntityUtils.toString(entity2));
+				}
+				System.out.println("----------------------------------------");
+			}
+		} catch (Exception e) {
+			System.out.println(e);
+		}
+	}
  
 	public static void main(String[] args) throws Exception {
 		// These properties can be specified using command line as well by using 
