@@ -3,20 +3,28 @@
  */
 package com.microsoft.mssql;
 
-import java.security.Principal;
 import java.io.File;
+import java.security.Principal;
 
 import org.apache.http.HttpEntity;
+import org.apache.http.auth.AuthSchemeProvider;
 import org.apache.http.auth.AuthScope;
 import org.apache.http.auth.Credentials;
 import org.apache.http.client.CredentialsProvider;
+import org.apache.http.client.config.AuthSchemes;
 import org.apache.http.client.methods.CloseableHttpResponse;
-import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPut;
 import org.apache.http.client.methods.HttpUriRequest;
 import org.apache.http.client.methods.RequestBuilder;
-import org.apache.http.impl.client.CloseableHttpClient;
+import org.apache.http.config.Registry;
+import org.apache.http.config.RegistryBuilder;
 import org.apache.http.entity.mime.MultipartEntityBuilder;
+import org.apache.http.impl.auth.BasicSchemeFactory;
+import org.apache.http.impl.auth.DigestSchemeFactory;
+import org.apache.http.impl.auth.KerberosSchemeFactory;
+import org.apache.http.impl.auth.NTLMSchemeFactory;
+import org.apache.http.impl.auth.SPNegoSchemeFactory;
+import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.util.EntityUtils;
 
@@ -65,9 +73,23 @@ public class App {
 	
 	private static void uploadResource(String inputFilePath, String outputFilePath){
 		System.out.println("Entering create resource");
+		
+		// Create a custom auth scheme registry to prevent reverse DNS lookup on the Http Endpoints
+		// For BDC, the same IP address can be associated with multiple service endpoints. Hence control.aris.local and knox.aris.local
+		// can resolve to the same IP during reverse lookup. As a result of this kerberos auth may fail.
+		// To fix the problem, we should prevent reverse lookup by turning off Hostname Canonicalization in HTTP client and 
+		// recommend that the user use the FQDN of knox endpoint to connect to knox.
+		Registry<AuthSchemeProvider> authSchemeRegistryCopy = RegistryBuilder.<AuthSchemeProvider>create()
+                .register(AuthSchemes.BASIC, new BasicSchemeFactory())
+                .register(AuthSchemes.DIGEST, new DigestSchemeFactory())
+                .register(AuthSchemes.NTLM, new NTLMSchemeFactory())
+                .register(AuthSchemes.SPNEGO, new SPNegoSchemeFactory(true, false))
+                .register(AuthSchemes.KERBEROS, new KerberosSchemeFactory(true, false))
+                .build();
+		
 		// Construct Knox endpoint
 		String createOperationEndpoint = GW_ENDPOINT + outputFilePath + "?op=CREATE&overwrite=true"; 
-		try (CloseableHttpClient client2 = HttpClients.custom().setDefaultCredentialsProvider(provider).build()) {
+		try (CloseableHttpClient client2 = HttpClients.custom().setDefaultCredentialsProvider(provider).setDefaultAuthSchemeRegistry(authSchemeRegistryCopy).build()) {
 			HttpUriRequest request = new HttpPut(createOperationEndpoint);
 			// First request to get the location in data nodes
 			try (CloseableHttpResponse response = client2.execute(request)) { 
