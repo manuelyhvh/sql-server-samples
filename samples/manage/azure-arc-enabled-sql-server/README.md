@@ -3,7 +3,6 @@ services: Azure Arc enabled SQL Server
 platforms: Azure
 author: anosov1960
 ms.author: sashan
-ms.reviewer: mikeray
 ms.date: 12/08/2020
 ---
 
@@ -13,10 +12,15 @@ Use the following steps to migrate your existing SQL Server - Azure Arc resource
 
 1. Launch the [Cloud Shell](https://shell.azure.com/). For details, [read more about PowerShell in Cloud Shell](https://aka.ms/pscloudshell/docs).
 
-2. Upload the script to the shell that calculates the current consumption of Azure Hybrid Benefit core licenses by using the following command:
+2. Upload the script to the shell using the following command:
 
     ```console
     curl https://raw.githubusercontent.com/microsoft/sql-server-samples/master/samples/manage/azure-arc-enabled-sql-server/migrate-to-azure-arc-data.ps1 -o migrate-to-azure-arc-data.ps1
+    ```
+3. Run the script.  
+
+    ```console
+   ./migrate-to-azure-arc-data.ps1
     ```
 
 > [!NOTE]
