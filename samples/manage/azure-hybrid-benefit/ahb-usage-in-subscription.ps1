@@ -1,5 +1,24 @@
-﻿# This scripts calculates the AHB usage by all the SQL resources in a specific subscription 
-# based on the selected Azure Hybrid Benefit option 
+﻿# ---------------------------------------------------------------------------------- 
+# 
+# Copyright Microsoft Corporation 
+# Licensed under the Apache License, Version 2.0 (the "License"); 
+# you may not use this file except in compliance with the License. 
+# You may obtain a copy of the License at 
+# http://www.apache.org/licenses/LICENSE-2.0 
+# Unless required by applicable law or agreed to in writing, software 
+# distributed under the License is distributed on an "AS IS" BASIS, 
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. 
+# See the License for the specific language governing permissions and 
+# limitations under the License. 
+# ---------------------------------------------------------------------------------
+#
+# This script calculates the usage of different types of SQL Server licenses by the SQL resources 
+# in the specific subscriptions. 
+#
+# NOTE: 
+# 1. The script requires a .csv file with the list of subscriptions. Use Export-Csv comlet to create the file.   
+# 2. SQL Database resources that use the DTU based business model are excluded. 
+#
 
 # Set the subscription Id
 $SubcriptionId = read-host -Prompt "Enter Subscription ID"
