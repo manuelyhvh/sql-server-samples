@@ -12,17 +12,17 @@
 # limitations under the License.
 # ---------------------------------------------------------------------------------
 #
-#  Sample script to calculate the total SQL Server license usage by all of the SQL resources in a specific subscription or the entire the account.
-
-# This script acceptes a .CSV file as a parameter  taht provides the list of subscriptions to be scanned for the license usage. You can create   
+# Sample script to calculate the consolidated SQL Server license usage by all of the SQL resources in a specific subscription or the entire the account.
+#
+# This script accepts a .csv file as a parameter, which provides a list of subscriptions to be scanned for the license usage. You can create   
 # such a file by the following command and then edit to remove the subscriptions you don't  want to scan:
 # > Get-AzSubscription | Export-Csv .\mysubscriptions.csv -NoTypeInformation
 #
-# If no file is provoded, the script will prompt for a subscriptiobn ID or "*". The latter will automatically scan all subscription you account 
-# hass access to.
+# If no file is provided, the script will prompt for a subscriptiobn ID or `*`. The latter will automatically scan all the subscriptions you account 
+# has access to.
 #
 #
-#  NOTE: The script does not calculate usage for Azure SQL resources that use the DTU-based putchase model
+# NOTE: The script does not calculate usage for Azure SQL resources that use the DTU-based purchasing model
 #
 
 # Import the subscription info
