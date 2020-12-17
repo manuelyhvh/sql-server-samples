@@ -8,7 +8,7 @@ ms.date: 12/15/2020
 
 # Overview 
 
-This script is provided to help you manage the SQL Server licenses that are consumed by the SQL Servers deployed to Azure. The script's output is a `sql-license-usage.csv` file with the consolidated SQL Server license usage by all SQL resources in the specific subscriptions or the entire account. The usage is broken down into the following categories of licenses:
+This script is provided to help you manage the SQL Server licenses that are consumed by the SQL Servers deployed to Azure. The script's output is a `sql-license-usage.csv` file with the consolidated SQL Server license usage by all SQL resources in the specific subscriptions or the entire account. The usage is broken into the following license categories:
 
 - AHB Standard vCores
 - AHB Enterprise vCores
@@ -58,6 +58,6 @@ If you need to scan a subset of the subscriptions, use the following steps:
 
 > [!NOTE]
 > - To paste the commands into the shell, use `Ctrl-Shift-V` on Windows or `Cmd-v` on MacOS.
-> - The script will be uploaded directly to the home folder associated with your Cloud Shell session.
+> - The `curl` command will copy the script directly to the home folder associated with your Cloud Shell session.
 > - The script will prompt for the resource group name and print a message when migration is completed.
 
