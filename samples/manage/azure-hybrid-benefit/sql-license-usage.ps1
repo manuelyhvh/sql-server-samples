@@ -40,14 +40,19 @@ if ($args[0] -ne $null) {
     }
 }
 
+#Initialize arrays
 [System.Collections.ArrayList]$usage = @()
 if ($ec -eq $null){
     $usage += ,(@("Subscription Name", "Subscription ID", "AHB Std vCores", "AHB Ent vCores", "PAYG Std vCores", "PAYG Ent vCores", "HADR Std vCores", "HADR Ent vCores", "Developer vCores", "Express vCores"))
 }else{
     $usage += ,(@("Subscription Name", "Subscription ID", "AHB ECs", "PAYG ECs", "AHB Std vCores", "AHB Ent vCores", "PAYG Std vCores", "PAYG Ent vCores", "HADR Std vCores", "HADR Ent vCores", "Developer vCores", "Express vCores"))
 }
-$total = [pscustomobject]@{ahb_std=0; ahb_ent=0; payg_std=0; payg_ent=0; hadr_std=0; hadr_ent=0; developer=0; express=0}
 
+$subtotal = [pscustomobject]@{ahb_std=0; ahb_ent=0; payg_std=0; payg_ent=0; hadr_std=0; hadr_ent=0; developer=0; express=0}
+$total = [pscustomobject]@{}
+foreach( $property in $subtotal.psobject.properties.name ){
+    $total | Add-Member -MemberType NoteProperty -Name $property -Value 6
+}
 
 #Save the VM SKU table
 $VM_SKUs = Get-AzComputeResourceSku
@@ -66,9 +71,11 @@ foreach ($sub in $subscriptions){
         {continue}
     }
 
-    # Total counts of different license types 
-    $subtotal = [pscustomobject]@{ahb_std=0; ahb_ent=0; payg_std=0; payg_ent=0; hadr_std=0; hadr_ent=0; developer=0; express=0}
-
+    # Reset the subtotals     
+    foreach( $property in $subtotal.psobject.properties.name ){
+        $subtotal.$property = 0
+    }
+    
     #Get all logical servers
     $servers = Get-AzSqlServer 
 
@@ -231,7 +238,8 @@ foreach ($sub in $subscriptions){
         }
     }
     
-    foreach( $property in $total.psobject.properties.name ){
+    # Increment the totals and add subtotals to the usage array
+    foreach( $property in $subtotal.psobject.properties.name ){
         $total.$property += $subtotal.$property
     }
     if ($ec -eq $null){
@@ -249,6 +257,7 @@ if ($ec -eq $null){
 
 $table = ConvertFrom-Csv ($usage | %{ $_ -join ','} ) 
 $table | Format-table
+$fileName = '.\sql-license-usage_' + (Get-Date -f yyyy-MM-dd_HH-mm-ss) + '.csv'
 $table | Export-Csv .\sql-license-usage.csv -NoTypeInformation
 
 Write-Host ([Environment]::NewLine + "-- The usage data is saved to .\sql-license-usage.csv")
