@@ -8,7 +8,7 @@ ms.date: 12/15/2020
 
 # Overview 
 
-This script is provided to help you manage the SQL Server licenses that are consumed by the SQL Servers deployed to Azure. The script's output is a `sql-license-usage.csv` file with the consolidated SQL Server license usage by all SQL resources in the specific subscriptions or the entire account. The usage is broken into the following license categories:
+This script is provided to help you manage the SQL Server licenses that are consumed by the SQL Servers deployed to Azure. The script's output is a `sql-license-usage_<timestamp>.csv` file with the consolidated SQL Server license usage by all SQL resources in the specific subscriptions or the entire account. By periodically generating the usage report you can track your license utilization over time. The usage is broken into the following license categories:
 
 - AHB Standard vCores
 - AHB Enterprise vCores
