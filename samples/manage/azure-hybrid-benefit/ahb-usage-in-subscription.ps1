@@ -28,7 +28,7 @@ Set-AzContext -SubscriptionId $SubcriptionId
 $total_std_vcores = 0
 $total_ent_vcores = 0
 
-#Get all SQL databadses in the subscription
+#Get all SQL databases in the subscription
 $databases = Get-AzSqlServer | Get-AzSqlDatabase
 
 # Get the databases with License Included and add to VCore count
