@@ -1,12 +1,12 @@
-# SQL DB Edge Demo
+# Azure SQL Edge Demo
 
 ## Overview
 
-The SQL DB Edge demo is based on a Contoso Renewable Energy, a wind turbine farm that leverages SQL DB Edge for data processing onboard the generator. 
+The Azure SQL Edge demo is based on a Contoso Renewable Energy, a wind turbine farm that leverages Azure SQL Edge for data processing onboard the generator. 
 
 The demo will walk you through resolving an alert being raised due to wind turbulence being detected at the device. You will train a model and deploy it to SQL DB Edge that will correct the detected wind wake and ultimately optimize power output. 
 
-We will also look at some of the security features available with SQL DB Edge. 
+We will also look at some of the security features available with Azure SQL Edge. 
 
 ## Wind Turbine Data Explanation for the Wake Detection model
 
