@@ -8,17 +8,21 @@ ms.date: 12/17/2020
 
 # Overview 
 
-This script is provided to help you manage the SQL Server licenses that are consumed by the SQL Servers deployed to Azure. The script writes the results `sql-license-usage.csv` file with the consolidated SQL Server license usage by all SQL resources in the specific subscriptions or the entire account. If the file with this name already exists, the new results will be appended. The reports includes the following data for each scanned subscription and a total number of vCores in each category:
-
-- Date and time of scan
-- AHB Standard vCores
-- AHB Enterprise vCores
-- PAYG Standard vCores
-- PAYG Enterprise vCores
-- HADR Standard vCores
-- HADR Enterprise vCores
-- Developer vCores
-- Express vCores
+This script is provided to help you manage the SQL Server licenses that are consumed by the SQL Servers deployed to Azure. The script writes the results to a `sql-license-usage.csv` file. If the file with this name already exists, the new results will be appended to it. The report includes the following information for each scanned subscription as well as the totals for each  category.
+| **Category** | **Description** |
+|:--|:--|
+|Date|Date of the scan|
+|Time|Time of the scan|
+|Subscription name|The name of the subscription|
+|Subscription ID|The unique subscription ID|
+|AHB Std vCores|Total vCores used by General Purpose service tier or SQL Server Standard edition billed with AHB discount|
+|AHB Ent vCores|Total vCores used by Business Critical service tier or SQL Server Enterprise edition billed with AHB discount|
+|PAYG Std vCores|Total vCores used by General Purpose service tier or SQL Server Standard edition billed at full price|
+|PAYG Ent vCores|Total vCores used by Business Critical service tier or SQL Server Enterprise edition billed at full price|
+|HADR Std  vCores|Total vCores used by HADR replicas running SQL Server Standard edition|
+|HADR Ent vCores|Total vCores used by HADR replicas running SQL Server Enterprise edition|
+|Developer vCores|Total vCores used by SQL Server Developer edition|
+|Express vCores|Total vCores used by SQL Server Express edition|
 
 >[!NOTE]
 > - The usage data is a snapshot at the time of the script execution based on the size of the deployed SQL resources in vCores.
