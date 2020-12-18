@@ -53,13 +53,6 @@ The wind turbine will experience wake when the turbine wind direction is between
 
 
 
-## Clone the SQL DB Edge Demo Repository
-Git will be used to copy all the files for the demo to your local computer.  
-
-1. Install Git from [here](https://git-scm.com/download)
-1. Open a command prompt and navigate to a folder where the repo should be downloaded<br>
-1. Issue the command `https://github.com/SQLSourabh/DemoFiles.git`  
-
 ## Azure Resource Deployment
 
 An Azure Resource Manager (ARM) template will be used to deploy all the required resources in the solution.  Click on the link below to start the deployment.
