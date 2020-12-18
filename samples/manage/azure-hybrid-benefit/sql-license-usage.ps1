@@ -14,52 +14,49 @@
 #
 # Sample script to calculate the consolidated SQL Server license usage by all of the SQL resources in a specific subscription or the entire the account.
 #
-# This script accepts a .csv file as a parameter, which provides a list of subscriptions to be scanned for the license usage. You can create   
+# This script accepts a .csv file or a subscription ID as a parameter. The file must include a list of subscriptions to be scanned for the license usage. You can create   
 # such a file by the following command and then edit to remove the subscriptions you don't  want to scan:
 # > Get-AzSubscription | Export-Csv .\mysubscriptions.csv -NoTypeInformation
 #
-# If no file is provided, the script will prompt for a subscriptiobn ID or `*`. The latter will automatically scan all the subscriptions you account 
+# If no parameter is provided, the script will prompt for a file or subscriptiobn ID. If no value is provided, the scipt will scan all the subscriptions you account 
 # has access to.
 #
 #
 # NOTE: The script does not calculate usage for Azure SQL resources that use the DTU-based purchasing model
 #
 
-# Import the subscription info
+# Subscriptions to scan
 
-if ($args[0] -ne $null) {
-    # Read subscription list from the .csv file
+if ($args[0] -like "*.csv") {
     $subscriptions = Import-Csv $args[0]
-} else {
-    # Promt for the subscription 
-    $Id = read-host -Prompt "Enter Subscription ID"
-    if ($Id -eq "*") {
-        $subscriptions = Get-AzSubscription     
-    } else {
-        $subscriptions = [PSCustomObject]@{SubscriptionId = $Id} | Get-AzSubscription 
-    }
+}elseif($args[0] -ne $null){
+    $subscriptions = [PSCustomObject]@{SubscriptionId = $args[0]} | Get-AzSubscription 
+}else{
+    $subscriptions = Get-AzSubscription
 }
 
-#Initialize arrays
+
+#Initialize tables and arrays
+
 [System.Collections.ArrayList]$usage = @()
-if ($ec -eq $null){
-    $usage += ,(@("Subscription Name", "Subscription ID", "AHB Std vCores", "AHB Ent vCores", "PAYG Std vCores", "PAYG Ent vCores", "HADR Std vCores", "HADR Ent vCores", "Developer vCores", "Express vCores"))
+if ($includeEC -eq $null){
+    $usage += ,(@("Date", "Time", "Subscription Name", "Subscription ID", "AHB Std vCores", "AHB Ent vCores", "PAYG Std vCores", "PAYG Ent vCores", "HADR Std vCores", "HADR Ent vCores", "Developer vCores", "Express vCores"))
 }else{
-    $usage += ,(@("Subscription Name", "Subscription ID", "AHB ECs", "PAYG ECs", "AHB Std vCores", "AHB Ent vCores", "PAYG Std vCores", "PAYG Ent vCores", "HADR Std vCores", "HADR Ent vCores", "Developer vCores", "Express vCores"))
+    $usage += ,(@("Date", "Time", "Subscription Name", "Subscription ID", "AHB ECs", "PAYG ECs", "AHB Std vCores", "AHB Ent vCores", "PAYG Std vCores", "PAYG Ent vCores", "HADR Std vCores", "HADR Ent vCores", "Developer vCores", "Express vCores"))
 }
 
 $subtotal = [pscustomobject]@{ahb_std=0; ahb_ent=0; payg_std=0; payg_ent=0; hadr_std=0; hadr_ent=0; developer=0; express=0}
 $total = [pscustomobject]@{}
-foreach( $property in $subtotal.psobject.properties.name ){
-    $total | Add-Member -MemberType NoteProperty -Name $property -Value 6
-}
+$subtotal.psobject.properties.name | %{$total | Add-Member -MemberType NoteProperty -Name $_ -Value 0}
 
-#Save the VM SKU table
+#Save the VM SKU table for future use
+
 $VM_SKUs = Get-AzComputeResourceSku
 
-Write-Host ([Environment]::NewLine + "-- Scanning subscriptions...")
+Write-Host ([Environment]::NewLine + "-- Scanning subscriptions --")
 
 # Calculate usage for each subscription 
+
 foreach ($sub in $subscriptions){
 
     if ($sub.State -ne "Enabled") {continue}
@@ -72,10 +69,8 @@ foreach ($sub in $subscriptions){
     }
 
     # Reset the subtotals     
-    foreach( $property in $subtotal.psobject.properties.name ){
-        $subtotal.$property = 0
-    }
-    
+    $subtotal.psobject.properties.name | %{$subtotal.$_ = 0}
+        
     #Get all logical servers
     $servers = Get-AzSqlServer 
 
@@ -239,25 +234,30 @@ foreach ($sub in $subscriptions){
     }
     
     # Increment the totals and add subtotals to the usage array
-    foreach( $property in $subtotal.psobject.properties.name ){
-        $total.$property += $subtotal.$property
-    }
-    if ($ec -eq $null){
-        $usage += ,(@($sub.Name, $sub.Id, $subtotal.ahb_std, $subtotal.ahb_ent, $subtotal.payg_std, $subtotal.payg_ent, $subtotal.hadr_std, $subtotal.hadr_ent, $subtotal.developer, $subtotal.express))
+    
+    $subtotal.psobject.properties.name | %{$total.$_ += $subtotal.$_}
+     
+    if ($includeEC -eq $null){
+        $usage += ,(@((Get-Date -Format d), (Get-Date -Format t), $sub.Name, $sub.Id, $subtotal.ahb_std, $subtotal.ahb_ent, $subtotal.payg_std, $subtotal.payg_ent, $subtotal.hadr_std, $subtotal.hadr_ent, $subtotal.developer, $subtotal.express))
     }else{
-        $usage += ,(@($sub.Name, $sub.Id, ($subtotal.ahb_std + $subtotal.ahb_ent*4), ($subtotal.payg_std + $subtotal.payg_ent*4), $subtotal.ahb_std, $subtotal.ahb_ent, $subtotal.payg_std, $subtotal.payg_ent, $subtotal.hadr_std, $subtotal.hadr_ent, $subtotal.developer, $subtotal.express))
+        $usage += ,(@((Get-Date -Format d), (Get-Date -Format t), $sub.Name, $sub.Id, ($subtotal.ahb_std + $subtotal.ahb_ent*4), ($subtotal.payg_std + $subtotal.payg_ent*4), $subtotal.ahb_std, $subtotal.ahb_ent, $subtotal.payg_std, $subtotal.payg_ent, $subtotal.hadr_std, $subtotal.hadr_ent, $subtotal.developer, $subtotal.express))
     }
 }
 
-if ($ec -eq $null){
-        $usage += ,(@("Total", $null, $total.ahb_std, $total.ahb_ent, $total.payg_std, $total.payg_ent, $total.hadr_std, $total.hadr_ent, $total.developer, $total.express))
+# Add the total numbers to the usage array
+
+if ($includeEC -eq $null){
+        $usage += ,(@((Get-Date -Format d), (Get-Date -Format t), "Total", $null, $total.ahb_std, $total.ahb_ent, $total.payg_std, $total.payg_ent, $total.hadr_std, $total.hadr_ent, $total.developer, $total.express))
 }else{
-        $usage += ,(@("Total", $null, ($total.ahb_std + $total.ahb_ent*4), ($total.payg_std + $total.payg_ent*4), $total.ahb_std, $total.ahb_ent, $total.payg_std, $total.payg_ent, $total.hadr_std, $total.hadr_ent, $total.developer, $total.express))
+        $usage += ,(@((Get-Date -Format d), (Get-Date -Format t), "Total", $null, ($total.ahb_std + $total.ahb_ent*4), ($total.payg_std + $total.payg_ent*4), $total.ahb_std, $total.ahb_ent, $total.payg_std, $total.payg_ent, $total.hadr_std, $total.hadr_ent, $total.developer, $total.express))
 }
+
+# Append to '.\sql-license-usage.csv'
 
 $table = ConvertFrom-Csv ($usage | %{ $_ -join ','} ) 
 $table | Format-table
-$fileName = '.\sql-license-usage_' + (Get-Date -f yyyy-MM-dd_HH-mm-ss) + '.csv'
-$table | Export-Csv .\sql-license-usage.csv -NoTypeInformation
+#$fileName = '.\sql-license-usage_' + (Get-Date -f yyyy-MM-dd_HH-mm-ss) + '.csv'
+$fileName = '.\sql-license-usage.csv'
+$table | Export-Csv $fileName -NoTypeInformation -Append
 
-Write-Host ([Environment]::NewLine + "-- The usage data is saved to .\sql-license-usage.csv")
+Write-Host ([Environment]::NewLine + "-- The usage data is saved to " + $fileName + "--")
