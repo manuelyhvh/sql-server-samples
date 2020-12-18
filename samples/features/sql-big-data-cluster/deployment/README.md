@@ -19,3 +19,6 @@ Using the sample Python script in **offline** folder, you will push the necessar
 
 Using the sample Python script in **private-aks** folder, you will Deploy SQL Server big data cluster in in your private network with Azure Kubernetes service (AKS) private cluster.
 
+## __[OpenShift manifests and scripts](openshift/)__
+
+Use manifests and scripts in **openshift** folder, to support SQL Server Big Data Clusters on OpenShift.
