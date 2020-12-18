@@ -58,4 +58,4 @@ If the a file is specified, it must be a `.csv` file with the list of subscripti
 
 # Tracking SQL license usage over time
 
-You can track your license utilization over time by periodically running this script. Each new scan will add the results to  `sql-license-usage.csv`, which you can use for reporting the license usage over time in Excel or other tools. To this script on schedule using Azure automation, read [Create a PowerShell runbook tutorial](https://docs.microsoft.com/azure/automation/learn/automation-tutorial-runbook-textual-powershell).
+You can track your license utilization over time by periodically running this script. Each new scan will add the results to  `sql-license-usage.csv`, which you can use for reporting the license usage over time in Excel or other tools. To run this script on schedule using Azure automation, read [Create a PowerShell runbook tutorial](https://docs.microsoft.com/azure/automation/learn/automation-tutorial-runbook-textual-powershell).
