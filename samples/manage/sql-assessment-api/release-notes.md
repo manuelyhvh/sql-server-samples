@@ -4,13 +4,45 @@ This article provides details about updates, improvements, and bug fixes for the
 
 Installing SQL Assessment Extension: [SQL Server Assessment Extension for Azure Data Studio (Public Preview)](https://techcommunity.microsoft.com/t5/sql-server/released-sql-server-assessment-extension-for-azure-data-studio/ba-p/1470603)
 
+Download: [SQL Assessment NuGet package](https://www.nuget.org/packages/Microsoft.SqlServer.Assessment)
+
 Download: [Download SqlServer module](https://www.powershellgallery.com/packages/SqlServer)
 
 Download: [SMO NuGet Package](https://www.nuget.org/packages/Microsoft.SqlServer.SqlManagementObjects)
 
 You can use GitHub issues to provide feedback to the product team.
 
-## July 2020 - 21.1.18226
+## December 2020 - 1.0.302
+
+Version: SqlServer PowerShell module wasn't updated, SqlManagementObjects (SMO) package wasn't updated
+
+### What's new
+
+- Added rules:
+  - 'Max server memory' and 'Max server memory exceeds system memory' that check if the 'max server memory' setting falls within the recommended range
+  - 'Error log file is too big' that checks if there are any big error log files
+- 'Disk fragmentation analysis' that checks if a disk needs to be defragmented
+- New features for custom configuration files:
+  - Added new 'defaultValue' data transformation functions
+  - Added new functions:
+    - 'max' and 'min' functions that return maximum and minimum values of their arguments
+    - 'ieq' and 'ine' case-insensitive functions that check if the given arguments are equal
+    - 'iin' case-insensitive function that checks if a value is present in the given set
+    - 'interval' function that finds an interval into which the given argument falls and returns an associated value.
+    - 'startswith' and 'endswith' functions that check if one string starts or ends with another one, and their case-insensitive variants 'istartswith' and 'iendswith'
+    - 'indexof' function that finds the first occurrence of a substring, and its case-insensitive variant 'iindexof'
+  - Added local variables to assessment rules which can be used to show more details in messages
+  - Added WMI method call support to custom WMI probes
+
+### Bug fixes and improvements
+
+- Removed non-informative errors thrown from recursive assessment of SQL Server Registered Groups
+- Improved query performance for probes used in the 'Replication errors in the last 24 hours' rule
+- Updated MaxDOP related rules to follow the best practice recommendations
+- Fixed an issue that may occur when the 'automatic_soft_NUMA_disabled' configuration setting value was not returned by some SQL Server instances
+- Fixed an issue that may occur when the 'sql_memory_model' value was not returned by some SQL Server instances
+
+## July 2020 - 1.0.265
 
 Version: SqlServer module 21.1.18226, SqlManagementObjects (SMO) package wasn't updated
 
@@ -55,7 +87,7 @@ Version: SqlServer module 21.1.18226, SqlManagementObjects (SMO) package wasn't 
   - Option 'max worker threads' set to recommended value on x86 system
   - Option 'xp_cmdshell' is disabled
 
-## March 2020 - 21.1.18221
+## March 2020 - 1.0.246
 
 Version: SqlServer module 21.1.18221, SqlManagementObjects (SMO) package 160.2004021.0
 
@@ -81,7 +113,7 @@ Version: SqlServer module 21.1.18221, SqlManagementObjects (SMO) package 160.200
 - Wrong help link in XTPHashAvgChainBuckets rule
 - Occasional error "There is already an open DataReader associated with this Command which must be closed first" on PowerShell 7
 
-## December 2019 - 21.1.18218
+## December 2019 - 1.0.220
 
 Version: SqlServer module 21.1.18206, SqlManagementObjects (SMO) package wasn't updated
 
@@ -100,7 +132,7 @@ Version: SqlServer module 21.1.18206, SqlManagementObjects (SMO) package wasn't 
 - FullBackup rule has threshold in days but gets backup age in hours
 - When database can't be accessed and it's disabled for assessment, it throws access errors when performing assessment
 
-## GA - November 2019 - 21.1.18206
+## GA - November 2019 - 1.0.216
 
 Version: SqlServer module 21.1.18206, SqlManagementObjects (SMO) package 150.208.0
 
