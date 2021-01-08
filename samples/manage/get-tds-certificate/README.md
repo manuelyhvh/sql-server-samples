@@ -9,6 +9,7 @@ Script that downloads TDS certificate with public key only from Azure SQL
 [Run this sample](#run-this-sample)<br/>
 [Sample details](#sample-details)<br/>
 [Disclaimers](#disclaimers)<br/>
+[Related links](#related-links)<br/>
 
 <a name=about-this-sample></a>
 
@@ -62,3 +63,9 @@ This sample shows how to retreive Azure SQL TDS certificate and save it to DER e
 ## Disclaimers
 The scripts and this guide are copyright Microsoft Corporations and are provided as samples. They are not part of any Azure service and are not covered by any SLA or other Azure-related agreements. They are provided as-is with no warranties express or implied. Microsoft takes no responsibility for the use of the scripts or the accuracy of this document. Familiarize yourself with the scripts before using them.
 
+<a name=related-links></a>
+
+## Related Links
+<!-- Links to more articles. Remember to delete "en-us" from the link path. -->
+
+This sample reuses code from [Azure SQL Connectivity Checker](https://github.com/Azure/SQL-Connectivity-Checker)
