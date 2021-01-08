@@ -44,7 +44,7 @@ $scriptUrlBase = 'https://raw.githubusercontent.com/Microsoft/sql-server-samples
 
 $parameters = @{
     hostName = '<hostName>'
-    port = '<resourceGroupName>'
+    port = '<port>'
     publicCertificateFile  = '<publicCertificateFile>'
     }
 
