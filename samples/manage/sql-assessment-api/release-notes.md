@@ -1,6 +1,8 @@
 # Release notes for SQL Assessment API
 
-This article provides details about updates, improvements, and bug fixes for the current and previous versions of SQL Assessment API. SQL Assessment API is part of the SQL Server Management Objects (SMO) and the SQL Server PowerShell module. Install one of them or both to start working with the API.
+This article provides details about updates, improvements, and bug fixes for the current and previous versions of SQL Assessment API. SQL Assessment API is part of the SQL Server Management Objects (SMO) and the SQL Server PowerShell module. To start working with the API, install the SQL Assessment Extention to Azure Data Studio or utilize either the SqlServer module or SMO.
+
+Installing SQL Assessment Extension: [SQL Server Assessment Extension for Azure Data Studio (Public Preview)](https://techcommunity.microsoft.com/t5/sql-server/released-sql-server-assessment-extension-for-azure-data-studio/ba-p/1470603)
 
 Download: [Download SqlServer module](https://www.powershellgallery.com/packages/SqlServer)
 
@@ -8,9 +10,54 @@ Download: [SMO NuGet Package](https://www.nuget.org/packages/Microsoft.SqlServer
 
 You can use GitHub issues to provide feedback to the product team.
 
+## July 2020 - 21.1.18226
+
+Version: SqlServer module 21.1.18226, SqlManagementObjects (SMO) package wasn't updated
+
+### What's new
+
+- Added new types of probes in addition to SQL and EXTERNAL: CMDSHELL, WMI, REGISTRY, POWERSHELL
+- Enabling/disabling database checks for particular SQL Server instances (by instance name)
+- Added 40 rules, including  
+  - Ad Hoc Distributed Queries are enabled
+  - Affinity Mask and Affinity I/O Mask overlapping
+  - Auto Soft NUMA should be enabled
+  - Blocking chains
+  - Blocked Process Threshold is set to recommended value
+  - Option 'cross db ownership chaining' should be disabled
+  - Default trace enabled
+  - Disk Partition alignment
+  - Full-text search option 'load_os_resources' set to default
+  - Full-text search option 'verify_signature' set to default
+  - HP Logical Processor issue
+  - Option 'index create memory' value should be greater 'min memory per query'
+  - Lightweight pooling option disabled
+  - Option 'locks' should be set to default
+  - Option 'min memory per query' set to default
+  - Option 'network packet size' set to default
+  - NTFS block size in volumes that hold database files <> 64KB
+  - Option 'Ole Automation Procedures' set to default
+  - Page file is not automatically managed
+  - Insufficient page file free space
+  - Page file configured
+  - Memory paged out
+  - Power plan is High Performance
+  - Option 'priority boost' set to default
+  - Option 'query wait' set to default
+  - Option 'recovery interval' set to default
+  - Remote admin connections enabled on cluster (DAC)
+  - Option 'remote query timeout' set to default
+  - Option 'scan for startup procs' disabled on replication servers
+  - Worker thread exhaustion on CPU-bound system
+  - Possible worker thread exhaustion on a not-CPU-bound system
+  - Option 'cost threshold for parallelism' set to default
+  - Option 'max worker threads' set to recommended value on x64 system
+  - Option 'max worker threads' set to recommended value on x86 system
+  - Option 'xp_cmdshell' is disabled
+
 ## March 2020 - 21.1.18221
 
-Version: SqlServer module 21.1.18221, SqlManagementObjects (SMO) package wasn't updated
+Version: SqlServer module 21.1.18221, SqlManagementObjects (SMO) package 160.2004021.0
 
 ### What's new
 
