@@ -8,7 +8,7 @@ ms.date: 1/11/2021
 
 # Overview 
 
-This script provided a simple solution to analyze adn track the consolidated utilization of SQL Server licenses by all of the SQL resources in a specific subscription or the entire the account. By default, the script scans all subscriptions the user account has access. Alternatively, you can specify a single subscription or a .CSV file with a list of subscription. The usage report includes the following information for each scanned subscription.
+This script provides a simple solution to analyze adn track the consolidated utilization of SQL Server licenses by all of the SQL resources in a specific subscription or the entire the account. By default, the script scans all subscriptions the user account has access. Alternatively, you can specify a single subscription or a .CSV file with a list of subscription. The usage report includes the following information for each scanned subscription.
 
 | **Category** | **Description** |
 |:--|:--|
