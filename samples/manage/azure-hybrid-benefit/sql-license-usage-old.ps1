@@ -1,4 +1,4 @@
-﻿# ----------------------------------------------------------------------------------
+# ----------------------------------------------------------------------------------
 #
 # Copyright Microsoft Corporation
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -12,38 +12,25 @@
 # limitations under the License.
 # ---------------------------------------------------------------------------------
 #
-# This script provided a simple solution to analyze adn track the consolidated utilization of SQL Server licenses 
-# by all of the SQL resources in a specific subscription or the entire the account. By default, the script scans 
-# all subscriptions the user account has access. Alternatively, you can specify a single subscription or a .CSV file 
-# with a list of subscription. The usage report includes the following information for each scanned subscription.
+# Sample script to calculate the consolidated SQL Server license usage by all of the SQL resources in a specific subscription or the entire the account. PowerShell 7$PSverionTable.1 or higher is required. 
 #
-# The following resources are in scope for the license utilization analysis:
-# - Azure SQL databases (vCore-based purchasing model only) 
-# - Azure SQL elastic pools (vCore-based purchasing model only)
-# - Azure SQL managed instances
-# - Azure SQL instance pools
-# - Azure Data Factory SSIS integration runtimes
-# - SQL Servers in Azure virtual machines 
-# - SQL Servers in Azure virtual machines hosted in Azure dedicated host
+# This script accepts a -SubId parameter to specify a single subscription or a .CSV file with a list of subscription. If omitted, all subsriptions in the account will be scanned. 
+# To create such a .CSV file, use the following command and then edit to remove the subscriptions you don't  want to scan:
+# > Get-AzSubscription | Export-Csv .\mysubscriptions.csv -NoTypeInformation
 #
+# The results are saved to a .\sql-license-usage.csv or the database table sql-license-usage if specidied. To save the results in the table, you must provide the following parameters to the script:
+# -S [protocol:]server[instance_name][,port] 
+# -D database_name
+# -U user_name
+# -P password 
+# 
 # NOTE: The script does not calculate usage for Azure SQL resources that use the DTU-based purchasing model
 #
-# The script accepts the following command line parameters:
-# 
-# -SubId [subscription_id] | [csv_file_name]        (Accepts a .csv file with the list of subscriptions)
-# -UseInRunbook                                     (Required when executed as a Runbook)
-# -Server [protocol:]server[instance_name][,port]   (Required to save data to the database)
-# -Database [database_name]                         (Required to save data to the database)
-# -Username [user_name]                             (Required to save data to the database)
-# -Password [password]                              (Required to save data to the database)
-# -FilePath [csv_file_name]                         (Required to save data in a .csv format. Ignored if database parameters are specified)
-#
 
-param ([string] $SubId, [string] $Server, [string] $Username, [string] $Password, [string] $Database, [string] $FilePath, [switch] $UseInRunbook, [switch] $UseEC)
+param ([string] $SubId, [string] $S, [string] $U, [string] $P, [string] $D, [Boolean] $UseInRunbook = $False, [Boolean] $UseEC = $False)
 
 #The following block is required for runbooks only
 if ($UseInRunbook){
-
     # Ensures you do not inherit an AzContext in your runbook
     Disable-AzContextAutosave –Scope Process
 
@@ -68,14 +55,16 @@ if ($UseInRunbook){
 # Subscriptions to scan
 
 if ($SubId -like "*.csv") {
-    $subscriptions = Import-Csv $SubId
+    $subscriptions = Import-Csv $args[0]
 }elseif($SubId -ne $null){
     $subscriptions = [PSCustomObject]@{SubscriptionId = $SubId} | Get-AzSubscription 
 }else{
     $subscriptions = Get-AzSubscription
 }
+$SubId
+$subscriptions
 
-[Boolean] $useDatabase = $PSBoundParameters.ContainsKey("ServerInstance") -and $PSBoundParameters.ContainsKey("Username") -and $PSBoundParameters.ContainsKey("Password") -and $PSBoundParameters.ContainsKey("Database")
+[Boolean] $useDatabase = $PSBoundParameters.ContainsKey("S") -and $PSBoundParameters.ContainsKey("U") -and $PSBoundParameters.ContainsKey("P") -and $PSBoundParameters.ContainsKey("D")
 
 #Initialize tables and arrays
 
@@ -120,10 +109,10 @@ if ($useDatabase){
                     VALUES 
                     ('{0}','{1}','{2}','{3}','{4}','{5}','{6}','{7}','{8}','{9}','{10}','{11}','{12}','{13}')"        
     $propertiesToSplat = @{
-        Database = $Database
-        ServerInstance = $Server
-        User = $Username
-        Password = $Password
+        Database = $D
+        ServerInstance = $S
+        User = $U
+        Password = $P
         Query = $testSQL
     }
     
@@ -136,10 +125,8 @@ if ($useDatabase){
 }else{
 
     #File setup 
-    if (!$PSBoundParameters.ContainsKey("FilePath")) {
-        $FilePath = '.\sql-license-usage.csv'
-    }
 
+    [String] $fileName = '.\sql-license-usage.csv'
     [System.Collections.ArrayList]$usageTable = @()
     $usageTable += ,(@("Date", "Time", "Subscription Name", "Subscription ID", "AHB ECs", "PAYG ECs", "AHB Std vCores", "AHB Ent vCores", "PAYG Std vCores", "PAYG Ent vCores", "HADR Std vCores", "HADR Ent vCores", "Developer vCores", "Express vCores"))
 }
@@ -381,7 +368,8 @@ foreach ($sub in $subscriptions){
         $propertiesToSplat.Query = $insertSQL -f $Date, $Time, $sub.Name, $sub.Id, $ahb_ec, $payg_ec, $subtotal.ahb_std, $subtotal.ahb_ent, $subtotal.payg_std, $subtotal.payg_ent, $subtotal.hadr_std, $subtotal.hadr_ent, $subtotal.developer, $subtotal.express
         Invoke-SQLCmd @propertiesToSplat
     }else{
-        $usageTable += ,(@( $Date, $Time, $sub.Name, $sub.Id, $ahb_ec, $payg_ec, $subtotal.ahb_std, $subtotal.ahb_ent, $subtotal.payg_std, $subtotal.payg_ent, $subtotal.hadr_std, $subtotal.hadr_ent, $subtotal.developer, $subtotal.express))
+        $usageTable += ,(@($Date, $Time, $sub.Name, $sub.Id, $ahb_ec, $payg_ec, $subtotal.ahb_std, $subtotal.ahb_ent, $subtotal.payg_std, $subtotal.payg_ent, $subtotal.hadr_std, $subtotal.hadr_ent, $subtotal.developer, $subtotal.express))
+        ($usageTable | %{ $_ -join ','} ) | Write-Host
     }
 }
 
@@ -399,6 +387,6 @@ if ($useDatabase){
     
     # Write usage data to the .csv file
 
-     (ConvertFrom-Csv ($usageTable | %{$_ -join ','})) | Export-Csv $FilePath -Append -NoType
-    Write-Host ([Environment]::NewLine + "-- Added the usage data to $FilePath --")
+    ($usageTable | %{ $_ -join ','} ) | Out-file -FilePath $fileName -Append
+    Write-Host ([Environment]::NewLine + "-- Added the usage data to $fileName --")
 }
