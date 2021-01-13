@@ -16,8 +16,8 @@ This script provides a simple solution to analyze and track the consolidated uti
 |Time|Time of the scan|
 |Subscription name|The name of the subscription|
 |Subscription ID|The unique subscription ID|
-|AHB Std vCores|Total vCores used by General Purpose service tier or SQL Server Standard edition billed with AHB discount|
-|AHB Ent vCores|Total vCores used by Business Critical service tier or SQL Server Enterprise edition billed with AHB discount|
+|AHB Std vCores|Total vCores used by General Purpose service tier or SQL Server Standard edition billed with Azure Hybrid Benefit  discount|
+|AHB Ent vCores|Total vCores used by Business Critical service tier or SQL Server Enterprise edition billed with Azure Hybrid Benefit  discount|
 |PAYG Std vCores|Total vCores used by General Purpose service tier or SQL Server Standard edition billed at full price|
 |PAYG Ent vCores|Total vCores used by Business Critical service tier or SQL Server Enterprise edition billed at full price|
 |HADR Std  vCores|Total vCores used by HADR replicas running SQL Server Standard edition|
