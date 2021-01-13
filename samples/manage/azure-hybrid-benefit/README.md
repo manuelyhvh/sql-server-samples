@@ -3,12 +3,13 @@ services: Azure SQL
 platforms: Azure
 author: anosov1960
 ms.author: sashan
-ms.date: 12/17/2020
+ms.date: 1/11/2021
 ---
 
 # Overview 
 
-This script is provided to help you manage the SQL Server licenses that are consumed by the SQL Servers deployed to Azure. The script writes the results to a `sql-license-usage.csv` file. If the file with this name already exists, the new results will be appended to it. The report includes the following information for each scanned subscription as well as the totals for each  category.
+This script provides a simple solution to analyze and track the consolidated utilization of SQL Server licenses by all of the SQL resources in a specific subscription or the entire the account. By default, the script scans all subscriptions the user account has access. Alternatively, you can specify a single subscription or a .CSV file with a list of subscription. The usage report includes the following information for each scanned subscription.
+
 | **Category** | **Description** |
 |:--|:--|
 |Date|Date of the scan|
@@ -24,10 +25,67 @@ This script is provided to help you manage the SQL Server licenses that are cons
 |Developer vCores|Total vCores used by SQL Server Developer edition|
 |Express vCores|Total vCores used by SQL Server Express edition|
 
+The following resources are in scope for the license utilization analysis:
+- Azure SQL databases (vCore-based purchasing model only<sup>1</sup>) 
+- Azure SQL elastic pools (vCore-based purchasing model only<sup>1</sup>)
+- Azure SQL managed instances
+- Azure SQL instance pools
+- Azure Data Factory SSIS integration runtimes
+- SQL Servers in Azure virtual machines 
+- SQL Servers in Azure virtual machines hosted in Azure dedicated host
+
+<sup>1</sup>The DTU-based resources are not eligible for Azure Hybrid Benefit or HADR benefit. 
+
+# Launching the script 
+
+The script accepts the following command line parameters:
+
+| **Parameter** | **Value** | **Description** |
+|:--|:--|:--|
+|-SubId|subscription_id *or* a file_name|Accepts a .csv file with the list of subscriptions<sup>2</sup>|
+|-UseInRunbook||Must be specified when executed as a Runbook|
+|-Server|[protocol:]server[instance_name][,port]|Required to save data to the database| 
+|-Database|database_name|Required to save data to the database|
+|-Username|user_name|Required to save data to the database|
+|-Password|password|Required to save data to the database, must be passed as secure string|
+|-FilePath|csv_file_name|Required to save data in a .csv format. Ignored if database parameters are specified|
+
+<sup>2</sup>You can create a .csv file using the following command and then edit to remove the subscriptions you don't  want to scan. 
+```PowerShell
+Get-AzSubscription | Export-Csv .\mysubscriptions.csv -NoTypeInformation 
+```
+If both database parameters and *FilePath* are omitted, the script will write the results to a `.\sql-license-usage.csv` file. The file is created automatically. If the file already exists, the consecutive scans will append the results results to it. If the database parameters are specified, the data will be saved 
+
+
 >[!NOTE]
 > - The usage data is a snapshot at the time of the script execution based on the size of the deployed SQL resources in vCores.
 > - For IaaS workloads, such as SQL Server in Virtual Machines or SSIS integration runtimes, each vCPU is counted as one vCore.
 > - For PaaS workloads, each vCore of Business Critical service tier is counted as one Enterprise vCore and each vCore of General Purpose service tier is counted as one Standard vCore.
+> - The values AHB ECs and PAYG ECs are reserved for the future use and should be ignored
+
+## Example 1
+
+The following command will scan all the subscriptions in the account and save the results in `.\sql-license-usage.csv`
+
+```PowerShell
+.\sql-license-usage.ps1
+```
+
+## Example 2
+
+The following command will scan the subscription `<sub_id>` and save the results in `<my_csv_file>` file.
+
+```PowerShell
+.\sql-license-usage.ps1 -SubId <sub_id> -FilePath .\<my_csv_file>.csv
+```
+
+## Example 3
+
+The following command will scan all the subscriptions in the account and save the results in a SQL database `<db_name>` on a SQL Server instance `<sql_server_name>.database.windows.net`.
+
+```PowerShell
+.\sql-license-usage.ps1 -ServerInstance <server_name>.database.windows.net -Database <db_name> -Username <user_name> -Password $pwd
+```
 
 # Running the script using Cloud Shell
 
@@ -41,21 +99,20 @@ Use the following steps to calculate the SQL Server license usage:
         curl https://raw.githubusercontent.com/microsoft/sql-server-samples/master/samples/manage/azure-hybrid-benefit/sql-license-usage.ps1 -o sql-license-usage.ps1
     ```
 
-3. Run the script with a specific subscriptions ID or the file name as the parameter. The file should be used if you need to scan a subset of the subscriptions. If the parameter is not specified, the script will scan all the subscriptions in your account.
+3. Run the script with a set of parameters that reflect your desired configuration.
 
     ```console
-       ./sql-license-usage.ps1 <subscription ID> or <filename>.csv
+       ./sql-license-usage.ps1 <parameters>
     ```
 
-If the a file is specified, it must be a `.csv` file with the list of subscriptions. To create a file containing all subscriptions in your account, use the following command. You can then edit the file to remove the subscriptions you don't want to scan.
-
-    ```console
-        Get-AzSubscription | Export-Csv .\mysubscriptions.csv -NoTypeInformation
-    ```
 > [!NOTE]
 > - To paste the commands into the shell, use `Ctrl-Shift-V` on Windows or `Cmd-v` on MacOS.
 > - The `curl` command will copy the script directly to the home folder associated with your Cloud Shell session.
 
 # Tracking SQL license usage over time
 
-You can track your license utilization over time by periodically running this script. Each new scan will add the results to  `sql-license-usage.csv`, which you can use for reporting the license usage over time in Excel or other tools. To run this script on schedule using Azure automation, read [Create a PowerShell runbook tutorial](https://docs.microsoft.com/azure/automation/learn/automation-tutorial-runbook-textual-powershell).
+You can track your license utilization over time by periodically running this script. To schedule automatic execution of the script, create a PowerShell runbook using an Azure Automation account. See the [Runbook tutorial](https://docs.microsoft.com/en-us/azure/automation/learn/automation-tutorial-runbook-textual-powershell) for the details of how to create a PowerShell runbook. Because the script accesses the resources across multiple subscriptions, the runbook must be able to authenticate using the Run As account that was automatically created when you created your Automation account. The logic required for the Runbooks is part of the script. 
+
+>[!IMPORTANT]
+> - When running the script as a runbook, use a database to ensure that the results can be analyzed outside of the runbook.
+> - You must specify a *-UseInRunbook* switch to ensure that the runbook is authenticated using the Run As account. 
