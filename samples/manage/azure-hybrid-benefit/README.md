@@ -34,13 +34,19 @@ The following resources are in scope for the license utilization analysis:
 - SQL Servers in Azure virtual machines 
 - SQL Servers in Azure virtual machines hosted in Azure dedicated host
 
-<sup>1</sup>The DTU-based resources are not eligible for Azure Hybrid Benefit or HADR benefit. 
+<sup>1</sup>The DTU-based resources are not eligible for Azure Hybrid Benefit or HADR benefit.
+
+>[!NOTE]
+> - The usage data is a snapshot at the time of the script execution based on the size of the deployed SQL resources in vCores.
+> - For IaaS workloads, such as SQL Server in Virtual Machines or SSIS integration runtimes, each vCPU is counted as one vCore.
+> - For PaaS workloads, each vCore of Business Critical service tier is counted as one Enterprise vCore and each vCore of General Purpose service tier is counted as one Standard vCore.
+> - The values AHB ECs and PAYG ECs are reserved for the future use and should be ignored
 
 # Launching the script 
 
 The script accepts the following command line parameters:
 
-| **Parameter** | **Value** | **Description** |
+| **Parameter** &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;  | **Value** | **Description** |
 |:--|:--|:--|
 |-SubId|subscription_id *or* a file_name|Accepts a .csv file with the list of subscriptions<sup>2</sup>|
 |-UseInRunbook||Must be specified when executed as a Runbook|
@@ -54,14 +60,7 @@ The script accepts the following command line parameters:
 ```PowerShell
 Get-AzSubscription | Export-Csv .\mysubscriptions.csv -NoTypeInformation 
 ```
-If both database parameters and *FilePath* are omitted, the script will write the results to a `.\sql-license-usage.csv` file. The file is created automatically. If the file already exists, the consecutive scans will append the results results to it. If the database parameters are specified, the data will be saved 
-
-
->[!NOTE]
-> - The usage data is a snapshot at the time of the script execution based on the size of the deployed SQL resources in vCores.
-> - For IaaS workloads, such as SQL Server in Virtual Machines or SSIS integration runtimes, each vCPU is counted as one vCore.
-> - For PaaS workloads, each vCore of Business Critical service tier is counted as one Enterprise vCore and each vCore of General Purpose service tier is counted as one Standard vCore.
-> - The values AHB ECs and PAYG ECs are reserved for the future use and should be ignored
+If both database parameters and *FilePath* are omitted, the script will write the results to a `.\sql-license-usage.csv` file. The file is created automatically. If the file already exists, the consecutive scans will append the results to it. If the database parameters are specified, the data will be saved in a *Usage-per-subscription* table. If the table doesn't exist, it will be created automatically.
 
 ## Example 1
 
@@ -84,7 +83,7 @@ The following command will scan the subscription `<sub_id>` and save the results
 The following command will scan all the subscriptions in the account and save the results in a SQL database `<db_name>` on a SQL Server instance `<sql_server_name>.database.windows.net`.
 
 ```PowerShell
-.\sql-license-usage.ps1 -ServerInstance <server_name>.database.windows.net -Database <db_name> -Username <user_name> -Password $pwd
+.\sql-license-usage.ps1 -Server <server_name>.database.windows.net -Database <db_name> -Username <user_name> -Password $pwd
 ```
 
 # Running the script using Cloud Shell
