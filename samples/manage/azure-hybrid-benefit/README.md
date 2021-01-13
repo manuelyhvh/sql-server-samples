@@ -6,7 +6,7 @@ ms.author: sashan
 ms.date: 1/11/2021
 ---
 
-# Overview 
+# Overview
 
 This script provides a simple solution to analyze and track the consolidated utilization of SQL Server licenses by all of the SQL resources in a specific subscription or the entire the account. By default, the script scans all subscriptions the user account has access. Alternatively, you can specify a single subscription or a .CSV file with a list of subscription. The usage report includes the following information for each scanned subscription.
 
@@ -26,20 +26,19 @@ This script provides a simple solution to analyze and track the consolidated uti
 |Express vCores|Total vCores used by SQL Server Express edition|
 
 The following resources are in scope for the license utilization analysis:
-- Azure SQL databases (vCore-based purchasing model only<sup>1</sup>) 
-- Azure SQL elastic pools (vCore-based purchasing model only<sup>1</sup>)
+- Azure SQL databases (vCore-based purchasing model only) 
+- Azure SQL elastic pools (vCore-based purchasing model only)
 - Azure SQL managed instances
 - Azure SQL instance pools
 - Azure Data Factory SSIS integration runtimes
 - SQL Servers in Azure virtual machines 
 - SQL Servers in Azure virtual machines hosted in Azure dedicated host
 
-<sup>1</sup>The DTU-based resources are not eligible for Azure Hybrid Benefit or HADR benefit.
-
 >[!NOTE]
 > - The usage data is a snapshot at the time of the script execution based on the size of the deployed SQL resources in vCores.
 > - For IaaS workloads, such as SQL Server in Virtual Machines or SSIS integration runtimes, each vCPU is counted as one vCore.
 > - For PaaS workloads, each vCore of Business Critical service tier is counted as one Enterprise vCore and each vCore of General Purpose service tier is counted as one Standard vCore.
+> - In the DTU-based purchasing model, the SQL license cost is built into the individual SKU prices. These resources are not eligible for Azure Hybrid Benefit or HADR benefit, and therefore are not in scope of the tool.
 > - The values AHB ECs and PAYG ECs are reserved for the future use and should be ignored
 
 # Launching the script 
@@ -48,7 +47,7 @@ The script accepts the following command line parameters:
 
 | **Parameter** &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;  | **Value** | **Description** |
 |:--|:--|:--|
-|-SubId|subscription_id *or* a file_name|Accepts a .csv file with the list of subscriptions<sup>2</sup>|
+|-SubId|subscription_id *or* a file_name|Accepts a .csv file with the list of subscriptions<sup>1</sup>|
 |-UseInRunbook||Must be specified when executed as a Runbook|
 |-Server|[protocol:]server[instance_name][,port]|Required to save data to the database| 
 |-Database|database_name|Required to save data to the database|
@@ -56,7 +55,7 @@ The script accepts the following command line parameters:
 |-Password|password|Required to save data to the database, must be passed as secure string|
 |-FilePath|csv_file_name|Required to save data in a .csv format. Ignored if database parameters are specified|
 
-<sup>2</sup>You can create a .csv file using the following command and then edit to remove the subscriptions you don't  want to scan. 
+<sup>1</sup>You can create a .csv file using the following command and then edit to remove the subscriptions you don't  want to scan.
 ```PowerShell
 Get-AzSubscription | Export-Csv .\mysubscriptions.csv -NoTypeInformation 
 ```
@@ -110,8 +109,8 @@ Use the following steps to calculate the SQL Server license usage:
 
 # Tracking SQL license usage over time
 
-You can track your license utilization over time by periodically running this script. To schedule automatic execution of the script, create a PowerShell runbook using an Azure Automation account. See the [Runbook tutorial](https://docs.microsoft.com/en-us/azure/automation/learn/automation-tutorial-runbook-textual-powershell) for the details of how to create a PowerShell runbook. Because the script accesses the resources across multiple subscriptions, the runbook must be able to authenticate using the Run As account that was automatically created when you created your Automation account. The logic required for the Runbooks is part of the script. 
+You can track your license utilization over time by periodically running this script. To schedule automatic execution of the script, create a PowerShell runbook using an Azure Automation account. See the [Runbook tutorial](https://docs.microsoft.com/en-us/azure/automation/learn/automation-tutorial-runbook-textual-powershell) for the details of how to create a PowerShell runbook. Because the script accesses the resources across multiple subscriptions, the runbook must be able to authenticate using the Run As account that was automatically created when you created your Automation account. The logic required for the Runbooks is part of the script.
 
 >[!IMPORTANT]
 > - When running the script as a runbook, use a database to ensure that the results can be analyzed outside of the runbook.
-> - You must specify a *-UseInRunbook* switch to ensure that the runbook is authenticated using the Run As account. 
+> - You must specify a *-UseInRunbook* switch to ensure that the runbook is authenticated using the Run As account.
