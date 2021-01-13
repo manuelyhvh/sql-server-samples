@@ -47,7 +47,7 @@ The script accepts the following command line parameters:
 |-Server|[protocol:]server[instance_name][,port]|Required to save data to the database| 
 |-Database|database_name|Required to save data to the database|
 |-Username|user_name|Required to save data to the database|
-|-Password|password|Required to save data to the database|
+|-Password|password|Required to save data to the database, must be passed as secure string|
 |-FilePath|csv_file_name|Required to save data in a .csv format. Ignored if database parameters are specified|
 
 <sup>2</sup>You can create a .csv file using the following command and then edit to remove the subscriptions you don't  want to scan. 

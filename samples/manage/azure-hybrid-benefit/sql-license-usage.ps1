@@ -35,11 +35,20 @@
 # -Server [protocol:]server[instance_name][,port]   (Required to save data to the database)
 # -Database [database_name]                         (Required to save data to the database)
 # -Username [user_name]                             (Required to save data to the database)
-# -Password [password]                              (Required to save data to the database)
+# -Password [password]                              (Required to save data to the database, must be passed as secure string)
 # -FilePath [csv_file_name]                         (Required to save data in a .csv format. Ignored if database parameters are specified)
 #
 
-param ([string] $SubId, [string] $Server, [string] $Username, [string] $Password, [string] $Database, [string] $FilePath, [switch] $UseInRunbook, [switch] $UseEC)
+param (
+    [string] $SubId, 
+    [string] $Server, 
+    [string] $Username, 
+    [SecureString] $Password, 
+    [string] $Database, 
+    [string] $FilePath, 
+    [switch] $UseInRunbook, 
+    [switch] $IncludeEC
+)
 
 #The following block is required for runbooks only
 if ($UseInRunbook){
@@ -75,7 +84,7 @@ if ($SubId -like "*.csv") {
     $subscriptions = Get-AzSubscription
 }
 
-[Boolean] $useDatabase = $PSBoundParameters.ContainsKey("ServerInstance") -and $PSBoundParameters.ContainsKey("Username") -and $PSBoundParameters.ContainsKey("Password") -and $PSBoundParameters.ContainsKey("Database")
+[Boolean] $useDatabase = $PSBoundParameters.ContainsKey("Server") -and $PSBoundParameters.ContainsKey("Username") -and $PSBoundParameters.ContainsKey("Password") -and $PSBoundParameters.ContainsKey("Database")
 
 #Initialize tables and arrays
 
@@ -83,6 +92,8 @@ if ($useDatabase){
     
     #Database setup
 
+    $cred = New-Object System.Management.Automation.PSCredential($Username,$Password)
+    
     [String] $tableName = "Usage-per-subscription"
     [String] $testSQL = "SELECT COUNT(*) FROM INFORMATION_SCHEMA.TABLES 
                     WHERE TABLE_SCHEMA = 'dbo' 
@@ -122,11 +133,11 @@ if ($useDatabase){
     $propertiesToSplat = @{
         Database = $Database
         ServerInstance = $Server
-        User = $Username
-        Password = $Password
+        User = $cred.Username
+        Password = $cred.GetNetworkCredential().Password
         Query = $testSQL
     }
-    
+       
     # Create table if does not exist
     if ((Invoke-SQLCmd @propertiesToSplat).Column1 -eq 0) {
         $propertiesToSplat.Query = $createSQL
@@ -370,7 +381,7 @@ foreach ($sub in $subscriptions){
      
     $Date = Get-Date -Format "yyy-MM-dd"
     $Time = Get-Date -Format "HH:mm:ss"
-    if ($includeEC -eq $null){
+    if ($IncludeEC -eq $null){
         $ahb_ec = 0
         $payg_ec = 0
      }else{
@@ -384,14 +395,6 @@ foreach ($sub in $subscriptions){
         $usageTable += ,(@( $Date, $Time, $sub.Name, $sub.Id, $ahb_ec, $payg_ec, $subtotal.ahb_std, $subtotal.ahb_ent, $subtotal.payg_std, $subtotal.payg_ent, $subtotal.hadr_std, $subtotal.hadr_ent, $subtotal.developer, $subtotal.express))
     }
 }
-
-# Add the total numbers to the usage array
-
-#if ($includeEC -eq $null){
-#        $usageTable += ,(@($Date, $Time, "Total", $null, $total.ahb_std, $total.ahb_ent, $total.payg_std, $total.payg_ent, $total.hadr_std, $total.hadr_ent, $total.developer, $total.express))
-#}else{
-#        $usageTable += ,(@(($Date, $Time$total, "Total", $null, ($total.ahb_std + $total.ahb_ent*4), ($total.payg_std + $total.payg_ent*4), $total.ahb_std, $total.ahb_ent, $total.payg_std, $total.payg_ent, $total.hadr_std, $total.hadr_ent, $total.developer, $total.express))
-#}
 
 if ($useDatabase){
     Write-Host ([Environment]::NewLine + "-- Added the usage data to $tableName table --")  
