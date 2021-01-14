@@ -82,7 +82,8 @@ The following command will scan the subscription `<sub_id>` and save the results
 The following command will scan all the subscriptions in the account and save the results in a SQL database `<db_name>` on a SQL Server instance `<sql_server_name>.database.windows.net`.
 
 ```PowerShell
-.\sql-license-usage.ps1 -Server <server_name>.database.windows.net -Database <db_name> -Username <user_name> -Password $pwd
+$cred = Get-Credential -credential <user_name>
+.\sql-license-usage.ps1 -Server <server_name>.database.windows.net -Database <db_name> -Username $cred.Username -Password $cred.Password
 ```
 
 # Running the script using Cloud Shell
