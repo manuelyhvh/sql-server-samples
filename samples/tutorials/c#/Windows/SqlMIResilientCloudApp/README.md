@@ -1,15 +1,15 @@
 ![](../media/solutions-microsoft-logo-small.png)
 
 # About
-This source code is an example of buildling cloud-ready apps that are resilient to transient errors and failovers in the cloud. In particular, the example is made with Azure SQL Managed Instance, but it can be applied to other SQL servers as well.
+This source code is an example of buildling cloud-ready apps that are resilient to transient errors and failovers in the cloud. In particular, the example was made in C# with Azure SQL Managed Instance, but it can be applied to other SQL servers as well.
 
 The accompanying article to this source code is the following: here: http://aka.ms/mifailover-techblog
 
 # How to build
 
-- Create Console app in Visual studio
+- Create Console app project in Visual Studio
 - Copy-paste the program file
-- Use App.config to enter your SQL MI connection details. In Visual Studio, you will also need to add your config file to the project (see here: https://docs.microsoft.com/en-us/visualstudio/ide/how-to-add-app-config-file?view=vs-2019)
+- Use App.config to enter your SQL MI connection details. In Visual Studio, you will also need to [add your config file](https://docs.microsoft.com/en-us/visualstudio/ide/how-to-add-app-config-file) to the project.
 
 # Database side configuration
 
