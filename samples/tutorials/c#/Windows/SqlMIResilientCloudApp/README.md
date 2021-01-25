@@ -15,11 +15,13 @@ The accompanying article to this source code is the following: here: http://aka.
 
 On SQL MI (e.g. using SSMS) you will need to create a failoverDB. Use the follwing t-sql script:
 
+```t-sql
 CREATE DATABASE failoverDB;
 USE failoverDB;
 CREATE TABLE timetable (datestamp datetime);
 INSERT INTO timetable (datestamp) VALUES (CURRENT_TIMESTAMP);
 SELECT * FROM timetable;
+```
 
 # Demo
 
