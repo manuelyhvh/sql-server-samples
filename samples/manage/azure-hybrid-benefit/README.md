@@ -115,3 +115,10 @@ You can track your license utilization over time by periodically running this sc
 >[!IMPORTANT]
 > - When running the script as a runbook, use a database to ensure that the results can be analyzed outside of the runbook.
 > - You must specify a *-UseInRunbook* switch to ensure that the runbook is authenticated using the Run As account.
+> - Your automation account must have the following modules installed. If not, add them from the Gallery.
+>    - Az.Accounts
+>    - Az.Compute
+>    - Az.DataFactory
+>    - Az.Resources
+>    - Az.Sql
+>    - Az.SqlVirtualMachine
