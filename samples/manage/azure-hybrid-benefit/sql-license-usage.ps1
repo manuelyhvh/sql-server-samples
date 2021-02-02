@@ -31,13 +31,14 @@
 # The script accepts the following command line parameters:
 # 
 # -SubId [subscription_id] | [csv_file_name]        (Accepts a .csv file with the list of subscriptions)
-# -UseInRunbook                                     (Required when executed as a Runbook)
+# -UseInRunbook [True] | [False]                    (Required when executed as a Runbook)
 # -Server [protocol:]server[instance_name][,port]   (Required to save data to the database)
 # -Database [database_name]                         (Required to save data to the database)
 # -Username [user_name]                             (Required to save data to the database)
 # -Password [password]                              (Required to save data to the database, must be passed as secure string)
 # -FilePath [csv_file_name]                         (Required to save data in a .csv format. Ignored if database parameters are specified)
 #
+# 
 
 param (
     [string] $SubId, 
@@ -46,9 +47,37 @@ param (
     [SecureString] $Password, 
     [string] $Database, 
     [string] $FilePath, 
-    [switch] $UseInRunbook, 
-    [switch] $IncludeEC
+    [bool] $UseInRunbook, 
+    [bool] $IncludeEC
 )
+
+
+function Load-Module ($m) {
+
+    # This function ensures that the specified module is imported into the session
+    # If module is already imported - do nothing
+
+    if (!(Get-Module | Where-Object {$_.Name -eq $m})) {
+         # If module is not imported, but available on disk then import
+        if (Get-Module -ListAvailable | Where-Object {$_.Name -eq $m}) {
+            Import-Module $m 
+        }
+        else {
+
+            # If module is not imported, not available on disk, but is in online gallery then install and import
+            if (Find-Module -Name $m | Where-Object {$_.Name -eq $m}) {
+                Install-Module -Name $m -Force -Verbose -Scope CurrentUser
+                Import-Module $m
+            }
+            else {
+
+                # If module is not imported, not available and not in online gallery then abort
+                write-host "Module $m not imported, not available and not in online gallery, exiting."
+                EXIT 1
+            }
+        }
+    }
+}
 
 #The following block is required for runbooks only
 if ($UseInRunbook){
@@ -71,6 +100,22 @@ if ($UseInRunbook){
                             -CertificateThumbprint $connection.CertificateThumbprint
 
         Start-Sleep -Seconds 5
+    }
+}else{
+    # Ensure that the required modules are imported
+    # In Runbooks these modules must be added to the automation account manually
+
+    $requiredModules = @(
+        "Az.Accounts",
+        "Az.Compute",
+        "Az.DatraFactory",
+        "Az.Resources",
+        "Az.Sql",
+        "Az.SqlVirtualMachine"
+    )
+
+    foreach ($module in $requiredModules){
+        Load-Module ($module)
     }
 }
 
@@ -405,3 +450,4 @@ if ($useDatabase){
      (ConvertFrom-Csv ($usageTable | %{$_ -join ','})) | Export-Csv $FilePath -Append -NoType
     Write-Host ([Environment]::NewLine + "-- Added the usage data to $FilePath --")
 }
+
