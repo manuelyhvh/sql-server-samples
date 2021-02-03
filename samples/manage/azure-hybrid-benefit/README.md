@@ -78,11 +78,11 @@ The following command will scan the subscription `<sub_id>` and save the results
 
 ## Example 3
 
-The following command will scan all the subscriptions in the account and save the results in a SQL database `<db_name>` on a SQL Server instance `<sql_server_name>.database.windows.net`. It will prompt for the database user name and password.
+The following command will scan all the subscriptions in the account and save the results in a SQL database `sql-license-usage` on a SQL Server instance `my-westus2-server.database.windows.net`. It will prompt for the database user name and password.
 
 ```PowerShell
 $cred = Get-Credential
-.\sql-license-usage.ps1 -Server <server_name>.database.windows.net -Database <db_name> -Cred $cred 
+.\sql-license-usage.ps1 -Server my-westus2-server.database.windows.net -Database sql-license-usage -Cred $cred 
 ```
 
 ## Example 4
@@ -137,7 +137,7 @@ You can track your license utilization over time by running this script on sched
 1. Open the [script file](https://raw.githubusercontent.com/microsoft/sql-server-samples/master/samples/manage/azure-hybrid-benefit/sql-license-usage.ps1), copy the entire file and paste it into the editor, click on *Save* and then click on *Publish*.
 1. From the runbook blade, click on the *Link to schedule* button and select an existing schedule or create a new one with the desired frequency of runs and the expiration time.
 1. Click on *Parameters and run settings* and specify the following parameters:
-    - SUBID. Leave it blank if you want to scan all the subscriptions
+    - SUBID. Leave it blank if you want to scan all the subscriptions in the account.
     - SERVER. Put in the SQL Server connection endpoint (e.g. my-westus2-sql-server.database.windows.net)
     - CRED. Put in the name of the credential object you created in Step 2.
     - DATABASE. Put in the database name where you want to save the license utilization data.
