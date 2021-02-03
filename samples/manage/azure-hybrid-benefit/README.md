@@ -125,7 +125,7 @@ Use the following steps to calculate the SQL Server license usage:
 You can track your license utilization over time by running this script on schedule as a runbook. To set it up using Azure Portal, follow these steps. 
 
 1. [Create a new automation account](https://ms.portal.azure.com/#create/Microsoft.AutomationAccount)  or use an existing one.
-1. Select *Credentials* in the **Shared resources** group and create a credential object with the database username and password. The script will use these to connect to the specified database and save data.
+1. Select *Credentials* in the **Shared resources** group and create a credential object with the database username and password. The script will use these to connect to the specified database to save the license utilization data.
 1. Select *Modules* in the **Shared resources** group and make sure your automation account have the following PowerShell modules installed. If not, add them from the Gallery.
     - Az.Accounts
     - Az.Compute
@@ -140,11 +140,10 @@ You can track your license utilization over time by running this script on sched
     - SUBID. Leave it blank if you want to scan all the subscriptions
     - SERVER. Put in the SQL Server connection endpoint (e.g. my-westus2-sql-server.database.windows.net)
     - CRED. Put in the name of the credential object you created in Step 2.
-    - DATABASE. Put in the database name where you want to save the license information.
-    - USEINRUNBOOKS. Select True.
-    
+    - DATABASE. Put in the database name where you want to save the license utilization data.
+    - USEINRUNBOOKS. Select True to activate the logic that authenticates the runbook using the Run As account that was automatically created when you created your Automation account.
+
 For more information about the runbooks, see the [Runbook tutorial](https://docs.microsoft.com/en-us/azure/automation/learn/automation-tutorial-runbook-textual-powershell) 
 
 >[!IMPORTANT]
-> - Because the script accesses the resources across multiple subscriptions, the runbook must be able to authenticate using the Run As account that was automatically created when you created your Automation account. The logic required for the Runbooks is part of the script.
-> - When running the script as a runbook, it is b=necessary to use a database to ensure that the results can be analyzed outside of the runbook.
+> When running the script as a runbook, it is necessary to use a database to ensure that the results can be analyzed outside of the runbook.
