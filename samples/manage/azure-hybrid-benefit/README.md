@@ -3,7 +3,7 @@ services: Azure SQL
 platforms: Azure
 author: anosov1960
 ms.author: sashan
-ms.date: 1/11/2021
+ms.date: 2/2/2021
 ---
 
 # Overview
@@ -45,15 +45,14 @@ The following resources are in scope for the license utilization analysis:
 
 The script accepts the following command line parameters:
 
-| **Parameter** &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;  | **Value** | **Description** |
+| **Parameter** &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;  | **Value** &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp; &nbsp; | **Description** |
 |:--|:--|:--|
-|-SubId|subscription_id *or* a file_name|Accepts a .csv file with the list of subscriptions<sup>1</sup>|
-|-UseInRunbook||Must be specified when executed as a Runbook|
-|-Server|[protocol:]server[instance_name][,port]|Required to save data to the database| 
-|-Database|database_name|Required to save data to the database|
-|-Username|user_name|Required to save data to the database|
-|-Password|password|Required to save data to the database, must be passed as a *[SecureString]* variable|
-|-FilePath|csv_file_name|Required to save data in a .csv format. Ignored if database parameters are specified|
+|-SubId|subscription_id *or* a file_name|Optional: subscription id or a .csv file with the list of subscriptions<sup>1</sup>|
+|-UseInRunbook| \$True or \$False (default) |Optional: must be $True when executed as a Runbook|
+|-Server|[protocol:]server[instance_name][,port]|Optional: SQL Server connection endpoint to save data to the database.<br>  Must be accompanied by -Database and -Cred | 
+|-Database|database_name|Optional: database name where data will be saved.<br>  Must be accompanied by -Server and -Cred|
+|-Cred|credential_object|Optional: value of type PSCredential to securely pass database user and password|
+|-FilePath|csv_file_name|Optional: filename where the data will be saved in a .csv format. Ignored if database parameters are specified|
 
 <sup>1</sup>You can create a .csv file using the following command and then edit to remove the subscriptions you don't  want to scan.
 ```PowerShell
@@ -79,11 +78,24 @@ The following command will scan the subscription `<sub_id>` and save the results
 
 ## Example 3
 
-The following command will scan all the subscriptions in the account and save the results in a SQL database `<db_name>` on a SQL Server instance `<sql_server_name>.database.windows.net`.
+The following command will scan all the subscriptions in the account and save the results in a SQL database `<db_name>` on a SQL Server instance `<sql_server_name>.database.windows.net`. It will prompt for the database user name and password.
 
 ```PowerShell
-$cred = Get-Credential -credential <user_name>
-.\sql-license-usage.ps1 -Server <server_name>.database.windows.net -Database <db_name> -Username $cred.Username -Password $cred.Password
+$cred = Get-Credential
+.\sql-license-usage.ps1 -Server <server_name>.database.windows.net -Database <db_name> -Cred $cred 
+```
+
+## Example 4
+
+The following command uses the parameter splatting method to achieve the same outcome as Example 3.
+
+```PowerShell
+$params =@{
+    Server="my-westus2-server.database.windows.net";
+    Database="sql-license-usage";
+    Cred=Get-Credential;
+}    
+.\sql-license-usage.ps1 @params
 ```
 
 # Running the script using Cloud Shell
@@ -108,17 +120,31 @@ Use the following steps to calculate the SQL Server license usage:
 > - To paste the commands into the shell, use `Ctrl-Shift-V` on Windows or `Cmd-v` on MacOS.
 > - The `curl` command will copy the script directly to the home folder associated with your Cloud Shell session.
 
-# Tracking SQL license usage over time
+# Running the script as a Azure runbook
 
-You can track your license utilization over time by periodically running this script. To schedule automatic execution of the script, create a PowerShell runbook using an Azure Automation account. See the [Runbook tutorial](https://docs.microsoft.com/en-us/azure/automation/learn/automation-tutorial-runbook-textual-powershell) for the details of how to create a PowerShell runbook. Because the script accesses the resources across multiple subscriptions, the runbook must be able to authenticate using the Run As account that was automatically created when you created your Automation account. The logic required for the Runbooks is part of the script.
+You can track your license utilization over time by running this script on schedule as a runbook. To set it up using Azure Portal, follow these steps. 
+
+1. [Create a new automation account](https://ms.portal.azure.com/#create/Microsoft.AutomationAccount)  or use an existing one.
+1. Select *Credentials* in the **Shared resources** group and create a credential object with the database username and password. The script will use these to connect to the specified database and save data.
+1. Select *Modules* in the **Shared resources** group and make sure your automation account have the following PowerShell modules installed. If not, add them from the Gallery.
+    - Az.Accounts
+    - Az.Compute
+    - Az.DataFactory
+    - Az.Resources
+    - Az.Sql
+    - Az.SqlVirtualMachine
+1. Select *Runbooks* in the **Process automation** group and create a new PowerShell runbook. Open it and click on the *Edit* button.
+1. Open the [script file](https://raw.githubusercontent.com/microsoft/sql-server-samples/master/samples/manage/azure-hybrid-benefit/sql-license-usage.ps1), copy the entire file and paste it into the editor, click on *Save* and then click on *Publish*.
+1. From the runbook blade, click on the *Link to schedule* button and select an existing schedule or create a new one with the desired frequency of runs and the expiration time.
+1. Click on *Parameters and run settings* and specify the following parameters:
+    - SUBID. Leave it blank if you want to scan all the subscriptions
+    - SERVER. Put in the SQL Server connection endpoint (e.g. my-westus2-sql-server.database.windows.net)
+    - CRED. Put in the name of the credential object you created in Step 2.
+    - DATABASE. Put in the database name where you want to save the license information.
+    - USEINRUNBOOKS. Select True.
+    
+For more information about the runbooks, see the [Runbook tutorial](https://docs.microsoft.com/en-us/azure/automation/learn/automation-tutorial-runbook-textual-powershell) 
 
 >[!IMPORTANT]
-> - When running the script as a runbook, use a database to ensure that the results can be analyzed outside of the runbook.
-> - You must specify a *-UseInRunbook* switch to ensure that the runbook is authenticated using the Run As account.
-> - Your automation account must have the following modules installed. If not, add them from the Gallery.
->    - Az.Accounts
->    - Az.Compute
->    - Az.DataFactory
->    - Az.Resources
->    - Az.Sql
->    - Az.SqlVirtualMachine
+> - Because the script accesses the resources across multiple subscriptions, the runbook must be able to authenticate using the Run As account that was automatically created when you created your Automation account. The logic required for the Runbooks is part of the script.
+> - When running the script as a runbook, it is b=necessary to use a database to ensure that the results can be analyzed outside of the runbook.

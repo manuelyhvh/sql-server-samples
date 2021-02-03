@@ -34,23 +34,27 @@
 # -UseInRunbook [True] | [False]                    (Required when executed as a Runbook)
 # -Server [protocol:]server[instance_name][,port]   (Required to save data to the database)
 # -Database [database_name]                         (Required to save data to the database)
-# -Username [user_name]                             (Required to save data to the database)
-# -Password [password]                              (Required to save data to the database, must be passed as secure string)
+# -Cred [credential_object]                         (Required to save data to the database)
 # -FilePath [csv_file_name]                         (Required to save data in a .csv format. Ignored if database parameters are specified)
 #
 # 
 
 param (
+    [Parameter (Mandatory= $false)] 
     [string] $SubId, 
+    [Parameter (Mandatory= $false)]
     [string] $Server, 
-    [string] $Username, 
-    [SecureString] $Password, 
+    [Parameter (Mandatory= $false)]
+    [PSCredential] $Cred, 
+    [Parameter (Mandatory= $false)]
     [string] $Database, 
+    [Parameter (Mandatory= $false)]
     [string] $FilePath, 
-    [bool] $UseInRunbook, 
-    [bool] $IncludeEC
+    [Parameter (Mandatory= $false)]
+    [bool] $UseInRunbook = $false, 
+    [Parameter (Mandatory= $false)]
+    [bool] $IncludeEC = $false
 )
-
 
 function Load-Module ($m) {
 
@@ -108,7 +112,7 @@ if ($UseInRunbook){
     $requiredModules = @(
         "Az.Accounts",
         "Az.Compute",
-        "Az.DatraFactory",
+        "Az.DataFactory",
         "Az.Resources",
         "Az.Sql",
         "Az.SqlVirtualMachine"
@@ -129,7 +133,7 @@ if ($SubId -like "*.csv") {
     $subscriptions = Get-AzSubscription
 }
 
-[Boolean] $useDatabase = $PSBoundParameters.ContainsKey("Server") -and $PSBoundParameters.ContainsKey("Username") -and $PSBoundParameters.ContainsKey("Password") -and $PSBoundParameters.ContainsKey("Database")
+[bool] $useDatabase = $PSBoundParameters.ContainsKey("Server") -and $PSBoundParameters.ContainsKey("Cred") -and $PSBoundParameters.ContainsKey("Database")
 
 #Initialize tables and arrays
 
@@ -137,7 +141,7 @@ if ($useDatabase){
     
     #Database setup
 
-    $cred = New-Object System.Management.Automation.PSCredential($Username,$Password)
+    #$cred = New-Object System.Management.Automation.PSCredential($Username,$Password)
     
     [String] $tableName = "Usage-per-subscription"
     [String] $testSQL = "SELECT COUNT(*) FROM INFORMATION_SCHEMA.TABLES 
@@ -178,8 +182,8 @@ if ($useDatabase){
     $propertiesToSplat = @{
         Database = $Database
         ServerInstance = $Server
-        User = $cred.Username
-        Password = $cred.GetNetworkCredential().Password
+        User = $Cred.Username
+        Password = $Cred.GetNetworkCredential().Password
         Query = $testSQL
     }
        
@@ -413,7 +417,7 @@ foreach ($sub in $subscriptions){
             
             $softwarePlan = Invoke-RestMethod @params
             if ($softwarePlan.Sku.Name -like "SQL*"){
-                $size_info = $VM_SKUs | where {$_.ResourceType.Contains('hostGroups/hosts') -and $_.Name.Contains($vm_host.Sku.Name)} | Select-Object -First 1   
+                $size_info = $VM_SKUs | Where-Object {$_.ResourceType.Contains('hostGroups/hosts') -and $_.Name.Contains($vm_host.Sku.Name)} | Select-Object -First 1   
                 $cores= $size_info.Capabilities | Where-Object {$_.name -eq "Cores"}     
                 $subtotal.ahb_ent += $cores.Value
             }
@@ -426,12 +430,12 @@ foreach ($sub in $subscriptions){
      
     $Date = Get-Date -Format "yyy-MM-dd"
     $Time = Get-Date -Format "HH:mm:ss"
-    if ($IncludeEC -eq $null){
-        $ahb_ec = 0
-        $payg_ec = 0
-     }else{
+    if ($IncludeEC){
         $ahb_ec = ($subtotal.ahb_std + $subtotal.ahb_ent*4)
         $payg_ec = ($subtotal.payg_std + $subtotal.payg_ent*4)
+    }else{
+        $ahb_ec = 0
+        $payg_ec = 0
     }
     if ($useDatabase){
         $propertiesToSplat.Query = $insertSQL -f $Date, $Time, $sub.Name, $sub.Id, $ahb_ec, $payg_ec, $subtotal.ahb_std, $subtotal.ahb_ent, $subtotal.payg_std, $subtotal.payg_ent, $subtotal.hadr_std, $subtotal.hadr_ent, $subtotal.developer, $subtotal.express
