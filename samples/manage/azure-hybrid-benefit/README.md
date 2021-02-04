@@ -126,7 +126,7 @@ You can track your license utilization over time by running this script on sched
 
 1. Open a command shell on your device and run this command. It will copy the script to your local folder.
 ```console
-        curl https://raw.githubusercontent.com/microsoft/sql-server-samples/master/samples/manage/azure-hybrid-benefit/sql-license-usage.ps1 -o sql-license-usage.ps1
+curl https://raw.githubusercontent.com/microsoft/sql-server-samples/master/samples/manage/azure-hybrid-benefit/sql-license-usage.ps1 -o sql-license-usage.ps1
 ```
 2. [Create a new automation account](https://ms.portal.azure.com/#create/Microsoft.AutomationAccount)  or use an existing one.
 1. Select *Rus as accounts* in the **Account Settings** group, open the automatically created Azure *Run As Account* and note or copy the Display Name property. You must add this user to all the subscriptions you wish to scan with the *Reader* access role.  See [Role assignment portal](https://docs.microsoft.com/en-us/azure/role-based-access-control/role-assignments-portal) for the instructions about role assignments.
@@ -142,7 +142,7 @@ You can track your license utilization over time by running this script on sched
 1. When import is completed click on *Publish*.
 1. From the runbook blade, click on the *Link to schedule* button and select an existing schedule or create a new one with the desired frequency of runs and the expiration time.
 1. Click on *Parameters and run settings* and specify the following parameters:
-    - SUBID. Leave it blank if you want to scan all the subscriptions in the account.
+    - SUBID. Put in a subscription ID or leave it blank if you want to scan all the subscriptions the *Run As Account* has been given access to in Step 3.
     - SERVER. Put in the SQL Server connection endpoint (e.g. my-westus2-sql-server.database.windows.net)
     - CRED. Put in the name of the credential object you created in Step 3.
     - DATABASE. Put in the database name where you want to save the license utilization data.
