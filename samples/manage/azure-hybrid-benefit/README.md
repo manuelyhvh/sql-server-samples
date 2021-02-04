@@ -124,7 +124,12 @@ Use the following steps to calculate the SQL Server license usage:
 
 You can track your license utilization over time by running this script on schedule as a runbook. To set it up using Azure Portal, follow these steps. 
 
-1. [Create a new automation account](https://ms.portal.azure.com/#create/Microsoft.AutomationAccount)  or use an existing one.
+1. Open a command shell on your device and run this command. It will copy the script to your local folder.
+```console
+        curl https://raw.githubusercontent.com/microsoft/sql-server-samples/master/samples/manage/azure-hybrid-benefit/sql-license-usage.ps1 -o sql-license-usage.ps1
+```
+2. [Create a new automation account](https://ms.portal.azure.com/#create/Microsoft.AutomationAccount)  or use an existing one.
+1. Select *Rus as accounts* in the **Account Settings** group, open the automatically created Azure *Run As Account* and note or copy the Display Name property. You must add this user to all the subscriptions you wish to scan with the *Reader* access role.  See [Role assignment portal](https://docs.microsoft.com/en-us/azure/role-based-access-control/role-assignments-portal) for the instructions about role assignments.
 1. Select *Credentials* in the **Shared resources** group and create a credential object with the database username and password. The script will use these to connect to the specified database to save the license utilization data.
 1. Select *Modules* in the **Shared resources** group and make sure your automation account have the following PowerShell modules installed. If not, add them from the Gallery.
     - Az.Accounts
@@ -133,15 +138,16 @@ You can track your license utilization over time by running this script on sched
     - Az.Resources
     - Az.Sql
     - Az.SqlVirtualMachine
-1. Select *Runbooks* in the **Process automation** group and create a new PowerShell runbook. Open it and click on the *Edit* button.
-1. Open the [script file](https://raw.githubusercontent.com/microsoft/sql-server-samples/master/samples/manage/azure-hybrid-benefit/sql-license-usage.ps1), copy the entire file and paste it into the editor, click on *Save* and then click on *Publish*.
+1. Select *Runbooks* in the **Process automation** group and click on *Import a runbook*, select the file you downloaded in Step 1 and click **Create**.
+1. When import is completed click on *Publish*.
 1. From the runbook blade, click on the *Link to schedule* button and select an existing schedule or create a new one with the desired frequency of runs and the expiration time.
 1. Click on *Parameters and run settings* and specify the following parameters:
     - SUBID. Leave it blank if you want to scan all the subscriptions in the account.
     - SERVER. Put in the SQL Server connection endpoint (e.g. my-westus2-sql-server.database.windows.net)
-    - CRED. Put in the name of the credential object you created in Step 2.
+    - CRED. Put in the name of the credential object you created in Step 3.
     - DATABASE. Put in the database name where you want to save the license utilization data.
     - USEINRUNBOOKS. Select True to activate the logic that authenticates the runbook using the Run As account that was automatically created when you created your Automation account.
+1. Click **OK** to link to the schedule and **OK** again to create the job.
 
 For more information about the runbooks, see the [Runbook tutorial](https://docs.microsoft.com/en-us/azure/automation/learn/automation-tutorial-runbook-textual-powershell) 
 
