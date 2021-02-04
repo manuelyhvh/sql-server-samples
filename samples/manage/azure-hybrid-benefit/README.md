@@ -142,7 +142,7 @@ You can track your license utilization over time by running this script on sched
 1. When import is completed click on *Publish*.
 1. From the runbook blade, click on the *Link to schedule* button and select an existing schedule or create a new one with the desired frequency of runs and the expiration time.
 1. Click on *Parameters and run settings* and specify the following parameters:
-    - SUBID. Leave it blank if you want to scan all the subscriptions in the account.
+    - SUBID. Put in a subscription ID or leave it blank if you want to scan all the subscriptions the *Run As Account* has been given access to in Step 3.
     - SERVER. Put in the SQL Server connection endpoint (e.g. my-westus2-sql-server.database.windows.net)
     - CRED. Put in the name of the credential object you created in Step 3.
     - DATABASE. Put in the database name where you want to save the license utilization data.
