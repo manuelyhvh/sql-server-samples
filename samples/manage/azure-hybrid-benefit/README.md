@@ -8,7 +8,7 @@ ms.date: 2/2/2021
 
 # Overview
 
-This script provides a simple solution to analyze and track the consolidated utilization of SQL Server licenses by all of the SQL resources in a specific subscription or the entire the account. By default, the script scans all subscriptions the user account has access. Alternatively, you can specify a single subscription or a .CSV file with a list of subscription. The usage report includes the following information for each scanned subscription.
+This script provides a simple solution to analyze and track the consolidated utilization of SQL Server licenses by all of the SQL resources in a specific subscription or the entire account. By default, the script scans all subscriptions the user account has access to. Alternatively, you can specify a single subscription or a .CSV file with a list of subscription. The usage report includes the following information for each scanned subscription.
 
 | **Category** | **Description** |
 |:--|:--|
@@ -107,13 +107,13 @@ Use the following steps to calculate the SQL Server license usage:
 2. Upload the script to the shell using the following command:
 
     ```console
-        curl https://raw.githubusercontent.com/microsoft/sql-server-samples/master/samples/manage/azure-hybrid-benefit/sql-license-usage.ps1 -o sql-license-usage.ps1
+    curl https://raw.githubusercontent.com/microsoft/sql-server-samples/master/samples/manage/azure-hybrid-benefit/sql-license-usage.ps1 -o sql-license-usage.ps1
     ```
 
 3. Run the script with a set of parameters that reflect your desired configuration.
 
     ```console
-       ./sql-license-usage.ps1 <parameters>
+    ./sql-license-usage.ps1 <parameters>
     ```
 
 > [!NOTE]
@@ -129,7 +129,7 @@ You can track your license utilization over time by running this script on sched
 curl https://raw.githubusercontent.com/microsoft/sql-server-samples/master/samples/manage/azure-hybrid-benefit/sql-license-usage.ps1 -o sql-license-usage.ps1
 ```
 2. [Create a new automation account](https://ms.portal.azure.com/#create/Microsoft.AutomationAccount)  or use an existing one.
-1. Select *Rus as accounts* in the **Account Settings** group, open the automatically created Azure *Run As Account* and note or copy the Display Name property. You must add this user to all the subscriptions you wish to scan with the *Reader* access role.  See [Role assignment portal](https://docs.microsoft.com/en-us/azure/role-based-access-control/role-assignments-portal) for the instructions about role assignments.
+1. Select *Rus as accounts* in the **Account Settings** group, open the automatically created *Azure Run As Account* and note or copy the Display Name property. You must add this user to all the subscriptions you wish to scan with the *Reader* access role.  See [Role assignment portal](https://docs.microsoft.com/en-us/azure/role-based-access-control/role-assignments-portal) for the instructions about role assignments.
 1. Select *Credentials* in the **Shared resources** group and create a credential object with the database username and password. The script will use these to connect to the specified database to save the license utilization data.
 1. Select *Modules* in the **Shared resources** group and make sure your automation account have the following PowerShell modules installed. If not, add them from the Gallery.
     - Az.Accounts
@@ -142,7 +142,7 @@ curl https://raw.githubusercontent.com/microsoft/sql-server-samples/master/sampl
 1. When import is completed click on *Publish*.
 1. From the runbook blade, click on the *Link to schedule* button and select an existing schedule or create a new one with the desired frequency of runs and the expiration time.
 1. Click on *Parameters and run settings* and specify the following parameters:
-    - SUBID. Put in a subscription ID or leave it blank if you want to scan all the subscriptions the *Run As Account* has been given access to in Step 3.
+    - SUBID. Put in a subscription ID or leave it blank if you want to scan all the subscriptions the *Azure Run As Account* has been given access to in Step 3.
     - SERVER. Put in the SQL Server connection endpoint (e.g. my-westus2-sql-server.database.windows.net)
     - CRED. Put in the name of the credential object you created in Step 3.
     - DATABASE. Put in the database name where you want to save the license utilization data.
@@ -152,4 +152,4 @@ curl https://raw.githubusercontent.com/microsoft/sql-server-samples/master/sampl
 For more information about the runbooks, see the [Runbook tutorial](https://docs.microsoft.com/en-us/azure/automation/learn/automation-tutorial-runbook-textual-powershell) 
 
 >[!IMPORTANT]
-> When running the script as a runbook, it is necessary to use a database to ensure that the results can be analyzed outside of the runbook.
+> When running the script as a runbook, it is necessary to save the data in a database so that the results could be analyzed outside of the runbook.
