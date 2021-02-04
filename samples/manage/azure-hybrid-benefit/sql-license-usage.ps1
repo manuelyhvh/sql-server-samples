@@ -133,6 +133,8 @@ if ($SubId -like "*.csv") {
     $subscriptions = Get-AzSubscription
 }
 
+write-host $subscriptions
+
 [bool] $useDatabase = $PSBoundParameters.ContainsKey("Server") -and $PSBoundParameters.ContainsKey("Cred") -and $PSBoundParameters.ContainsKey("Database")
 
 #Initialize tables and arrays
