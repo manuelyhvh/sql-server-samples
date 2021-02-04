@@ -126,7 +126,7 @@ You can track your license utilization over time by running this script on sched
 
 1. Open a command shell on your device and run this command. It will copy the script to your local folder.
 ```console
-        curl https://raw.githubusercontent.com/microsoft/sql-server-samples/master/samples/manage/azure-hybrid-benefit/sql-license-usage.ps1 -o sql-license-usage.ps1
+curl https://raw.githubusercontent.com/microsoft/sql-server-samples/master/samples/manage/azure-hybrid-benefit/sql-license-usage.ps1 -o sql-license-usage.ps1
 ```
 2. [Create a new automation account](https://ms.portal.azure.com/#create/Microsoft.AutomationAccount)  or use an existing one.
 1. Select *Rus as accounts* in the **Account Settings** group, open the automatically created Azure *Run As Account* and note or copy the Display Name property. You must add this user to all the subscriptions you wish to scan with the *Reader* access role.  See [Role assignment portal](https://docs.microsoft.com/en-us/azure/role-based-access-control/role-assignments-portal) for the instructions about role assignments.
