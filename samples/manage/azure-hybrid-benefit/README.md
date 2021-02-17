@@ -62,7 +62,7 @@ If both database parameters and *FilePath* are omitted, the script will write th
 
 ## Example 1
 
-The following command will scan all the subscriptions in the account and save the results in `.\sql-license-usage.csv`
+The following command will scan all the subscriptions to which the user has access to and save the results in `.\sql-license-usage.csv`
 
 ```PowerShell
 .\sql-license-usage.ps1
@@ -78,7 +78,7 @@ The following command will scan the subscription `<sub_id>` and save the results
 
 ## Example 3
 
-The following command will scan all the subscriptions in the account and save the results in a SQL database `sql-license-usage` on a SQL Server instance `my-westus2-server.database.windows.net`. It will prompt for the database user name and password.
+The following command will scan all the subscriptions the user has access to and save the results in a SQL database `sql-license-usage` on a SQL Server instance `my-westus2-server.database.windows.net`. It will prompt for the database user name and password.
 
 ```PowerShell
 $cred = Get-Credential
@@ -87,7 +87,7 @@ $cred = Get-Credential
 
 ## Example 4
 
-The following command uses the parameter splatting method to achieve the same outcome as Example 3.
+The following command uses a parameter splatting method to achieve the same outcome as Example 3.
 
 ```PowerShell
 $params =@{
