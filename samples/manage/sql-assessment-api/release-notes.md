@@ -1,6 +1,8 @@
 # Release notes for SQL Assessment API
 
-This article provides details about updates, improvements, and bug fixes for the current and previous versions of SQL Assessment API. SQL Assessment API is part of the SQL Server Management Objects (SMO) and the SQL Server PowerShell module. To start working with the API, install the SQL Assessment Extention to Azure Data Studio or utilize either the SqlServer module or SMO.
+This article provides details about updates, improvements, and bug fixes for the current and previous versions of SQL Assessment API. 
+
+To start working with the API, install the SQL Assessment Extention to Azure Data Studio or utilize either the SqlServer module or SMO.
 
 Installing SQL Assessment Extension: [SQL Server Assessment Extension for Azure Data Studio (Public Preview)](https://techcommunity.microsoft.com/t5/sql-server/released-sql-server-assessment-extension-for-azure-data-studio/ba-p/1470603)
 
@@ -11,6 +13,41 @@ Download: [Download SqlServer module](https://www.powershellgallery.com/packages
 Download: [SMO NuGet Package](https://www.nuget.org/packages/Microsoft.SqlServer.SqlManagementObjects)
 
 You can use GitHub issues to provide feedback to the product team.
+
+## March 2021 - 1.0.304
+
+Version: SqlServer PowerShell module wasn't updated, SqlManagementObjects (SMO) package wasn't updated
+
+### What's new
+
+- Added the 'MachineType' property to Target that is used for making rules specific to SQL Server on Azure Virtual Machine
+- Added the ability to pass data among multiple probes and invoke probes one by one
+- Added rules:
+  - [SQL Server on Azure VM] VM size is not memory-optimized - checks the virtual machine size and recommends to use memory-optimized VM series for the best performance of SQL Server workloads
+  - 'SQL Server Agent' service uses non-recommended account
+  - 'SQL Server Agent' service uses not supported account
+  - 'SQL Server Agent' and 'SQL Server Database Engine' use same account
+  - 'SQL Server Agent' service is stopped
+  - 'SQL Server Browser' and 'SQL Server Database Engine' use same account
+  - 'SQL Server Browser' service is stopped
+  - 'Integration Services' and 'SQL Server Database Engine' use same account
+  - 'Integration Services' service is stopped
+  - 'Full-text search' service uses non-recommended account
+  - 'Full-text search' and 'SQL Server Database Engine' use same account
+  - 'Full-text search' service is stopped
+  - 'Analysis Services' and 'SQL Server Database Engine' use same account
+  - 'Analysis Services' service is stopped
+  - 'Reporting Services' and 'SQL Server Database Engine' use same account
+  - 'Reporting Services' service is stopped
+  - 'SQL Server Database Engine' service uses non-recommended account
+  - 'SQL Server Database Engine' service uses not supported account
+
+### Bug fixes and improvements
+
+- Updated the 'LatestCU' rule with the latest CU versions 
+- Updated the 'ReplErrors24H' rule to collect information for all 'Publisher' databases 
+- Fixed an issue with local variables used for displaying extended details in messages 
+- Fixed an issue with the wrong Linux target type for the 'PriorityBoostOn' rule
 
 ## December 2020 - 1.0.302
 
