@@ -3,7 +3,7 @@ services: Azure SQL
 platforms: Azure
 author: anosov1960
 ms.author: sashan
-ms.date: 2/2/2021
+ms.date: 3/5/2021
 ---
 
 # Overview
