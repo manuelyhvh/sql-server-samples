@@ -1,0 +1,4 @@
+"Date","Time","Subscription Name","Subscription ID","AHB ECs","PAYG ECs","AHB Std vCores","AHB Ent vCores","PAYG Std vCores","PAYG Ent vCores","HADR Std vCores","HADR Ent vCores","Developer vCores","Express vCores","Unregistered SQLVM vCores","Unknown vCores"
+"2021-03-04","20:55:41","geodr_m2_365640","10a238d6-a139-46d0-818d-d091394072b6","0","0","0","41","162","13","0","0","0","0","16","0"
+"2021-03-04","21:07:38","ADS TINA Engineering","a5082b19-8a6e-4bc5-8fdd-8ef39dfebc39","0","0","8","0","13","0","0","0","18","0","0","0"
+"2021-03-04","21:09:49","Workload Insight dev/test subscription","741fd0f5-9cb8-442c-91c3-3ef4ca231c2a","0","0","12","0","25","32","0","0","0","0","0","4"
