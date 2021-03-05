@@ -277,7 +277,7 @@ if ($useDatabase){
                     [HADR_ENT_vCores] [int] NULL,
                     [Developer_vCores] [int] NULL,
                     [Express_vCores] [int] NULL,
-                    [Unregistered_SQLVM_vCores] [int] NULL,
+                    [Unregistered_vCores] [int] NULL,
                     [Unknown_vCores] [int] NULL)"
     [String] $insertSQL = "INSERT INTO [dbo].[$tableName](
                     [Date],
@@ -294,7 +294,7 @@ if ($useDatabase){
                     [HADR_ENT_vCores],
                     [Developer_vCores],
                     [Express_vCores],
-                    [Unregistered_SQLVM_vCores],
+                    [Unregistered_vCores],
                     [Unknown_vCores]) 
                     VALUES 
                     ('{0}','{1}','{2}','{3}','{4}','{5}','{6}','{7}','{8}','{9}','{10}','{11}','{12}','{13}','{14}','{15}' )"        
@@ -320,7 +320,7 @@ if ($useDatabase){
     }
 
     [System.Collections.ArrayList]$usageTable = @()
-    $usageTable += ,(@("Date", "Time", "Subscription Name", "Subscription ID", "AHB ECs", "PAYG ECs", "AHB Std vCores", "AHB Ent vCores", "PAYG Std vCores", "PAYG Ent vCores", "HADR Std vCores", "HADR Ent vCores", "Developer vCores", "Express vCores", "Unregistered SQLVM vCores", "Unknown vCores"))
+    $usageTable += ,(@("Date", "Time", "Subscription Name", "Subscription ID", "AHB ECs", "PAYG ECs", "AHB Std vCores", "AHB Ent vCores", "PAYG Std vCores", "PAYG Ent vCores", "HADR Std vCores", "HADR Ent vCores", "Developer vCores", "Express vCores", "Unregistered vCores", "Unknown vCores"))
 }
 
 $global:VM_SKUs = @{} # To hold the VM SKU table for future use
