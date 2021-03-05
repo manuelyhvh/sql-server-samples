@@ -24,7 +24,7 @@ This script provides a simple solution to analyze and track the consolidated uti
 |HADR Ent vCores|Total vCores used by HADR replicas running SQL Server Enterprise edition|
 |Developer vCores|Total vCores used by SQL Server Developer edition|
 |Express vCores|Total vCores used by SQL Server Express edition|
-|Unregistered SQLVM vCores|Total vCores used by SQL Server VM that are not registered with SQL IaaS Agent Extension |
+|Unregistered vCores|Total vCores used by SQL Server in Virtual Machines that are not registered with SQL IaaS Agent Extension |
 |Unknown vCores|Total vCores used by Azure SQL Server resources with an unknown edition or service tier|
 
 The following resources are in scope for the license utilization analysis:
