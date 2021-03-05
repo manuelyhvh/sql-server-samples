@@ -1,0 +1,16 @@
+Id,Name,State,SubscriptionId,TenantId,HomeTenantId,ManagedByTenantIds,CurrentStorageAccountName,SubscriptionPolicies,ExtendedProperties,CurrentStorageAccount
+10a238d6-a139-46d0-818d-d091394072b6,geodr_m2_365640,Enabled,10a238d6-a139-46d0-818d-d091394072b6,72f988bf-86f1-41af-91ab-2d7cd011db47,72f988bf-86f1-41af-91ab-2d7cd011db47,System.String[],,"{
+  ""LocationPlacementId"": ""Internal_2014-09-01"",
+  ""QuotaId"": ""Internal_2014-09-01"",
+  ""SpendingLimit"": ""Off""
+}","System.Collections.Generic.Dictionary`2[System.String,System.String]",
+a5082b19-8a6e-4bc5-8fdd-8ef39dfebc39,ADS TINA Engineering,Enabled,a5082b19-8a6e-4bc5-8fdd-8ef39dfebc39,72f988bf-86f1-41af-91ab-2d7cd011db47,72f988bf-86f1-41af-91ab-2d7cd011db47,System.String[],,"{
+  ""LocationPlacementId"": ""Internal_2014-09-01"",
+  ""QuotaId"": ""Internal_2014-09-01"",
+  ""SpendingLimit"": ""Off""
+}","System.Collections.Generic.Dictionary`2[System.String,System.String]",
+741fd0f5-9cb8-442c-91c3-3ef4ca231c2a,Workload Insight dev/test subscription,Enabled,741fd0f5-9cb8-442c-91c3-3ef4ca231c2a,72f988bf-86f1-41af-91ab-2d7cd011db47,72f988bf-86f1-41af-91ab-2d7cd011db47,System.String[],,"{
+  ""LocationPlacementId"": ""Internal_2014-09-01"",
+  ""QuotaId"": ""Internal_2014-09-01"",
+  ""SpendingLimit"": ""Off""
+}","System.Collections.Generic.Dictionary`2[System.String,System.String]",
