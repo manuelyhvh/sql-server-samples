@@ -1,39 +1,39 @@
-apiVersion: security.openshift.io/v1
-kind: SecurityContextConstraints
-metadata:
-  annotations:
-    kubernetes.io/description: SQL Server BDC custom scc is based on 'nonroot' scc plus additional capabilities.
-  generation: 2
-  name: bdc-scc
-allowHostDirVolumePlugin: false
-allowHostIPC: false
-allowHostNetwork: false
-allowHostPID: false
-allowHostPorts: false
-allowPrivilegeEscalation: true
-allowPrivilegedContainer: false
+allowHostDirVolumePlugin: false
+allowHostIPC: false
+allowHostNetwork: false
+allowHostPID: false
+allowHostPorts: false
+allowPrivilegeEscalation: true
+allowPrivilegedContainer: false
 allowedCapabilities:
-  - SETUID
-  - SETGID
-  - CHOWN
+  - SETUID
+  - SETGID
+  - CHOWN
   - SYS_PTRACE
-defaultAddCapabilities: null
+apiVersion: security.openshift.io/v1
+defaultAddCapabilities: null
 fsGroup:
-  type: RunAsAny
-readOnlyRootFilesystem: false
+  type: RunAsAny
+kind: SecurityContextConstraints
+metadata:
+  annotations:
+    kubernetes.io/description: SQL Server BDC custom scc is based on 'nonroot' scc plus additional capabilities required by BDC.
+  generation: 2
+  name: bdc-scc
+readOnlyRootFilesystem: false
 requiredDropCapabilities:
-  - KILL
-  - MKNOD
+  - KILL
+  - MKNOD
 runAsUser:
-  type: MustRunAsNonRoot
+  type: MustRunAsNonRoot
 seLinuxContext:
-  type: MustRunAs
+  type: MustRunAs
 supplementalGroups:
-  type: RunAsAny
+  type: RunAsAny
 volumes:
-  - configMap
-  - downwardAPI
-  - emptyDir
-  - persistentVolumeClaim
-  - projected
-  - secret
+  - configMap
+  - downwardAPI
+  - emptyDir
+  - persistentVolumeClaim
+  - projected
+  - secret
