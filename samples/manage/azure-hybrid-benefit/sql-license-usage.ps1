@@ -1,18 +1,5 @@
-﻿# ----------------------------------------------------------------------------------
-#
-# Copyright Microsoft Corporation
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-# http://www.apache.org/licenses/LICENSE-2.0
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
-# ---------------------------------------------------------------------------------
-#
-# This script provided a simple solution to analyze and track the consolidated utilization of SQL Server licenses 
+﻿#
+# This script provides a simple solution to analyze and track the consolidated utilization of SQL Server licenses 
 # by all of the SQL resources in a specific subscription or the entire the account. By default, the script scans 
 # all subscriptions the user account has access. Alternatively, you can specify a single subscription or a .CSV file 
 # with a list of subscription. The usage report includes the following information for each scanned subscription.
