@@ -31,12 +31,11 @@
 # The script accepts the following command line parameters:
 # 
 # -SubId [subscription_id] | [csv_file_name]        (Accepts a .csv file with the list of subscriptions)
-# -UseInRunbook [True] | [False]                    (Required when executed as a Runbook)
 # -Server [protocol:]server[instance_name][,port]   (Required to save data to the database)
 # -Database [database_name]                         (Required to save data to the database)
 # -Cred [credential_object]                         (Required to save data to the database)
 # -FilePath [csv_file_name]                         (Required to save data in a .csv format. Ignored if database parameters are specified)
-#
+# -UseInRunbook [True] | [False]                    (Required when executed as a Runbook)
 # 
 
 param (
@@ -84,7 +83,7 @@ function CheckModule ($m) {
 }
 
 function GetVCores {
-    # This function translates each VM or Host sku typo and name into vCores
+    # This function translates each VM or Host sku type and name into vCores
     
      [CmdletBinding()]
      param (
@@ -114,7 +113,7 @@ function GetVCores {
      }      
  }
 function AddVCores {
-    # This function populets the $subtotal nubmers
+    # This function breaks down vCores into the $subtotal columns
     
     [CmdletBinding()]
     param (
@@ -264,7 +263,7 @@ if ($SubId -like "*.csv") {
 
 [bool] $useDatabase = $PSBoundParameters.ContainsKey("Server") -and $PSBoundParameters.ContainsKey("Cred") -and $PSBoundParameters.ContainsKey("Database")
 
-#Initialize tables and arrays
+# Initialize tables and arrays
 
 if ($useDatabase){
     
@@ -363,42 +362,42 @@ foreach ($sub in $subscriptions){
     # Get all resource groups in the subscription
     $rgs = Get-AzResourceGroup
     
-    #Get all logical servers
+    # Get all logical servers
     $servers = Get-AzSqlServer 
 
-    #Scan all vCore-based SQL database resources in the subscription
+    # Scan all vCore-based SQL database resources in the subscription
     $servers | Get-AzSqlDatabase |  Where-Object { $_.SkuName -ne "ElasticPool" -and $_.Edition -in "GeneralPurpose", "BusinessCritical", "Hyperscale"} | Foreach-Object {
         AddVCores -Tier $_.Edition -LicenseType $_.LicenseType -CoreCount $_.Capacity
     }
     [system.gc]::Collect()
 
-    #Scan all vcOre-based SQL elastic pool resources in the subscription
+    # Scan all vcOre-based SQL elastic pool resources in the subscription
     $servers | Get-AzSqlElasticPool | Where-Object { $_.Edition -in "GeneralPurpose", "BusinessCritical", "Hyperscale"} | Foreach-Object {
         AddVCores -Tier $_.Edition -LicenseType $_.LicenseType -CoreCount $_.Capacity
     }
     [system.gc]::Collect()
 
-    #Scan all SQL managed instance resources in the subscription
+    # Scan all SQL managed instance resources in the subscription
     Get-AzSqlInstance | Where-Object { $_.InstancePoolName -eq $null} | Foreach-Object {
         AddVCores -Tier $_.Sku.Tier -LicenseType $_.LicenseType -CoreCount $_.VCores
     }
     [system.gc]::Collect()
      
-    #Scan all instance pool resources in the subscription
+    # Scan all instance pool resources in the subscription
     Get-AzSqlInstancePool | Foreach-Object {
         AddVCores -Tier $_.Edition -LicenseType $_.LicenseType -CoreCount $_.VCores
     }
     [system.gc]::Collect()
 
-    #Scan all SSIS imtegration runtime resources in the subscription
+    # Scan all SSIS imtegration runtime resources in the subscription
     $rgs | Get-AzDataFactoryV2 | Get-AzDataFactoryV2IntegrationRuntime |  Where-Object { $_.State -eq "Started" -and $_.Nodesize -ne $null } | Foreach-Object {
         $vCores = GetVCores -type "virtualMachines" -name $_.NodeSize
         AddVCores -Tier $_.Edition -LicenseType $_.LicenseType -CoreCount $vCores      
     }
     [system.gc]::Collect()
 
-    #Scan all VMs with SQL server installed using a parallel loop (up to 10 at a time). For that reason function AddVCores is not used 
-    #NOTE: ForEach-Object -Parallel is not supported in Runbooks (requires PS v7.1)
+    # Scan all VMs with SQL server installed using a parallel loop (up to 10 at a time). For that reason function AddVCores is not used 
+    # NOTE: ForEach-Object -Parallel is not supported in Runbooks (requires PS v7.1)
     if ($PSVersionTable.PSVersion.Major -ge 7){
         $vms = Get-AzVM -Status | Where-Object { $_.powerstate -eq 'VM running' } | ForEach-Object -ThrottleLimit 10 -Parallel {
             $function:GetVCores = $using:GetVCoresDef          

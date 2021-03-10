@@ -3,7 +3,7 @@ services: Azure SQL
 platforms: Azure
 author: anosov1960
 ms.author: sashan
-ms.date: 3/5/2021
+ms.date: 3/9/2021
 ---
 
 # Overview
@@ -42,7 +42,7 @@ The following resources are in scope for the license utilization analysis:
 > - For PaaS workloads, each vCore of Business Critical service tier is counted as one Enterprise vCore and each vCore of General Purpose service tier is counted as one Standard vCore.
 > - In the DTU-based purchasing model, the SQL license cost is built into the individual SKU prices. These resources are not eligible for Azure Hybrid Benefit or HADR benefit, and therefore are not in scope of the tool.
 > - You must be at least a *Reader* of each subscription you scan. 
-> - Unregistered vCores are only reported for Virtual Machines running Windows. You must be a subscription *Contributor* or *Owner*, otherwise this column will show a zero value.
+> - To report unregistered vCores, you must be a subscription *Contributor* or *Owner*, otherwise this column will show a zero value.
 > - The values AHB ECs and PAYG ECs are reserved for the future use and should be ignored
 
 # Launching the script 
