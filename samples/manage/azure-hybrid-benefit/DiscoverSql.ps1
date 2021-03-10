@@ -1,8 +1,7 @@
 
-#
+    
 # This script checks if SQL Server is installed on Windows
-# 
-#    
+    
     [bool] $SqlInstalled = $false 
     $regPath = 'HKLM:\SOFTWARE\Microsoft\Microsoft SQL Server'
     if (Test-Path $regPath) {
