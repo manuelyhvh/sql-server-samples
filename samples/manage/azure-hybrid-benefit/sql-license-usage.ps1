@@ -23,11 +23,12 @@
 # -Cred [credential_object]                         (Required to save data to the database)
 # -FilePath [csv_file_name]                         (Required to save data in a .csv format. Ignored if database parameters are specified)
 # -UseInRunbook [True] | [False]                    (Required when executed as a Runbook)
+# -ShowUnregistered [True] | [False]                (Optional. If specified, checks every VM if SQL server is installed)
 # 
 
 param (
     [Parameter (Mandatory= $false)] 
-    [string] $SubId, 
+    [string] $SubId = '4f6d3845-d3e3-4c31-bdf0-c73464aaff0e', 
     [Parameter (Mandatory= $false)]
     [string] $Server, 
     [Parameter (Mandatory= $false)]
@@ -39,7 +40,10 @@ param (
     [Parameter (Mandatory= $false)]
     [bool] $UseInRunbook = $false, 
     [Parameter (Mandatory= $false)]
-    [bool] $ShowEC = $false
+    [bool] $ShowEC = $false,
+    [Parameter (Mandatory= $false)]
+    [bool] $ShowUnregistered = $false
+
 )
 
 function CheckModule ($m) {
@@ -418,32 +422,34 @@ foreach ($sub in $subscriptions){
                 }     
             }
             else {
-                if ($_.StorageProfile.OSDisk.OSType -eq "Windows"){            
-                    $params =@{
-                        ResourceGroupName = $_.ResourceGroupName
-                        Name = $_.Name
-                        CommandId = 'RunPowerShellScript'
-                        ScriptPath = 'DiscoverSql.ps1'
-                        ErrorAction = 'Stop'
-                    } 
-                }
-                else {
-                    $params =@{
-                        ResourceGroupName = $_.ResourceGroupName
-                        Name = $_.Name
-                        CommandId = 'RunShellScript'
-                        ScriptPath = 'DiscoverSql.sh'
-                        ErrorAction = 'Stop'
-                    }                       
-                }
-                try {                    
-                    $out = Invoke-AzVMRunCommand @params            
-                    if ($out.Value[0].Message.Contains('True')){                
-                        $($using:subtotal).unreg_sqlvm += $vCores            
-                    }                
-                }
-                catch {          
-                    write-host $params.Name "No acceaa"
+                if ($($using:ShowUnregistered)){
+                    if ($_.StorageProfile.OSDisk.OSType -eq "Windows"){            
+                        $params =@{
+                            ResourceGroupName = $_.ResourceGroupName
+                            Name = $_.Name
+                            CommandId = 'RunPowerShellScript'
+                            ScriptPath = 'DiscoverSql.ps1'
+                            ErrorAction = 'Stop'
+                        } 
+                    }
+                    else {
+                        $params =@{
+                            ResourceGroupName = $_.ResourceGroupName
+                            Name = $_.Name
+                            CommandId = 'RunShellScript'
+                            ScriptPath = 'DiscoverSql.sh'
+                            ErrorAction = 'Stop'
+                        }                       
+                    }
+                    try {                    
+                        $out = Invoke-AzVMRunCommand @params            
+                        if ($out.Value[0].Message.Contains('True')){                
+                            $($using:subtotal).unreg_sqlvm += $vCores            
+                        }                
+                    }
+                    catch {          
+                        write-host $params.Name "No acceaa"
+                    }
                 }
             }
         }        
@@ -456,31 +462,33 @@ foreach ($sub in $subscriptions){
                 AddVCores -Tier $sql_vm.Sku -LicenseType $sql_vm.LicenseType -CoreCount $vCores                
             }
             else {
-                if ($_.StorageProfile.OSDisk.OSType -eq "Windows"){            
-                    $params =@{
-                        ResourceGroupName = $_.ResourceGroupName
-                        Name = $_.Name
-                        CommandId = 'RunPowerShellScript'
-                        ScriptPath = 'DiscoverSql.ps1'
-                        ErrorAction = 'Stop'
-                    } 
-                }
-                else {
-                    $params =@{
-                        ResourceGroupName = $_.ResourceGroupName
-                        Name = $_.Name
-                        CommandId = 'RunShellScript'
-                        ScriptPath = 'DiscoverSql.sh'
-                        ErrorAction = 'Stop'
-                    }                       
-                }try {
-                    $out = Invoke-AzVMRunCommand @params            
-                    if ($out.Value[0].Message.Contains('True')){                
-                        $subtotal.unreg_sqlvm += $vCores            
+                if ($ShowUnregistered){
+                    if ($_.StorageProfile.OSDisk.OSType -eq "Windows"){            
+                        $params =@{
+                            ResourceGroupName = $_.ResourceGroupName
+                            Name = $_.Name
+                            CommandId = 'RunPowerShellScript'
+                            ScriptPath = 'DiscoverSql.ps1'
+                            ErrorAction = 'Stop'
+                        } 
                     }
-                }
-                catch {          
-                    write-host $params.Name "No acceaa"
+                    else {
+                        $params =@{
+                            ResourceGroupName = $_.ResourceGroupName
+                            Name = $_.Name
+                            CommandId = 'RunShellScript'
+                            ScriptPath = 'DiscoverSql.sh'
+                            ErrorAction = 'Stop'
+                        }                       
+                    }try {
+                        $out = Invoke-AzVMRunCommand @params            
+                        if ($out.Value[0].Message.Contains('True')){                
+                            $subtotal.unreg_sqlvm += $vCores            
+                        }
+                    }
+                    catch {          
+                        write-host $params.Name "No acceaa"
+                    }
                 }
             }
         }        
