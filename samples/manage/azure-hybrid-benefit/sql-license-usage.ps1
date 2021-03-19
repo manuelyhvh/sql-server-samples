@@ -1,18 +1,5 @@
-﻿# ----------------------------------------------------------------------------------
-#
-# Copyright Microsoft Corporation
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-# http://www.apache.org/licenses/LICENSE-2.0
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
-# ---------------------------------------------------------------------------------
-#
-# This script provided a simple solution to analyze and track the consolidated utilization of SQL Server licenses 
+﻿#
+# This script provides a simple solution to analyze and track the consolidated utilization of SQL Server licenses 
 # by all of the SQL resources in a specific subscription or the entire the account. By default, the script scans 
 # all subscriptions the user account has access. Alternatively, you can specify a single subscription or a .CSV file 
 # with a list of subscription. The usage report includes the following information for each scanned subscription.
@@ -31,17 +18,17 @@
 # The script accepts the following command line parameters:
 # 
 # -SubId [subscription_id] | [csv_file_name]        (Accepts a .csv file with the list of subscriptions)
-# -UseInRunbook [True] | [False]                    (Required when executed as a Runbook)
 # -Server [protocol:]server[instance_name][,port]   (Required to save data to the database)
 # -Database [database_name]                         (Required to save data to the database)
 # -Cred [credential_object]                         (Required to save data to the database)
 # -FilePath [csv_file_name]                         (Required to save data in a .csv format. Ignored if database parameters are specified)
-#
+# -UseInRunbook [True] | [False]                    (Required when executed as a Runbook)
+# -ShowUnregistered [True] | [False]                (Optional. If specified, checks every VM if SQL server is installed)
 # 
 
 param (
     [Parameter (Mandatory= $false)] 
-    [string] $SubId, 
+    [string] $SubId = '4f6d3845-d3e3-4c31-bdf0-c73464aaff0e', 
     [Parameter (Mandatory= $false)]
     [string] $Server, 
     [Parameter (Mandatory= $false)]
@@ -53,10 +40,13 @@ param (
     [Parameter (Mandatory= $false)]
     [bool] $UseInRunbook = $false, 
     [Parameter (Mandatory= $false)]
-    [bool] $IncludeEC = $false
+    [bool] $ShowEC = $false,
+    [Parameter (Mandatory= $false)]
+    [bool] $ShowUnregistered = $false
+
 )
 
-function Load-Module ($m) {
+function CheckModule ($m) {
 
     # This function ensures that the specified module is imported into the session
     # If module is already imported - do nothing
@@ -82,6 +72,129 @@ function Load-Module ($m) {
         }
     }
 }
+
+function GetVCores {
+    # This function translates each VM or Host sku type and name into vCores
+    
+     [CmdletBinding()]
+     param (
+         [Parameter(Mandatory)]
+         [string]$type,
+         [Parameter(Mandatory)]
+         [string]$name
+     )
+     
+     if ($global:VM_SKUs.Count -eq 0){
+         $global:VM_SKUs = Get-AzComputeResourceSku  "westus" | where-object {$_.ResourceType -in 'virtualMachines','hostGroups/hosts'}
+     }
+     # Select first size and get the VCPus available
+     $size_info = $global:VM_SKUs | Where-Object {$_.ResourceType.Contains($type) -and $_.Name.Contains($name)} | Select-Object -First 1
+                         
+     # Save the VCPU count
+     switch ($type) {
+         "hosts" {$vcpu = $size_info.Capabilities | Where-Object {$_.name -eq "Cores"} }
+         "virtualMachines" {$vcpu = $size_info.Capabilities | Where-Object {$_.name -eq "vCPUsAvailable"} }
+     }
+     
+     if ($vcpu){
+         return $vcpu.Value
+     }
+     else {
+         return 0
+     }      
+ }
+function AddVCores {
+    # This function breaks down vCores into the $subtotal columns
+    
+    [CmdletBinding()]
+    param (
+        [Parameter(Mandatory=$false)]
+        [string]$Tier,
+        [Parameter(Mandatory=$false)]
+        [string]$LicenseType,
+        [Parameter(Mandatory)]
+        $CoreCount
+    )
+    #write-host $Tier "," $LicenseType "," $CoreCount
+    switch ($Tier) {
+        "BusinessCritical" {
+            switch ($LicenseType) {
+                "BasePrice" {$script:subtotal.ahb_ent += $CoreCount}
+                "LicenseIncluded" {$script:subtotal.payg_ent += $CoreCount} 
+                default {$script:subtotal.payg_ent += $CoreCount} 
+            }
+        }
+        "GeneralPurpose" {
+            switch ($LicenseType) {
+                "BasePrice" {$script:subtotal.ahb_std += $CoreCount}
+                "LicenseIncluded" {$script:subtotal.payg_std += $CoreCount} 
+                default {$script:subtotal.payg_std += $CoreCount}
+            }
+        }
+        "Hyperscale" {
+            switch ($LicenseType) {
+                "BasePrice" {$script:subtotal.ahb_std += $CoreCount}
+                "LicenseIncluded" {$script:subtotal.payg_std += $CoreCount} 
+                default {$script:subtotal.payg_std += $CoreCount} 
+            }
+        }
+        "Enterprise" {
+            switch ($LicenseType) {
+                "BasePrice" {$script:subtotal.ahb_ent += $CoreCount}
+                "LicenseIncluded" {$script:subtotal.payg_ent += $CoreCount} 
+                "AHUB" {$script:subtotal.ahb_ent += $CoreCount}
+                "DR" {$script:subtotal.hadr_ent += $CoreCount}
+                "PAYG" {$script:subtotal.payg_ent += $CoreCount} 
+                default {$script:subtotal.payg_ent += $CoreCount} 
+            }
+        }
+        "Standard" {
+            switch ($LicenseType) {
+                "BasePrice" {$script:subtotal.ahb_std += $CoreCount}
+                "LicenseIncluded" {$script:subtotal.payg_std += $CoreCount} 
+                "AHUB" {$script:subtotal.ahb_std += $CoreCount}
+                "DR" {$script:subtotal.hadr_std += $CoreCount}
+                "PAYG" {$script:subtotal.payg_std += $CoreCount} 
+                default {$script:subtotal.payg_std += $CoreCount}
+            }
+        }
+        "Developer" {            
+            $script:subtotal.developer += $CoreCount
+        }
+        "Express" {
+            $script:subtotal.express += $CoreCount
+        }
+        default {
+            $script:subtotal.unknown_tier += $CoreCount
+        }
+    }   
+}
+
+function DiscoveryOnWindows {
+    
+# This script checks if SQL Server is installed on Windows
+    
+    [bool] $SqlInstalled = $false 
+    $regPath = 'HKLM:\SOFTWARE\Microsoft\Microsoft SQL Server'
+    if (Test-Path $regPath) {
+        $inst = (get-itemproperty $regPath).InstalledInstances
+        $SqlInstalled = ($inst.Count -gt 0)
+    }
+    Write-Output $SqlInstalled
+}
+
+#
+# This script checks if SQL Server is installed on Linux
+# 
+#    
+$DiscoveryOnLinux =
+    'if ! systemctl is-active --quiet mssql-server.service; then 
+    echo "False" 
+    exit 
+    else 
+        echo "True" 
+    fi'
+
 
 #The following block is required for runbooks only
 if ($UseInRunbook){
@@ -117,13 +230,19 @@ if ($UseInRunbook){
         "Az.Sql",
         "Az.SqlVirtualMachine"
     )
-
-    foreach ($module in $requiredModules){
-        Load-Module ($module)
-    }
+    $requiredModules | Foreach-Object {CheckModule $_}
 }
 
+# Save the function definitions to run in parallel loops
+$GetVCoresDef = $function:GetVCores.ToString()
+$AddVCoresDef = $function:AddVCores.ToString()
+
+# Create a script file with the SQL server discovery logic
+New-Item  -ItemType file -path DiscoverSql.ps1 -value $function:DiscoveryOnWindows.ToString() -Force | Out-Null
+New-Item  -ItemType file -path DiscoverSql.sh -value $DiscoveryOnLinux -Force | Out-Null
+
 # Subscriptions to scan
+
 
 if ($SubId -like "*.csv") {
     $subscriptions = Import-Csv $SubId
@@ -133,11 +252,9 @@ if ($SubId -like "*.csv") {
     $subscriptions = Get-AzSubscription
 }
 
-write-host $subscriptions
-
 [bool] $useDatabase = $PSBoundParameters.ContainsKey("Server") -and $PSBoundParameters.ContainsKey("Cred") -and $PSBoundParameters.ContainsKey("Database")
 
-#Initialize tables and arrays
+# Initialize tables and arrays
 
 if ($useDatabase){
     
@@ -163,7 +280,9 @@ if ($useDatabase){
                     [HADR_STD_vCores] [int] NULL,
                     [HADR_ENT_vCores] [int] NULL,
                     [Developer_vCores] [int] NULL,
-                    [Express_vCores] [int] NULL)"
+                    [Express_vCores] [int] NULL,
+                    [Unregistered_vCores] [int] NULL,
+                    [Unknown_vCores] [int] NULL)"
     [String] $insertSQL = "INSERT INTO [dbo].[$tableName](
                     [Date],
                     [Time],
@@ -178,9 +297,11 @@ if ($useDatabase){
                     [HADR_STD_vCores],
                     [HADR_ENT_vCores],
                     [Developer_vCores],
-                    [Express_vCores]) 
+                    [Express_vCores],
+                    [Unregistered_vCores],
+                    [Unknown_vCores]) 
                     VALUES 
-                    ('{0}','{1}','{2}','{3}','{4}','{5}','{6}','{7}','{8}','{9}','{10}','{11}','{12}','{13}')"        
+                    ('{0}','{1}','{2}','{3}','{4}','{5}','{6}','{7}','{8}','{9}','{10}','{11}','{12}','{13}','{14}','{15}' )"        
     $propertiesToSplat = @{
         Database = $Database
         ServerInstance = $Server
@@ -203,16 +324,13 @@ if ($useDatabase){
     }
 
     [System.Collections.ArrayList]$usageTable = @()
-    $usageTable += ,(@("Date", "Time", "Subscription Name", "Subscription ID", "AHB ECs", "PAYG ECs", "AHB Std vCores", "AHB Ent vCores", "PAYG Std vCores", "PAYG Ent vCores", "HADR Std vCores", "HADR Ent vCores", "Developer vCores", "Express vCores"))
+    $usageTable += ,(@("Date", "Time", "Subscription Name", "Subscription ID", "AHB ECs", "PAYG ECs", "AHB Std vCores", "AHB Ent vCores", "PAYG Std vCores", "PAYG Ent vCores", "HADR Std vCores", "HADR Ent vCores", "Developer vCores", "Express vCores", "Unregistered vCores", "Unknown vCores"))
 }
 
-$subtotal = [pscustomobject]@{ahb_std=0; ahb_ent=0; payg_std=0; payg_ent=0; hadr_std=0; hadr_ent=0; developer=0; express=0}
-$total = [pscustomobject]@{}
-$subtotal.psobject.properties.name | %{$total | Add-Member -MemberType NoteProperty -Name $_ -Value 0}
-
-#Save the VM SKU table for future use
-
-$VM_SKUs = Get-AzComputeResourceSku
+$global:VM_SKUs = @{} # To hold the VM SKU table for future use
+$subtotal = [pscustomobject]@{ahb_std=0; ahb_ent=0; payg_std=0; payg_ent=0; hadr_std=0; hadr_ent=0; developer=0; express=0; unreg_sqlvm=0; unknown_tier=0}
+#$total = [pscustomobject]@{}
+#$subtotal.psobject.properties.name | Foreach-Object {$total | Add-Member -MemberType NoteProperty -Name $_ -Value 0}
 
 Write-Host ([Environment]::NewLine + "-- Scanning subscriptions --")
 
@@ -223,180 +341,163 @@ foreach ($sub in $subscriptions){
     if ($sub.State -ne "Enabled") {continue}
 
     try {
-        Set-AzContext -SubscriptionId $sub.Id
+        Set-AzContext -SubscriptionId $sub.Id  
     }catch {
         write-host "Invalid subscription: " $sub.Id
         {continue}
     }
 
     # Reset the subtotals     
-    $subtotal.psobject.properties.name | %{$subtotal.$_ = 0}
+    $subtotal.psobject.properties.name | Foreach-object {$subtotal.$_ = 0}
         
-    #Get all logical servers
+    # Get all resource groups in the subscription
+    $rgs = Get-AzResourceGroup
+    
+    # Get all logical servers
     $servers = Get-AzSqlServer 
 
-    #Get all SQL database resources in the subscription
-    $databases = $servers | Get-AzSqlDatabase
-
-    # Process the vCore-based databases 
-    foreach ($db in $databases ){
-        if ($db.SkuName -eq "ElasticPool") {continue}
-
-        if ($db.LicenseType -eq "LicenseIncluded") {
-            if ($db.Edition -eq "BusinessCritical") {
-                $subtotal.ahb_ent += $db.Capacity
-            } elseif ($db.Edition -eq "GeneralPurpose") {
-                $subtotal.ahb_std += $db.Capacity
-            }
-        }else{
-            if ($db.Edition -eq "BusinessCritical") {
-                $subtotal.payg_ent += $db.Capacity
-            } elseif ($db.Edition -eq "GeneralPurpose") {
-                $subtotal.payg_std += $db.Capacity
-            }
-        } 
+    # Scan all vCore-based SQL database resources in the subscription
+    $servers | Get-AzSqlDatabase |  Where-Object { $_.SkuName -ne "ElasticPool" -and $_.Edition -in "GeneralPurpose", "BusinessCritical", "Hyperscale"} | Foreach-Object {
+        AddVCores -Tier $_.Edition -LicenseType $_.LicenseType -CoreCount $_.Capacity
     }
+    [system.gc]::Collect()
 
-    #Get all SQL elastic pool resources in the subscription
-    $pools = $servers | Get-AzSqlElasticPool
-
-    # Process the vCore-based elastic pools 
-    foreach ($pool in $pools){
-        if ($pool.LicenseType -eq "LicenseIncluded") {
-            if ($pool.Edition -eq "BusinessCritical") {
-                $subtotal.ahb_ent += $pool.Capacity
-            } elseif ($pool.Edition -eq "GeneralPurpose") {
-                $subtotal.ahb_std += $pool.Capacity
-            }
-        }else{
-            if ($pool.Edition -eq "BusinessCritical") {
-                $subtotal.payg_ent += $pool.Capacity
-            } elseif ($pool.Edition -eq "GeneralPurpose") {
-                $subtotal.payg_std += $pool.Capacity
-            }
-        }
+    # Scan all vcOre-based SQL elastic pool resources in the subscription
+    $servers | Get-AzSqlElasticPool | Where-Object { $_.Edition -in "GeneralPurpose", "BusinessCritical", "Hyperscale"} | Foreach-Object {
+        AddVCores -Tier $_.Edition -LicenseType $_.LicenseType -CoreCount $_.Capacity
     }
+    [system.gc]::Collect()
 
-    #Get all SQL managed instance resources in the subscription
-    $instances = Get-AzSqlInstance
-
-    # Process the SQL managed instances with License Included and add to VCore count
-    foreach ($ins in $instances){
-        if ($ins.InstancePoolName -eq $null){
-            if ($ins.LicenseType -eq "LicenseIncluded") {
-                if ($ins.Sku.Tier -eq "BusinessCritical") {
-                    $subtotal.ahb_ent += $ins.VCores
-                } elseif ($ins.Sku.Tier -eq "GeneralPurpose") {
-                    $subtotal.ahb_std += $ins.VCores
-                }
-            }else{
-                if ($ins.Edition -eq "BusinessCritical") {
-                    $subtotal.payg_ent += $pool.Capacity
-                } elseif ($ins.Edition -eq "GeneralPurpose") {
-                    $subtotal.payg_std += $ins.Capacity
-                }        
-            }
-        }
+    # Scan all SQL managed instance resources in the subscription
+    Get-AzSqlInstance | Where-Object { $_.InstancePoolName -eq $null} | Foreach-Object {
+        AddVCores -Tier $_.Sku.Tier -LicenseType $_.LicenseType -CoreCount $_.VCores
     }
-
-    #Get all instance pool resources in the subscription
-    $ipools = Get-AzSqlInstancePool
-
-    # Process the instance pools 
-    foreach ($ip in $ipools){
-        if ($ip.LicenseType -eq "LicenseIncluded") {
-            if ($ip.Edition -eq "BusinessCritical") {
-                $subtotal.ahb_ent += $ip.VCores
-            } elseif ($ip.Edition -eq "GeneralPurpose") {
-                $subtotal.ahb_std += $ip.VCores
-            }
-        }else{
-            if ($ip.Edition -eq "BusinessCritical") {
-                $subtotal.payg_ent += $ip.Capacity
-            } elseif ($ip.Edition -eq "GeneralPurpose") {
-                $subtotal.payg_std += $ip.Capacity
-            }        
-        }
-    }
-
+    [system.gc]::Collect()
      
-    #Get all SSIS imtegration runtime resources in the subscription
-    $ssis_irs = Get-AzResourceGroup | Get-AzDataFactoryV2 | Get-AzDataFactoryV2IntegrationRuntime
+    # Scan all instance pool resources in the subscription
+    Get-AzSqlInstancePool | Foreach-Object {
+        AddVCores -Tier $_.Edition -LicenseType $_.LicenseType -CoreCount $_.VCores
+    }
+    [system.gc]::Collect()
 
-    # Get the VM size, match it with the corresponding VCPU count and add to VCore count
-    foreach ($ssis_ir in $ssis_irs){
-        # Select first size and get the VCPus available
-        $size_info = $VM_SKUs | where { $_.Name -like $ssis_ir.NodeSize} | Select-Object -First 1
-        
-        # Save the VCPU count
-        $vcpu= $size_info.Capabilities | Where-Object {$_.name -eq "vCPUsAvailable"}
+    # Scan all SSIS imtegration runtime resources in the subscription
+    $rgs | Get-AzDataFactoryV2 | Get-AzDataFactoryV2IntegrationRuntime |  Where-Object { $_.State -eq "Started" -and $_.Nodesize -ne $null } | Foreach-Object {
+        $vCores = GetVCores -type "virtualMachines" -name $_.NodeSize
+        AddVCores -Tier $_.Edition -LicenseType $_.LicenseType -CoreCount $vCores      
+    }
+    [system.gc]::Collect()
 
-        if ($ssis_ir.State -eq "Started"){      
-            if ($ssis_ir.LicenseType -like "LicenseIncluded"){
-                if ($ssis_ir.Edition -like "Enterprise"){
-                    $subtotal.ahb_ent += $vcpu.value
-                }elseif ($ssis_ir.Edition -like "Standard"){
-                    $subtotal.ahb_std += $vcpu.value
-                }
-            }elseif ($data.license -like "BasePrice"){ 
-                if ($ssis_ir.Edition -like "Enterprise"){
-                    $subtotal.payg_ent += $vcpu.value
-                }elseif ($ssis_ir.Edition -like "Standard"){
-                    $subtotal.payg_std += $vcpu.value
-                }elseif ($ssis_ir.Edition -like "Developer"){
-                    $subtotal.developer += $vcpu.value             
-                }elseif ($ssis_ir.Edition -like "Express"){
-                    $subtotal.express += $vcpu.value
+    # Scan all VMs with SQL server installed using a parallel loop (up to 10 at a time). For that reason function AddVCores is not used 
+    # NOTE: ForEach-Object -Parallel is not supported in Runbooks (requires PS v7.1)
+    if ($PSVersionTable.PSVersion.Major -ge 7){
+        $vms = Get-AzVM -Status | Where-Object { $_.powerstate -eq 'VM running' } | ForEach-Object -ThrottleLimit 10 -Parallel {
+            $function:GetVCores = $using:GetVCoresDef          
+            $vCores = GetVCores -type 'virtualMachines' -name $_.HardwareProfile.VmSize
+            $sql_vm = Get-AzSqlVm -ResourceGroupName $_.ResourceGroupName -Name $_.Name -ErrorAction Ignore
+            
+            if ($sql_vm) {
+                switch ($sql_vm.Sku) {
+                    "Enterprise" {
+                        switch ($sql_vm.LicenseType) {
+                            "AHUB" {$($using:subtotal).ahb_ent += $vCores}
+                            "DR" {$($using:subtotal).hadr_ent += $vCores}
+                            "PAYG" {$($using:subtotal).payg_ent += $vCores} 
+                            default {$($using:subtotal).payg_ent += $vCores} 
+                        }
+                    }
+                    "Standard" {
+                        switch ($sql_vm.LicenseType) {
+                            "AHUB" {$($using:subtotal).ahb_std += $vCores}
+                            "DR" {$($using:subtotal).hadr_std += $vCores}
+                            "PAYG" {$($using:subtotal).payg_std += $vCores} 
+                            default {$($using:subtotal).payg_std += $vCores}
+                        }
+                    }
+                    "Developer" {                        
+                        $($using:subtotal).developer += $vCores
+                    }
+                    "Express" {
+                        $($using:subtotal).express += $vCores
+                    }        
+                }     
+            }
+            else {
+                if ($($using:ShowUnregistered)){
+                    if ($_.StorageProfile.OSDisk.OSType -eq "Windows"){            
+                        $params =@{
+                            ResourceGroupName = $_.ResourceGroupName
+                            Name = $_.Name
+                            CommandId = 'RunPowerShellScript'
+                            ScriptPath = 'DiscoverSql.ps1'
+                            ErrorAction = 'Stop'
+                        } 
+                    }
+                    else {
+                        $params =@{
+                            ResourceGroupName = $_.ResourceGroupName
+                            Name = $_.Name
+                            CommandId = 'RunShellScript'
+                            ScriptPath = 'DiscoverSql.sh'
+                            ErrorAction = 'Stop'
+                        }                       
+                    }
+                    try {                    
+                        $out = Invoke-AzVMRunCommand @params            
+                        if ($out.Value[0].Message.Contains('True')){                
+                            $($using:subtotal).unreg_sqlvm += $vCores            
+                        }                
+                    }
+                    catch {          
+                        write-host $params.Name "No acceaa"
+                    }
                 }
             }
-        }
+        }        
     }
-    
-    
-    #Get All SQL VMs resources in the subscription
-    $sql_vms = Get-AzSqlVM 
-
-    # Get the VM size, match it with the corresponding VCPU count and add to VCore count
-    foreach ($sql_vm in $sql_vms){
-        $vm = Get-AzVm -Name $sql_vm.Name -ResourceGroupName $sql_vm.ResourceGroupName
-        $vm_size = $vm.HardwareProfile.VmSize
-        # Select first size and get the VCPus available
-        $size_info = $VM_SKUs | where {$_.ResourceType.Contains('virtualMachines') -and $_.Name -like $vm_size} | Select-Object -First 1
-        # Save the VCPU count
-        $vcpu= $size_info.Capabilities | Where-Object {$_.name -eq "vCPUsAvailable"}
-
-        if ($vcpu){
-            $data = [pscustomobject]@{vm_resource_uri=$vm.Id;sku=$sql_vm.Sku;license=$sql_vm.LicenseType;size=$vm_size;vcpus=$vcpu.value}
-        
-            if ($data.license -like "DR"){          
-                if ($data.sku -like "Enterprise"){
-                    $subtotal.hadr_ent += $data.vcpus
-                }elseif ($data.sku -like "Standard"){
-                    $subtotal.hadr_std += $data.vcpus
-                }
-            }elseif ($data.license -like "AHUB"){
-                if ($data.sku -like "Enterprise"){
-                    $subtotal.ahb_ent += $data.vcpus
-                }elseif ($data.sku -like "Standard"){
-                    $subtotal.ahb_std += $data.vcpus
-                }
-            }elseif ($data.license -like "PAYG"){ 
-                if ($data.sku -like "Enterprise"){
-                    $subtotal.payg_ent += $data.vcpus
-                }elseif ($data.sku -like "Standard"){
-                    $subtotal.payg_std += $data.vcpus
-                }elseif ($data.sku -like "Developer"){
-                    $subtotal.developer += $data.vcpus             
-                }elseif ($data.sku -like "Express"){
-                    $subtotal.express += $data.vcpus
+    else {
+        Get-AzVM -Status | Where-Object { $_.powerstate -eq 'VM running' } | ForEach-Object {
+            $vCores = GetVCores -type 'virtualMachines' -name $_.HardwareProfile.VmSize
+            $sql_vm = Get-AzSqlVm -ResourceGroupName $_.ResourceGroupName -Name $_.Name -ErrorAction Ignore
+            if ($sql_vm) {
+                AddVCores -Tier $sql_vm.Sku -LicenseType $sql_vm.LicenseType -CoreCount $vCores                
+            }
+            else {
+                if ($ShowUnregistered){
+                    if ($_.StorageProfile.OSDisk.OSType -eq "Windows"){            
+                        $params =@{
+                            ResourceGroupName = $_.ResourceGroupName
+                            Name = $_.Name
+                            CommandId = 'RunPowerShellScript'
+                            ScriptPath = 'DiscoverSql.ps1'
+                            ErrorAction = 'Stop'
+                        } 
+                    }
+                    else {
+                        $params =@{
+                            ResourceGroupName = $_.ResourceGroupName
+                            Name = $_.Name
+                            CommandId = 'RunShellScript'
+                            ScriptPath = 'DiscoverSql.sh'
+                            ErrorAction = 'Stop'
+                        }                       
+                    }try {
+                        $out = Invoke-AzVMRunCommand @params            
+                        if ($out.Value[0].Message.Contains('True')){                
+                            $subtotal.unreg_sqlvm += $vCores            
+                        }
+                    }
+                    catch {          
+                        write-host $params.Name "No acceaa"
+                    }
                 }
             }
-        }
-    }
-    
-    # Get All VMs hosts in the subscription
+        }        
+    }    
+    [system.gc]::Collect()
+
+    # Scan the VMs hosts in the subscription
     $host_groups = Get-AzHostGroup 
-    
+
     # Get the dedicated host size, match it with the corresponding VCPU count and add to VCore count
     
     foreach ($host_group in $host_groups){
@@ -407,7 +508,7 @@ foreach ($sub in $subscriptions){
 
             $token = (Get-AzAccessToken).Token
             $params = @{
-                Uri         = "https://management.azure.com/subscriptions/" + $sub + 
+                Uri         = "https://management.azure.com/subscriptions/" + $sub.Id + 
                             "/resourceGroups/" + $vm_host.ResourceGroupName.ToLower() + 
                             "/providers/Microsoft.Compute/hostGroups/" + $host_group.Name + 
                             "/hosts/" + $vm_host.Name + 
@@ -417,22 +518,31 @@ foreach ($sub in $subscriptions){
                 ContentType = 'application/json'
             }
             
-            $softwarePlan = Invoke-RestMethod @params
-            if ($softwarePlan.Sku.Name -like "SQL*"){
-                $size_info = $VM_SKUs | Where-Object {$_.ResourceType.Contains('hostGroups/hosts') -and $_.Name.Contains($vm_host.Sku.Name)} | Select-Object -First 1   
-                $cores= $size_info.Capabilities | Where-Object {$_.name -eq "Cores"}     
-                $subtotal.ahb_ent += $cores.Value
+            try {
+                $softwarePlan = Invoke-RestMethod @params
+                if ($softwarePlan.Sku.Name -like "SQL*"){            
+                    $subtotal.ahb_ent += (GetVCores -type 'hosts' -name $vm_host.Sku.Name)
+                }
             }
+            catch {                
+                $sub.Id
+                $vm_host.ResourceGroupName.ToLower()
+                $host_group.Name
+                $vm_host.Name
+                $params
+            }            
         }
     }
+    [system.gc]::Collect()
+
+    # Add subtotals to the usage array
     
-    # Increment the totals and add subtotals to the usage array
-    
-    $subtotal.psobject.properties.name | %{$total.$_ += $subtotal.$_}
+    #$subtotal.psobject.properties.name | Foreach-Object {$total.$_ += $subtotal.$_}
      
     $Date = Get-Date -Format "yyy-MM-dd"
+    
     $Time = Get-Date -Format "HH:mm:ss"
-    if ($IncludeEC){
+    if ($ShowEC){
         $ahb_ec = ($subtotal.ahb_std + $subtotal.ahb_ent*4)
         $payg_ec = ($subtotal.payg_std + $subtotal.payg_ent*4)
     }else{
@@ -440,10 +550,10 @@ foreach ($sub in $subscriptions){
         $payg_ec = 0
     }
     if ($useDatabase){
-        $propertiesToSplat.Query = $insertSQL -f $Date, $Time, $sub.Name, $sub.Id, $ahb_ec, $payg_ec, $subtotal.ahb_std, $subtotal.ahb_ent, $subtotal.payg_std, $subtotal.payg_ent, $subtotal.hadr_std, $subtotal.hadr_ent, $subtotal.developer, $subtotal.express
+        $propertiesToSplat.Query = $insertSQL -f $Date, $Time, $sub.Name, $sub.Id, $ahb_ec, $payg_ec, $subtotal.ahb_std, $subtotal.ahb_ent, $subtotal.payg_std, $subtotal.payg_ent, $subtotal.hadr_std, $subtotal.hadr_ent, $subtotal.developer, $subtotal.express, $subtotal.unreg_sqlvm, $subtotal.unknown_tier
         Invoke-SQLCmd @propertiesToSplat
     }else{
-        $usageTable += ,(@( $Date, $Time, $sub.Name, $sub.Id, $ahb_ec, $payg_ec, $subtotal.ahb_std, $subtotal.ahb_ent, $subtotal.payg_std, $subtotal.payg_ent, $subtotal.hadr_std, $subtotal.hadr_ent, $subtotal.developer, $subtotal.express))
+        $usageTable += ,(@( $Date, $Time, $sub.Name, $sub.Id, $ahb_ec, $payg_ec, $subtotal.ahb_std, $subtotal.ahb_ent, $subtotal.payg_std, $subtotal.payg_ent, $subtotal.hadr_std, $subtotal.hadr_ent, $subtotal.developer, $subtotal.express, $subtotal.unreg_sqlvm, $subtotal.unknown_tier))
     }
 }
 

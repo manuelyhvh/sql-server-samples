@@ -3,12 +3,12 @@ services: Azure SQL
 platforms: Azure
 author: anosov1960
 ms.author: sashan
-ms.date: 2/2/2021
+ms.date: 3/9/2021
 ---
 
 # Overview
 
-This script provides a simple solution to analyze and track the consolidated utilization of SQL Server licenses by all of the SQL resources in a specific subscription or the entire account. By default, the script scans all subscriptions the user account has access to. Alternatively, you can specify a single subscription or a .CSV file with a list of subscription. The usage report includes the following information for each scanned subscription.
+This script provides a simple solution to analyze and track the consolidated utilization of SQL Server licenses by all of the SQL resources in a specific subscription or the entire account. By default, the script scans all subscriptions the user account has access to. Alternatively, you can specify a single subscription or a .CSV file with a list of subscriptions. 
 
 | **Category** | **Description** |
 |:--|:--|
@@ -24,6 +24,8 @@ This script provides a simple solution to analyze and track the consolidated uti
 |HADR Ent vCores|Total vCores used by HADR replicas running SQL Server Enterprise edition|
 |Developer vCores|Total vCores used by SQL Server Developer edition|
 |Express vCores|Total vCores used by SQL Server Express edition|
+|Unregistered vCores|Total vCores used by SQL Server in Virtual Machines that are not registered with SQL IaaS Agent Extension |
+|Unknown vCores|Total vCores used by Azure SQL Server resources with an unknown edition or service tier|
 
 The following resources are in scope for the license utilization analysis:
 - Azure SQL databases (vCore-based purchasing model only) 
@@ -39,13 +41,15 @@ The following resources are in scope for the license utilization analysis:
 > - For IaaS workloads, such as SQL Server in Virtual Machines or SSIS integration runtimes, each vCPU is counted as one vCore.
 > - For PaaS workloads, each vCore of Business Critical service tier is counted as one Enterprise vCore and each vCore of General Purpose service tier is counted as one Standard vCore.
 > - In the DTU-based purchasing model, the SQL license cost is built into the individual SKU prices. These resources are not eligible for Azure Hybrid Benefit or HADR benefit, and therefore are not in scope of the tool.
+> - You must be at least a *Reader* of each subscription you scan. 
+> - To report unregistered vCores, you must be a subscription *Contributor* or *Owner*, otherwise this column will show a zero value.
 > - The values AHB ECs and PAYG ECs are reserved for the future use and should be ignored
 
 # Launching the script 
 
 The script accepts the following command line parameters:
 
-| **Parameter** &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;  | **Value** &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp; &nbsp; | **Description** |
+| **Parameter** &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;  | **Value** &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp; &nbsp; | **Description** |
 |:--|:--|:--|
 |-SubId|subscription_id *or* a file_name|Optional: subscription id or a .csv file with the list of subscriptions<sup>1</sup>|
 |-UseInRunbook| \$True or \$False (default) |Optional: must be $True when executed as a Runbook|
@@ -53,6 +57,7 @@ The script accepts the following command line parameters:
 |-Database|database_name|Optional: database name where data will be saved.<br>  Must be accompanied by -Server and -Cred|
 |-Cred|credential_object|Optional: value of type PSCredential to securely pass database user and password|
 |-FilePath|csv_file_name|Optional: filename where the data will be saved in a .csv format. Ignored if database parameters are specified|
+|-ShowUnregistered|\$True or \$False (default)|Optional: causes the script to report the total size of VMs that self-host SQL server instance that is unregistered with the IaaS SQL extension|
 
 <sup>1</sup>You can create a .csv file using the following command and then edit to remove the subscriptions you don't  want to scan.
 ```PowerShell
@@ -62,7 +67,7 @@ If both database parameters and *FilePath* are omitted, the script will write th
 
 ## Example 1
 
-The following command will scan all the subscriptions in the account and save the results in `.\sql-license-usage.csv`
+The following command will scan all the subscriptions to which the user has access to and save the results in `.\sql-license-usage.csv`
 
 ```PowerShell
 .\sql-license-usage.ps1
@@ -78,7 +83,7 @@ The following command will scan the subscription `<sub_id>` and save the results
 
 ## Example 3
 
-The following command will scan all the subscriptions in the account and save the results in a SQL database `sql-license-usage` on a SQL Server instance `my-westus2-server.database.windows.net`. It will prompt for the database user name and password.
+The following command will scan all the subscriptions the user has access to and save the results in a SQL database `sql-license-usage` on a SQL Server instance `my-westus2-server.database.windows.net`. It will prompt for the database user name and password.
 
 ```PowerShell
 $cred = Get-Credential
@@ -87,7 +92,7 @@ $cred = Get-Credential
 
 ## Example 4
 
-The following command uses the parameter splatting method to achieve the same outcome as Example 3.
+The following command uses a parameter splatting method to achieve the same outcome as Example 3.
 
 ```PowerShell
 $params =@{
@@ -129,7 +134,7 @@ You can track your license utilization over time by running this script on sched
 curl https://raw.githubusercontent.com/microsoft/sql-server-samples/master/samples/manage/azure-hybrid-benefit/sql-license-usage.ps1 -o sql-license-usage.ps1
 ```
 2. [Create a new automation account](https://ms.portal.azure.com/#create/Microsoft.AutomationAccount)  or open an existing one.
-1. Select *Rus as accounts* in the **Account Settings** group, open the automatically created *Azure Run As Account* and note or copy the Display Name property. You must add this user to all the subscriptions you wish to scan with the *Reader* access role.  See [Role assignment portal](https://docs.microsoft.com/en-us/azure/role-based-access-control/role-assignments-portal) for the instructions about role assignments.
+1. Select *Rus as accounts* in the **Account Settings** group, open the automatically created *Azure Run As Account* and note or copy the Display Name property. You must add this user to all the target subscriptions with at least a *Reader* access role. To collect the Unregistered vCores, the user must be at least a *Contributor*. See [Role assignment portal](https://docs.microsoft.com/en-us/azure/role-based-access-control/role-assignments-portal) for the instructions about role assignments.
 1. Select *Credentials* in the **Shared resources** group and create a credential object with the database username and password. The script will use these to connect to the specified database to save the license utilization data.
 1. Select *Modules* in the **Shared resources** group and make sure your automation account have the following PowerShell modules installed. If not, add them from the Gallery.
     - Az.Accounts

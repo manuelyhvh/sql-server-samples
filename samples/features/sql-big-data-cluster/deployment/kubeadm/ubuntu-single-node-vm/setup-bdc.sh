@@ -90,7 +90,6 @@ mkdir -p $BDCDEPLOY_DIR
 cd $BDCDEPLOY_DIR/
 touch $LOG_FILE
 
-{
 # Install all necessary packages: kubernetes, docker, python3, python3-pip, request, azdata.
 #
 echo ""
