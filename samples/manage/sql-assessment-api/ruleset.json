@@ -1,7 +1,7 @@
 ﻿{
   "schemaVersion": "1.0",
   "name": "Microsoft ruleset",
-  "version": "1.0.304",
+  "version": "1.0.305",
   "rules": [
     {
       "id": "AutoCreateStats",
@@ -8871,7 +8871,7 @@
           "version": "[11.0,)"
         },
         "implementation": {
-          "query": "DECLARE @cmd NVARCHAR(max) = N''; SELECT @cmd = @cmd + N' USE ' + QUOTENAME([name]) + N'; SELECT msa.publisher_db ,msa.publication FROM dbo.MSdistribution_history AS msh INNER JOIN dbo.MSrepl_errors AS mse ON mse.id = msh.error_id INNER JOIN dbo.MSdistribution_agents AS msa ON msh.agent_id = msa.id WHERE mse.TIME >= DATEADD(hh, - 24, GETDATE()) GROUP BY msa.publisher_db ,msa.publication;' FROM [master].sys.databases WHERE is_distributor = 1; EXEC (@cmd);"
+          "query": "DECLARE @cmd NVARCHAR(max) = N''; SELECT @cmd = @cmd + N' USE ' + QUOTENAME([name]) + N'; SELECT msa.publisher_db ,msa.publication FROM dbo.MSdistribution_history AS msh INNER JOIN dbo.MSrepl_errors AS mse ON mse.id = msh.error_id INNER JOIN dbo.MSdistribution_agents AS msa ON msh.agent_id = msa.id WHERE mse.time >= DATEADD(hh, - 24, GETDATE()) GROUP BY msa.publisher_db ,msa.publication;' FROM [master].sys.databases WHERE is_distributor = 1; EXEC (@cmd);"
         }
       }
     ],
