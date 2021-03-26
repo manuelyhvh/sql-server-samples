@@ -28,7 +28,7 @@
 
 param (
     [Parameter (Mandatory= $false)] 
-    [string] $SubId = '4f6d3845-d3e3-4c31-bdf0-c73464aaff0e', 
+    [string] $SubId, 
     [Parameter (Mandatory= $false)]
     [string] $Server, 
     [Parameter (Mandatory= $false)]
@@ -88,7 +88,7 @@ function GetVCores {
          $global:VM_SKUs = Get-AzComputeResourceSku  "westus" | where-object {$_.ResourceType -in 'virtualMachines','hostGroups/hosts'}
      }
      # Select first size and get the VCPus available
-     $size_info = $global:VM_SKUs | Where-Object {$_.ResourceType.Contains($type) -and $_.Name.Contains($name)} | Select-Object -First 1
+     $size_info = $global:VM_SKUs | Where-Object {$_.ResourceType.Contains($type) -and ($_.Name -eq $name)} | Select-Object -First 1
                          
      # Save the VCPU count
      switch ($type) {
@@ -254,7 +254,7 @@ if ($SubId -like "*.csv") {
 
 [bool] $useDatabase = $PSBoundParameters.ContainsKey("Server") -and $PSBoundParameters.ContainsKey("Cred") -and $PSBoundParameters.ContainsKey("Database")
 
-# Initialize tables and arrays
+# Initialize tables and arraystype 
 
 if ($useDatabase){
     

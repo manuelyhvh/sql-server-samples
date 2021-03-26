@@ -57,7 +57,7 @@ The script accepts the following command line parameters:
 |-Database|database_name|Optional: database name where data will be saved.<br>  Must be accompanied by -Server and -Cred|
 |-Cred|credential_object|Optional: value of type PSCredential to securely pass database user and password|
 |-FilePath|csv_file_name|Optional: filename where the data will be saved in a .csv format. Ignored if database parameters are specified|
-|-ShowUnregistered|\$True or \$False (default)|Optional: causes the script to report the total size of VMs that self-host SQL server instance that is unregistered with the IaaS SQL extension|
+|-ShowUnregistered|\$True or \$False (default)|Optional: causes the script to report the total size of VMs with a  self-hosted SQL server instance that is unregistered with the IaaS SQL extension|
 
 <sup>1</sup>You can create a .csv file using the following command and then edit to remove the subscriptions you don't  want to scan.
 ```PowerShell
