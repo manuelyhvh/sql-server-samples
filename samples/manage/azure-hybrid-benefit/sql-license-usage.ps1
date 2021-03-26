@@ -254,7 +254,7 @@ if ($SubId -like "*.csv") {
 
 [bool] $useDatabase = $PSBoundParameters.ContainsKey("Server") -and $PSBoundParameters.ContainsKey("Cred") -and $PSBoundParameters.ContainsKey("Database")
 
-# Initialize tables and arraystype 
+# Initialize tables and arrays 
 
 if ($useDatabase){
     
