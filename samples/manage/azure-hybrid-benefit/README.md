@@ -3,7 +3,7 @@ services: Azure SQL
 platforms: Azure
 author: anosov1960
 ms.author: sashan
-ms.date: 3/9/2021
+ms.date: 3/27/2021
 ---
 
 # Overview
@@ -16,10 +16,10 @@ This script provides a simple solution to analyze and track the consolidated uti
 |Time|Time of the scan|
 |Subscription name|The name of the subscription|
 |Subscription ID|The unique subscription ID|
-|AHB Std vCores|Total vCores used by General Purpose service tier or SQL Server Standard edition billed with hybrid benefit  discount|
-|AHB Ent vCores|Total vCores used by Business Critical service tier or SQL Server Enterprise edition billed with hybrid benefit  discount|
-|PAYG Std vCores|Total vCores used by General Purpose service tier or SQL Server Standard edition billed at full price|
-|PAYG Ent vCores|Total vCores used by Business Critical service tier or SQL Server Enterprise edition billed at full price|
+|AHB Std vCores|Total vCores used by Standard level SQL services (General Purpose service tier or SQL Server Standard edition) that have Azure hybrid benefit enabled|
+|AHB Ent vCores|Total vCores used by Premium level SQL services (Business Critical  service tier or SQL Server Enterprise edition) that have Azure hybrid benefit enabled|
+|PAYG Std vCores|Total vCores used by Standard level SQL services (General Purpose service tier or SQL Server Standard edition) that are billed using the pay-as-you-go method|
+|PAYG Ent vCores|Total vCores used by Premium level SQL services (Business Critical  service tier or SQL Server Enterprise edition) that are billed using the pay-as-you-go method|
 |HADR Std  vCores|Total vCores used by HADR replicas running SQL Server Standard edition|
 |HADR Ent vCores|Total vCores used by HADR replicas running SQL Server Enterprise edition|
 |Developer vCores|Total vCores used by SQL Server Developer edition|
@@ -42,7 +42,7 @@ The following resources are in scope for the license utilization analysis:
 > - For PaaS workloads, each vCore of Business Critical service tier is counted as one Enterprise vCore and each vCore of General Purpose service tier is counted as one Standard vCore.
 > - In the DTU-based purchasing model, the SQL license cost is built into the individual SKU prices. These resources are not eligible for Azure Hybrid Benefit or HADR benefit, and therefore are not in scope of the tool.
 > - You must be at least a *Reader* of each subscription you scan. 
-> - To report unregistered vCores, you must be a subscription *Contributor* or *Owner*, otherwise this column will show a zero value.
+> - To report unregistered vCores, you must be a subscription *Contributor* or *Owner*, otherwise this column will show a zero value. Selecting this option will substantially increase the execution time, especially for the   subscriptions with large numbers of virtual machines.
 > - The values AHB ECs and PAYG ECs are reserved for the future use and should be ignored
 
 # Launching the script 
@@ -57,7 +57,7 @@ The script accepts the following command line parameters:
 |-Database|database_name|Optional: database name where data will be saved.<br>  Must be accompanied by -Server and -Cred|
 |-Cred|credential_object|Optional: value of type PSCredential to securely pass database user and password|
 |-FilePath|csv_file_name|Optional: filename where the data will be saved in a .csv format. Ignored if database parameters are specified|
-|-ShowUnregistered|\$True or \$False (default)|Optional: causes the script to report the total size of VMs that self-host SQL server instance that is unregistered with the IaaS SQL extension|
+|-ShowUnregistered|\$True or \$False (default)|Optional: causes the script to report the total size of VMs with a  self-hosted SQL server instance that is unregistered with the IaaS SQL extension|
 
 <sup>1</sup>You can create a .csv file using the following command and then edit to remove the subscriptions you don't  want to scan.
 ```PowerShell

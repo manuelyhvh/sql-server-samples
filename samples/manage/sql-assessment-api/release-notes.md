@@ -14,6 +14,14 @@ Download: [SMO NuGet Package](https://www.nuget.org/packages/Microsoft.SqlServer
 
 You can use GitHub issues to provide feedback to the product team.
 
+## March 2021 - 1.0.305
+
+Version: SqlServer PowerShell module 21.1.18245, SqlManagementObjects (SMO) package wasn't updated
+
+### Bug fixes and improvements
+
+- Fixed an issue that may cause the 'ReplErrors24H' check to fail on case-sensitive SQL Server instances with Distributor databases
+
 ## March 2021 - 1.0.304
 
 Version: SqlServer PowerShell module wasn't updated, SqlManagementObjects (SMO) package wasn't updated
