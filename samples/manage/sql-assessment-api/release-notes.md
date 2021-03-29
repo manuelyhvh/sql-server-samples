@@ -16,7 +16,7 @@ You can use GitHub issues to provide feedback to the product team.
 
 ## March 2021 - 1.0.305
 
-Version: SqlServer PowerShell module wasn't updated, SqlManagementObjects (SMO) package wasn't updated
+Version: SqlServer PowerShell module 21.1.18245, SqlManagementObjects (SMO) package wasn't updated
 
 ### Bug fixes and improvements
 
