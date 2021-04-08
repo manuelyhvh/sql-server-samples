@@ -119,7 +119,8 @@ resource Server_Name_activeDirectory 'Microsoft.Sql/servers/administrators@2019-
   properties: {
     administratorType: 'ActiveDirectory'
     login: AADSQLAdmin
-    sid: reference(resourceId('Microsoft.Sql/servers', '${projectname}server'), '2019-06-01-preview', 'Full').identity.principalId
+    //sid: reference(resourceId('Microsoft.Sql/servers', '${projectname}server'), '2019-06-01-preview', 'Full').identity.principalId
+    sid: objectId
     //tenantId: AAD_TenantId //optional
   }
 }
