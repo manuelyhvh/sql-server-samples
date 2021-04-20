@@ -1,6 +1,7 @@
 ﻿######################################################################
 # Request parameters to the user that are needed for the deployment
 ######################################################################
+#
 
 $subscriptionName = Read-Host -Prompt "Enter your subscription name"
 $projectName = Read-Host -Prompt "Enter a project name that is used to generate resource names"
