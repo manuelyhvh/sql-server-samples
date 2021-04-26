@@ -27,33 +27,120 @@ Perform the below steps before you show the demo.
 1. Prepare SQL Server Management Studio (SSMS).
     1. Start SSMS.
     1. In the Connect to Server dialog:
-        1. Enter your database server name. 
-        1. Set Authentication to Azure Active Directory – Universal with MFA.
-        1. In the User Name field, enter your Azure AD username, you've used to sign in to Azure, when you set up your demo environment.
-        1. Click the Options >> button.
-        1. Select the Connection Properties tab.
-        1. Enter the database name.
-        1. Select the Always Encrypted tab.
-        1. Make sure Enable Always Encrypted is not selected.
+        1. In the main page of the dialog, enter your database server name. Set `Authentication` to `Azure Active Directory – Universal with MFA`. In the `User Name` field, enter your Azure AD username, you've used to sign in to Azure, when you set up your demo environment.
+        
+           ![Connect to Server](./img/ssms-connect-to-server-main-page.png)
+        1. Click the `Options >>` button, select the `Connection Properties` tab and enter the database name(`ContosoHR`).
+
+           ![Connection Properties](./img/ssms-connect-to-server-connection-properties-page.png)
+
+        1. Select the `Always Encrypted` tab. Make sure the `Enable Always Encrypted` checkbox is **not** selected.
+
+           ![Always Encrypted disabled](./img/ssms-connect-to-server-always-encrypted-disabled.png)
+
         1. Click Connect.
         1. When prompted, sign in to Azure.
     1. Configure query windows.
-        1. In Object Explorer, find and select the ContosoHR database, click Ctrl + O.
-        1. In the Open File dialog, navigate to the tsql-scripts folder and select ListAllEmployees.sql.
-        1. In Object Explorer, select the ContosoHR database and click Ctrl + O again.
-        1. In the Open File dialog, navigate to the tsql-scripts folder and select QueryEvents.sql.
-2. Prepare your browser.
+        1. In Object Explorer, find and select the `ContosoHR` database.
+
+          ![Selecting database](./img/ssms-explorer-select-database.png)
+
+        1. With the `ContosoHR` database selected, click Ctrl + O. In the `Open File` dialog, navigate to the `tsql-scripts` folder and select `ListAllEmployees.sql`. Do not execute the query yet.
+        1. With the `ContosoHR` database selected, click Ctrl + O. In the `Open File` dialog, navigate to the `tsql-scripts` folder and select `QueryEvents.sql`. Do not execute the query yet.
+1. Prepare your web browser.
     1. Open your browser.
     1. Point the browser to the demo application URL.
-    1. Open a new tab and point to Azure Portal: https://portal.azure.com.
-    1. Sign in to Azure if prompted.
-    1. In the Search box in the Azure Portal, enter the name of your demo resource group and click Enter. In the search results, click on your resource group.
+
+       ![Web app](./img/web-app.png)
 
 ### Demos steps
 
-1. Show the Contoso HR web app in the the browser. This application displays employee records and allows you filter employee records by salary or by a portion of the social security number (SSN). Move the salary slider and enter a couple of digits in the search box to filter by salary and SSN.
-2. Switch to SSMS, click on the tab containing the ListAllEmployees.sql query and click F5 to execute the query. It shows the content of the database, the web application uses as a data store. Although you are a DBA of the database, you cannot see the plaintext data in the SSN and Salary columns, as those two columns are protected with Always Encrypted. 
-3. Click on the tab containing the QueryXevents.sql query and click F5 to execute it. This query retrieves extended events from the Demo extended event session, configured in the ContosoHR database. Each extended event captures a query the web application has sent to the database.
-4. Click on the link in the second column of the first row of the result set to see the extended event with the latest query from the application. 
-    1. Review the query statement. Note that the query contains the WHERE clause with rich computations on encrypted columns: pattern matching using the LIKE predicate on the SSN column and the range comparison on the Salary column. The query also sorts records (the ORDER BY clause) by SSN or Salary.
-    1. Scroll to the right, until you can see the value of the @SSNSearchPattern parameter. Note that the value of the parameter is encrypted – the client driver inside the web app transparently encrypts parameters corresponding to encrypted columns, before sending the query to the database. Not only does not the DBA have access to sensitive data in the database, but the DBA cannot see the plaintext values of query parameters used to process that data.
+1. Show the Contoso HR web app in the the browser. This application displays employee records and allows you to filter employees by salary or by a portion of the social security number (SSN). Move the salary slider and enter a couple of digits in the search box to filter by salary and SSN.
+
+   ![Web app filtering](./img/web-app-filtering.png)
+
+2. Switch to SSMS, select the `ListAllEmployees.sql` tab and click `F5` to execute the query, which shows the content of the `Employees` table, the web application uses as a data store. Although you are a DBA of the database, you cannot see the plaintext data in the `SSN` and `Salary` columns, as those two columns are protected with Always Encrypted.
+
+   ![Encrypted results](./img/ssms-encrypted-results.png)
+
+3. Select the `QueryXevents.sql` tab and click `F5` to execute the query. This query retrieves extended events from the `Demo` extended event session, configured in the `ContosoHR` database. Each extended event captures a query the web application has sent to the database.
+
+   ![Extended event results](./img/ssms-xevents-results.png)
+
+4. Click on the link in the second column of the first row of the result set to see the extended event with the latest query from the application. This will open the extended event in the new tab.
+    1. Review the query statement. Note that the query contains the `WHERE` clause with rich computations on encrypted columns: pattern matching using the `LIKE` predicate on the `SSN` column and the range comparison on the `Salary` column. The query also sorts records (the `ORDER BY` clause) by `SSN` or `Salary`. **PRO Tip:** to make it easier to view the query statement, you can put line brakes in it. 
+
+   ![Extended event](./img/ssms-xevent.png)
+
+    2. Locate the value of query parameters: `@SSNSearchPattern`, `@MinSalary`, `@MaxSalary`. Note that the values of the parameters are encrypted – the client driver inside the web app transparently encrypts parameters corresponding to encrypted columns, before sending the query to the database. Not only does not the DBA have access to sensitive data in the database, but the DBA cannot see the plaintext values of query parameters used to process that data.
+
+### Key Takeaways
+
+Always Encrypted with secure enclaves allows applications to perform rich queries on sensitive data without revealing the data to potentially malicious insiders, including DBAs in your organization.
+
+## Demo 2
+
+During this demo, you will take a tour of the demo environment, in which Always Encrypted with secure enclaves is already set up and sensitive data columns in the database are already encrypted.
+
+### Prepare for the demo
+Perform the below steps before you show the demo.
+
+1. Prepare SQL Server Management Studio (SSMS).
+    1. Start SSMS.
+    1. In the Connect to Server dialog:
+        1. In the main page of the dialog, enter your database server name. Set `Authentication` to `Azure Active Directory – Universal with MFA`. In the `User Name` field, enter your Azure AD username, you've used to sign in to Azure, when you set up your demo environment.
+        
+           ![Connect to Server](./img/ssms-connect-to-server-main-page.png)
+
+        1. Click Connect.
+        1. When prompted, sign in to Azure.
+1. Prepare your web browser.
+    1. Open a new tab in the browser and point to Azure Portal: `https://portal.azure.com`.
+    1. Sign in to Azure if prompted.
+    1. In the `Search` box in the Azure Portal, enter the name of your demo resource group and click `Enter`. In the search results, click on your resource group. You should see the content of your resource group, which should look like this:
+
+       ![Web app](./img/resource-group.png)
+
+### Demos steps
+
+1. Review the content of your demo resource group. It should contain the following resources:
+    - A app service hosting your Contoso HR web application.
+    - An attestation provider in Microsoft Azure Attestation for attesting the secure enclave for your database.
+    - A user-assigned managed identity that was used to deploy your web application.
+    - An app service plan for your web application.
+    - An Azure SQL database server in Azure SQL Database.
+    - A key vault in Azure Key Vault, containing the column master key for Always Encrypted.
+    - The `ContosoHR` database.
+
+2. Right-click on the `ContosoHR` database in the resource group and open its `Overview` blade in the new tab. Click on `Compute + storage` under `Settings`.  Click `Change configuration`. Note that the database is already configured to se the DC-series hardware configuration that supports confidential computing using secure enclaves. Setting the DC-series hardware configuration for a database is required to use Always Encrypted with secure enclaves in the database. For more information, see [Enable Intel SGX for your Azure SQL Database](https://docs.microsoft.com/en-us/azure/azure-sql/database/always-encrypted-enclaves-enable-sgx).
+
+   ![DC-series hardware configuration](./img/portal-dc-series-configuration.png)
+
+3. Close the browser tab for the database. Right-click on the attestation provider in your resource group and open its `Overview` blade in a new tab. Click on `Policy` under `Settings`. Select `SGX-IntelSDK` for `Attestation Type`. This will display the attestation policy configured for SGX enclaves. The policy allows a client driver within an application to verify the secure enclave in Azure SQL Database is a genuine Intel SGX enclave and it runs the genuine SQL library that implements Transact-SQL predicates and cryptographic operations of Always Encrypted. For more information, see [Configure Azure Attestation for your Azure SQL logical server](https://docs.microsoft.com/en-us/azure/azure-sql/database/always-encrypted-enclaves-configure-attestation).
+
+   ![DC-series hardware configuration](./img/portal-attestation-policy.png)
+
+4. Close the browser tab for the attestation provider. Right-click on the app service for the Contoso HR web application in your resource group and open its `Overview` blade in a new tab. Click on `Configuration` under `Settings`. In the `Connection strings` section, click `Advanced edit`. Select `SGX-IntelSDK` for `Attestation Type`. This will display the database connection string configured for the web application. There are two important things to call out in the database connection string.
+
+   - `Column Encryption Setting = Enabled` turns the Always Encrypted on in the client driver, allowing it to transparently encrypt query parameters and decrypt queries results.
+   - `Attestation Protocol = AAS` specifies Microsoft Azure Attestation is used for attesting the secure enclave for the `ContosoHR` database.
+   - `Enclave Attestation Url` specifies the URL of the attestation policy in your attestation provider in Microsoft Azure Attestation.
+
+   ![Connection string](./img/portal-web-app-connection-string.png)
+
+5. Close the browser tab for the app service. Right-click on the key vault in your resource group open its `Overview` blade in a new tab. 
+    1. Click on `Keys` under `Settings`. You should see the entry for the key, named `CMK` - this is your column master key for Always Encrypted.
+       ![Connection string](./img/portal-key-vault-key.png)
+   
+    2. Click on `Access Policies` under `Settings`. You should see two access policy entries: one for your identity and one for your web app's identity. These policies grant you permissions necessary to perform key management operations and they grant your web app permissions required to decrypt column encryption keys, protecting the data.
+
+6. Switch to SSMS.
+    1. In Object Explorer, navigate to the `ContosoHR` database. Then go to `Security` > `Always Encrypted Keys`.
+    1. Open the Column Master Keys and Column Encrption Keys folders. You should see the metadata object, named `CMK1`, for the column master key and the metadata object, named `CEK1`, for the column encryption key.
+    1. Right click on `CMK1` and select `Properties`. Note that the metadata object references the key in the key vault. Also note `Enclave Computations` is set to `Allowed`, which permits column encryptions, this columns master key protects, to be used in enclave computations.
+
+       ![Connection string](./img/ssms-cmk.png)
+
+### Key Takeaways
+
+Always Encrypted with secure enclaves requires specific hardware that is exposed in Azure SQL Database as the DC-series hardware configuration. Microsoft Azure Attestation is a Platform-as-a-Service solution for attestation enclaves in Azure. Enclaves are attested against a policy, you define and control.

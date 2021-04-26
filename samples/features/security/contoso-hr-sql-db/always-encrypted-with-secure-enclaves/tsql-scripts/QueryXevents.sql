@@ -38,19 +38,18 @@ FROM src;
 
 DECLARE @xe xml;
 
-SET @xe = (SELECT TOP(1)  
---[TimeStamp] = CONVERT(varchar(30), DATEADD(MINUTE, 0 - @Offset, xr.xeTimeStamp), 120)
-    --, 
-	xr.xeXML
-	--,CONVERT(nvarchar(max), xr.xeXML)
-FROM #xmlResults xr
-WHERE xr.xeTimeStamp >= @StartTime
+SELECT * FROM (
+	SELECT
+		[TimeStamp] = CONVERT(varchar(30), DATEADD(MINUTE, 0 - @Offset, xr.xeTimeStamp), 120)
+		, [Query] = xr.xeXML.query (N'/event/data[11]/value')
+	FROM #xmlResults xr
+	WHERE xr.xeTimeStamp >= @StartTime
     AND xr.xeTimeStamp<= @EndTime
-	AND CONVERT(nvarchar(max), xr.xeXML) LIKE '%SSN%'
-	AND CONVERT(nvarchar(max), xr.xeXML) NOT LIKE '%sp_describe_parameter_encryption%'
-ORDER BY xr.xeTimeStamp desc)
+) AS [t]
+WHERE
+CONVERT(nvarchar(max), Query) LIKE '%Employees%'
+	AND CONVERT(nvarchar(max), Query) LIKE '%SSN%'
+	AND CONVERT(nvarchar(max), Query) NOT LIKE '%sp_describe_parameter_encryption%'
+	AND CONVERT(nvarchar(max), Query) NOT LIKE '%COUNT%'
+ORDER BY [TimeStamp] DESC
 
-DECLARE @st xml;
-  
-SET @st =  @xe.query (N'/event/data[11]/value')
-SELECT @st
