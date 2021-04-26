@@ -26,19 +26,6 @@ param location string = resourceGroup().location
 @description('The current time.')
 param currentTime string = utcNow('u')
 
-////////////////////////////////////////////////////////////////////
-// Assign the user to the Contributor role for the resource group //
-////////////////////////////////////////////////////////////////////
-
-resource AssignContributorToUser_Resource 'Microsoft.Authorization/roleAssignments@2020-04-01-preview' = {
-  name: guid(uniqueString(resourceGroup().id),currentTime)
-  scope: any(resourceGroup().id)
-  properties: {
-    roleDefinitionId: '/subscriptions/${subscription().subscriptionId}/providers/Microsoft.Authorization/roleDefinitions/b24988ac-6180-42a0-ab88-20f7382dd24c'
-    principalId: userObjectId
-    principalType: 'User'
-  }
-}
 ////////////////////////////////////////////
 // Create and configure a database server //
 ////////////////////////////////////////////
@@ -154,35 +141,6 @@ resource AssignContributor_Resource 'Microsoft.Authorization/roleAssignments@202
   ]
 }
 
-// Create a storage account
-@description('Storage Account type')
-param storageAccountType string = 'Standard_LRS'
-var storageAccountName_var = '${projectName}storage'
-
-resource storageAccountResource 'Microsoft.Storage/storageAccounts@2020-08-01-preview' = {
-  name: storageAccountName_var
-  location: location
-  sku: {
-    name: storageAccountType
-  }
-  kind: 'StorageV2'
-  properties: {}
-}
-
-output storageoutput string = storageAccountResource.name
-
-resource storageAccountname 'Microsoft.Storage/storageAccounts/blobServices@2020-08-01-preview' = {
-  name: '${storageAccountResource.name}/default'
-  properties: {
-    cors: {
-      corsRules: []
-    }
-    deleteRetentionPolicy: {
-      enabled: false
-    }
-  }
-}
-
 // Create an App Service plan in Free tier
 resource WebAppServicePlan_Resource 'Microsoft.Web/serverfarms@2020-09-01' = {
   name: '${projectName}plan'
@@ -230,10 +188,6 @@ resource DeployWebApp 'Microsoft.Resources/deploymentScripts@2020-10-01' = {
   kind: 'AzurePowerShell'
     properties: {
     azPowerShellVersion: '5.0'
-    storageAccountSettings: {
-       storageAccountName: storageAccountResource.name
-       storageAccountKey: listKeys(storageAccountResource.id, storageAccountResource.apiVersion).keys[0].value
-    }
     scriptContent: '$PropertiesObject = @{repoUrl = "https://github.com/Pietervanhove/AEDemo.git"; branch = "master"; isManualIntegration = "true";} \r\n Set-AzResource -Properties $PropertiesObject -ResourceGroupName ${resourceGroup().name} -ResourceType Microsoft.Web/sites/sourcecontrols -ResourceName ${WebApp_Resource.name}/web -ApiVersion 2015-08-01 -Force'
     cleanupPreference: 'OnSuccess'
     retentionInterval: 'P1D'

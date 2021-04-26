@@ -6,7 +6,7 @@ Import-Module "SqlServer" -MinimumVersion "21.1.18235"
 # Prompt the user to enter the values of deployment parameters
 ######################################################################
 
-$subscriptionName = Read-Host -Prompt "Enter your subscription name"
+$subscriptionId = Read-Host -Prompt "Enter your subscription id"
 $projectName = Read-Host -Prompt "Enter a project name that is used to generate resource names"
 $location = Read-Host -Prompt "Enter a region where you want to deploy the demo environment"
 $sqlAdminUserName = Read-Host -Prompt "Enter the username of the Azure SQL database server administrator for SQL authentication"
@@ -22,7 +22,7 @@ $projectName = $projectName.ToLower()
 ######################################################################
 
 Connect-AzAccount
-$context = Set-AzContext -Subscription $subscriptionName
+$context = Set-AzContext -Subscription $subscriptionId
 $userName = $context.Account.Id
 $userObjectId = $(Get-AzADUser -UserPrincipalName $userName).Id
 
@@ -45,6 +45,12 @@ New-AzResourceGroupDeployment `
   -sqlAdminUserName $sqlAdminUserName `
   -sqlAdminPassword $sqlAdminPassword `
   -clientIP $clientIP
+
+######################################################################
+# Clean up not needed resources
+######################################################################
+
+Remove-AzDeploymentScript -ResourceGroupName $resourceGroupName -Name "${projectName}script"
 
 ######################################################################
 # Populate the database with data
@@ -151,6 +157,7 @@ $attestationUrl = $attestationProvider.AttestUri + “/attest/SgxEnclave”
 ######################################################################
 
 $app = Get-AzWebApp -Name $appName -ResourceGroupName $resourceGroupName 
+Write-Host -ForegroundColor "green" "Resource group name: $resourceGroupName"
 Write-Host -ForegroundColor "green" "Database server name: $serverName"
 Write-Host -ForegroundColor "green" "Database name: $databaseName"
 Write-Host -ForegroundColor "green" "Attestation URL: $attestationUrl"
