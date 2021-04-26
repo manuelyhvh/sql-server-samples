@@ -155,33 +155,33 @@ resource AssignContributor_Resource 'Microsoft.Authorization/roleAssignments@202
 }
 
 // Create a storage account
-@description('Storage Account type')
-param storageAccountType string = 'Standard_LRS'
-var storageAccountName_var = '${projectName}storage'
+// @description('Storage Account type')
+// param storageAccountType string = 'Standard_LRS'
+// var storageAccountName_var = '${projectName}storage'
 
-resource storageAccountResource 'Microsoft.Storage/storageAccounts@2020-08-01-preview' = {
-  name: storageAccountName_var
-  location: location
-  sku: {
-    name: storageAccountType
-  }
-  kind: 'StorageV2'
-  properties: {}
-}
+// resource storageAccountResource 'Microsoft.Storage/storageAccounts@2020-08-01-preview' = {
+//   name: storageAccountName_var
+//   location: location
+//   sku: {
+//     name: storageAccountType
+//   }
+//   kind: 'StorageV2'
+//   properties: {}
+// }
 
-output storageoutput string = storageAccountResource.name
+// output storageoutput string = storageAccountResource.name
 
-resource storageAccountname 'Microsoft.Storage/storageAccounts/blobServices@2020-08-01-preview' = {
-  name: '${storageAccountResource.name}/default'
-  properties: {
-    cors: {
-      corsRules: []
-    }
-    deleteRetentionPolicy: {
-      enabled: false
-    }
-  }
-}
+// resource storageAccountname 'Microsoft.Storage/storageAccounts/blobServices@2020-08-01-preview' = {
+//   name: '${storageAccountResource.name}/default'
+//   properties: {
+//     cors: {
+//       corsRules: []
+//     }
+//     deleteRetentionPolicy: {
+//       enabled: false
+//     }
+//   }
+// }
 
 // Create an App Service plan in Free tier
 resource WebAppServicePlan_Resource 'Microsoft.Web/serverfarms@2020-09-01' = {
@@ -230,10 +230,10 @@ resource DeployWebApp 'Microsoft.Resources/deploymentScripts@2020-10-01' = {
   kind: 'AzurePowerShell'
     properties: {
     azPowerShellVersion: '5.0'
-    storageAccountSettings: {
-       storageAccountName: storageAccountResource.name
-       storageAccountKey: listKeys(storageAccountResource.id, storageAccountResource.apiVersion).keys[0].value
-    }
+    // storageAccountSettings: {
+    //    storageAccountName: storageAccountResource.name
+    //    storageAccountKey: listKeys(storageAccountResource.id, storageAccountResource.apiVersion).keys[0].value
+    // }
     scriptContent: '$PropertiesObject = @{repoUrl = "https://github.com/Pietervanhove/AEDemo.git"; branch = "master"; isManualIntegration = "true";} \r\n Set-AzResource -Properties $PropertiesObject -ResourceGroupName ${resourceGroup().name} -ResourceType Microsoft.Web/sites/sourcecontrols -ResourceName ${WebApp_Resource.name}/web -ApiVersion 2015-08-01 -Force'
     cleanupPreference: 'OnSuccess'
     retentionInterval: 'P1D'
