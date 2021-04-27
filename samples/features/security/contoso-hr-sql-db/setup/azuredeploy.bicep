@@ -210,7 +210,6 @@ resource KeyVault_Resource 'Microsoft.KeyVault/vaults@2019-09-01' = {
       family: 'A'
       name: 'standard'
     }
-    enableSoftDelete: false
     accessPolicies: [
       {
         tenantId: subscription().tenantId

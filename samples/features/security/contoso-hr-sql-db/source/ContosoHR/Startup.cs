@@ -71,12 +71,7 @@ namespace ContosoHR
             SqlColumnEncryptionAzureKeyVaultProvider sqlColumnEncryptionAzureKeyVaultProvider = 
                 new SqlColumnEncryptionAzureKeyVaultProvider(KeyVaultAuthenticationCallback);
             SqlConnectionStringBuilder builder = new SqlConnectionStringBuilder(Configuration.GetConnectionString("ContosoHRDatabase"));
-            if(builder.Authentication != SqlAuthenticationMethod.ActiveDirectoryManagedIdentity)
-            {
-                var clientId = "f0f029e7-a654-4f34-8f66-db76c1b29752";
-                var secret = "U7O-B811m91~gN8nV-5fGzgpIlV_CLt6Mi";
-                _clientCredential = new ClientCredential(clientId, secret);
-            }
+
             // Register the Azure Key Vault provider
             SqlConnection.RegisterColumnEncryptionKeyStoreProviders(
                 customProviders: new Dictionary<string, SqlColumnEncryptionKeyStoreProvider>(

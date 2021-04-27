@@ -6,7 +6,6 @@ Import-Module "SqlServer" -MinimumVersion "21.1.18235"
 # Prompt the user to enter the values of deployment parameters
 ######################################################################
 
-uniqueString
 $projectName = Read-Host -Prompt "Enter a project name that is used to generate resource names"
 $subscriptionId = Read-Host -Prompt "Enter your subscription id"
 $location = Read-Host -Prompt "Enter a region where you want to deploy the demo environment"
