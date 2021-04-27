@@ -6,8 +6,9 @@ Import-Module "SqlServer" -MinimumVersion "21.1.18235"
 # Prompt the user to enter the values of deployment parameters
 ######################################################################
 
-$subscriptionId = Read-Host -Prompt "Enter your subscription id"
+uniqueString
 $projectName = Read-Host -Prompt "Enter a project name that is used to generate resource names"
+$subscriptionId = Read-Host -Prompt "Enter your subscription id"
 $location = Read-Host -Prompt "Enter a region where you want to deploy the demo environment"
 $sqlAdminUserName = Read-Host -Prompt "Enter the username of the Azure SQL database server administrator for SQL authentication"
 $sqlAdminPasswordSecureString = Read-Host -Prompt "Enter the password of the Azure SQL database server administrator for SQL authentication" -AsSecureString
