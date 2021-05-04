@@ -117,30 +117,6 @@ resource AssignAttestationReader_Resource 'Microsoft.Authorization/roleAssignmen
 // Configure the web application //
 ///////////////////////////////////
 
-// Create a managed identity for the web app deployment
-resource ManagedIdentity_Resource 'Microsoft.ManagedIdentity/userAssignedIdentities@2018-11-30' = {
-  name: '${projectName}identity'
-  tags: {}
-  location: location
-}
-
-var uamiId = resourceId('Microsoft.ManagedIdentity/userAssignedIdentities', '${ManagedIdentity_Resource.name}')
-
-//Add the Managed Identity to the Contributor Role
-resource AssignContributor_Resource 'Microsoft.Authorization/roleAssignments@2020-04-01-preview' = {
-  //name: guid(resourceGroup().id,currentTime)
-  name: guid(uniqueString(resourceGroup().id),dateTimeAdd(currentTime,'PT1S'))
-  scope: any(resourceGroup().id)
-  properties: {
-    roleDefinitionId: '/subscriptions/${subscription().subscriptionId}/providers/Microsoft.Authorization/roleDefinitions/b24988ac-6180-42a0-ab88-20f7382dd24c'
-    principalId: ManagedIdentity_Resource.properties.principalId
-    principalType: 'ServicePrincipal'
-  }
-  dependsOn: [
-    ManagedIdentity_Resource
-  ]
-}
-
 // Create an App Service plan in Free tier
 resource WebAppServicePlan_Resource 'Microsoft.Web/serverfarms@2020-09-01' = {
   name: '${projectName}plan'
@@ -162,6 +138,9 @@ resource WebApp_Resource 'Microsoft.Web/sites@2020-09-01' = {
   properties: {
     serverFarmId: WebAppServicePlan_Resource.id    
  }
+ dependsOn: [
+  WebAppServicePlan_Resource
+]
 }
 
 // Set the database connection string for the application
@@ -173,27 +152,24 @@ resource WebAppConnectionString_Resource 'Microsoft.Web/sites/config@2020-09-01'
       type: 'SQLAzure'
     }
   } 
+  dependsOn: [
+    WebApp_Resource
+  ]
 }
 
 // Deploy the application
-resource DeployWebApp 'Microsoft.Resources/deploymentScripts@2020-10-01' = {
-  name: '${projectName}script'
-  location: location
-  identity: {
-    type: 'UserAssigned'
-    userAssignedIdentities: {
-      '${uamiId}': {}
-    }
+resource siteName_web 'Microsoft.Web/sites/sourcecontrols@2015-04-01' = {
+  name: '${WebApp_Resource.name}/web'
+  properties: {
+    RepoUrl: 'https://github.com/Pietervanhove/AEDemo.git'
+    branch: 'master'
+    IsManualIntegration: true
   }
-  kind: 'AzurePowerShell'
-    properties: {
-    azPowerShellVersion: '5.0'
-    scriptContent: '$PropertiesObject = @{repoUrl = "https://github.com/Pietervanhove/AEDemo.git"; branch = "master"; isManualIntegration = "true";} \r\n Set-AzResource -Properties $PropertiesObject -ResourceGroupName ${resourceGroup().name} -ResourceType Microsoft.Web/sites/sourcecontrols -ResourceName ${WebApp_Resource.name}/web -ApiVersion 2015-08-01 -Force'
-    cleanupPreference: 'OnSuccess'
-    retentionInterval: 'P1D'
-    forceUpdateTag: currentTime // ensures script will run every time
-  }
+  dependsOn: [
+    WebApp_Resource
+  ]
 }
+
 
 //////////////////////////////////////
 // Create and configure a key vault //
