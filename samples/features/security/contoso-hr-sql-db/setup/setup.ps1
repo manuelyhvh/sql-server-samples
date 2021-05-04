@@ -47,12 +47,6 @@ New-AzResourceGroupDeployment `
   -clientIP $clientIP
 
 ######################################################################
-# Clean up not needed resources
-######################################################################
-
-Remove-AzDeploymentScript -ResourceGroupName $resourceGroupName -Name "${projectName}script"
-
-######################################################################
 # Populate the database with data
 ######################################################################
 
