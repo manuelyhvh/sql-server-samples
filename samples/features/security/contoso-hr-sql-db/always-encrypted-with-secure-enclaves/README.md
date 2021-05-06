@@ -37,11 +37,11 @@ Perform the below steps before you show the demo.
         2. Click Connect.
         3. When prompted, sign in to Azure.
 3. Prepare your web browser.
-    1. Open a new tab in the browser and point to Azure Portal: `https://portal.azure.com`.
+    1. Open a new tab in the browser and point it to Azure Portal: `https://portal.azure.com`.
     2. Sign in to Azure if prompted.
     3. In the `Search` box in the Azure Portal, enter the name of your demo resource group and click `Enter`. In the search results, click on your resource group. You should see the content of your resource group, which should look like this:
 
-       ![Web app](./img/resource-group.png)
+       ![Demo resource group](./img/resource-group.png)
 
 ### Demos steps
 
@@ -54,7 +54,7 @@ Perform the below steps before you show the demo.
     - `<project name>server`- the Azure SQL database server in Azure SQL Database.
     - `<project name>vault` - the key vault in Azure Key Vault, containing the column master key for Always Encrypted.
     - `ContosoHR` - the database.
-
+   
 2. Right-click on the `ContosoHR` database in the resource group and open its `Overview` blade in the new tab. Click on `Compute + storage` under `Settings`.  Click `Change configuration`. Note that the database is already configured to use the DC-series hardware configuration that supports confidential computing using secure enclaves. Setting the DC-series hardware configuration for a database is required to use Always Encrypted with secure enclaves in the database. For more information, see [Enable Intel SGX for your Azure SQL Database](https://docs.microsoft.com/en-us/azure/azure-sql/database/always-encrypted-enclaves-enable-sgx).
 
    ![DC-series hardware configuration](./img/portal-dc-series-configuration.png)
@@ -63,7 +63,7 @@ Perform the below steps before you show the demo.
 
    ![DC-series hardware configuration](./img/portal-attestation-policy.png)
 
-4. Close the browser tab for the attestation provider. Right-click on the app service for the Contoso HR web application in your resource group and open its `Overview` blade in a new tab. Click on `Configuration` under `Settings`. In the `Connection strings` section, click `Advanced edit`. This will display the database connection string configured for the web application. There are two important things to call out in the database connection string:
+4. Close the browser tab for the attestation provider. Right-click on the app service for the Contoso HR web application in your resource group and open its `Overview` blade in a new tab. Click on `Configuration` under `Settings`. In the `Connection strings` section, click `Advanced edit`. This will display the database connection string configured for the web application. There are three important things to call out in the database connection string:
 
    - `Column Encryption Setting = Enabled` turns the Always Encrypted on in the client driver, allowing it to transparently encrypt query parameters and decrypt queries results.
    - `Attestation Protocol = AAS` specifies Microsoft Azure Attestation is used for attesting the secure enclave for the `ContosoHR` database.
@@ -79,8 +79,8 @@ Perform the below steps before you show the demo.
 
 6. Switch to SSMS.
     1. In Object Explorer, navigate to the `ContosoHR` database. Then go to `Security` > `Always Encrypted Keys`.
-    2. Open the Column Master Keys and Column Encrption Keys folders. You should see the metadata object, named `CMK1`, for the column master key and the metadata object, named `CEK1`, for the column encryption key.
-    3. Right click on `CMK1` and select `Properties`. Note that the metadata object references the key in the key vault. Also note `Enclave Computations` is set to `Allowed`, which permits column encryption keys, this columns master key protects, to be used in enclave computations.
+    2. Open the `Column Master Keys` and `Column Encryption Keys` folders. You should see the metadata object, named `CMK1`, for the column master key and the metadata object, named `CEK1`, for the column encryption key.
+    3. Right click on `CMK1` and select `Properties`. Note that the metadata object references the key in the key vault. Also note `Enclave Computations` is set to `Allowed`, which permits the column encryption key, this columns master key protects, to be used in enclave computations.
 
        ![Connection string](./img/ssms-cmk.png)
 
@@ -90,7 +90,7 @@ Always Encrypted with secure enclaves requires specific hardware that is exposed
 
 ## Demo 2
 
-This short demo highlights the main benefits of Always Encrypted with secure enclaves.
+This short demo highlights the main benefits of Always Encrypted with secure enclaves. The starting point for the demo is the ContosoHR database the `SSN` and `Salary` columns already encrypted.
 
 ### Prepare for the demo
 Perform the below steps before you show the demo.
@@ -119,7 +119,7 @@ Perform the below steps before you show the demo.
           ![Selecting database](./img/ssms-explorer-select-database.png)
 
         2. With the `ContosoHR` database selected, click Ctrl + O. In the `Open File` dialog, navigate to the `tsql-scripts` folder and select `ListAllEmployees.sql`. Do not execute the query yet.
-        3. . With the `ContosoHR` database selected, click Ctrl + O. In the `Open File` dialog, navigate to the `tsql-scripts` folder and select `QueryEvents.sql`. Do not execute the query yet.
+        3. With the `ContosoHR` database selected, click Ctrl + O. In the `Open File` dialog, navigate to the `tsql-scripts` folder and select `QueryEvents.sql`. Do not execute the query yet.
 3. Prepare your web browser.
     1. Open your browser.
     2. Point the browser to the demo application URL.
@@ -156,25 +156,24 @@ Always Encrypted with secure enclaves allows applications to perform rich querie
 The starting point for this demo is the database with no columns encrypted - the data is initially not protected. The demo shows how to reach the following two objectives:
 
 1. Protect sensitive data in the database by encrypting it in-place.
-2. Ensure the Contoso HR web application can run rich queries on database columns after encrypting the columns.
+2. Ensure the Contoso HR web application can continue run rich queries on database columns after encrypting the columns.
 
 During the demo, you will use two instances of SQL Server Management Studio (SSMS):
 
 - DBA's instance - when using it, you will assume the role of a DBA.
 - Security Adminsitrator's instance - when using it, you will assume the role of a Security Administrator, who configures Always Encrypted in the database.
 
-
 ### Prepare for the demo
 Perform the below steps before you show the demo.
 
 1. Close all running SSMS instances.
 2. Prepare DBA's instance of SSMS.
-
     1. Start SSMS.
     2. In the Connect to Server dialog:
         1. In the main page of the dialog, enter your database server name. Set `Authentication` to `Azure Active Directory – Universal with MFA`. In the `User Name` field, enter your Azure AD username. You should enter the same username, you've used to sign in to Azure, when you set up your demo environment.
 
            ![Connect to Server](./img/ssms-connect-to-server-main-page.png)
+
         2. Click the `Options >>` button, select the `Connection Properties` tab and enter the database name(`ContosoHR`).
 
            ![Connection Properties](./img/ssms-connect-to-server-connection-properties-page.png)
@@ -245,7 +244,7 @@ Perform the below steps before you show the demo.
 
 5. Switch to Security Administrator's instance of SSMS, select the `EncryptColumns.sql` tab and click `F5` to execute the query, encrypts the data in the `SSN` and `Salary` columns in place, using the secure enclave.
 
-6. Switch back to DBA's instance of SSMS, select the `ListAllEmployees.sql` tab and click `F5` to execute the query again. Now the query should show the encrypted data in the `SSN` and `Salary` columns. As both columns are encrypted, a DBA cannot see the data in plaintext. 
+6. Switch back to DBA's instance of SSMS, select the `ListAllEmployees.sql` tab and click `F5` to execute the query again. Now the query should show the encrypted data in the `SSN` and `Salary` columns. As both columns are encrypted, the DBA cannot see the data in plaintext. 
 
    ![Encrypted results](./img/ssms-encrypted-results.png)
 
@@ -264,4 +263,4 @@ Perform the below steps before you show the demo.
 
 Secure enclaves make it possible to encrypt sensitive data columns in-place, eliminating a need to move the data outside of the database for cryptographic operations.
 
-The unique benefit of Always Encrypted with secure enclaves is that it allows you to protect your sensitive data from high-privilege users, including DBAs in your organization, and, after you encrypt your data to protect it, your applications can continue to use the full power of the relational database engine in Azure SQL Database and run rich queries on encrypted columns.
+The unique benefit of Always Encrypted with secure enclaves is that it allows you to protect your sensitive data from high-privilege users, including DBAs in your organization, and, after you encrypt your data to protect it, your applications can continue running rich queries on encrypted columns.

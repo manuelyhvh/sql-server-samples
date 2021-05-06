@@ -32,7 +32,8 @@ You also need to make sure the following software is installed on your machine:
         ```powershell
         Get-InstalledModule -Name SqlServer
         ```
-1. [Bicep](https://docs.microsoft.com/azure/azure-resource-manager/templates/bicep-overview) version 0.3.255 or later. You need install Bicep, so that it can be invoked from PowerShell. The recommended way to achieve that is to [install Bicep manually with PowerShell](https://docs.microsoft.com/azure/azure-resource-manager/templates/bicep-install?tabs=azure-powershell#manual-with-powershell).
+
+1. [Bicep](https://docs.microsoft.com/azure/azure-resource-manager/templates/bicep-overview) version 0.3.255 or later. You need install Bicep and ensure it can be invoked from PowerShell. The recommended way to achieve that is to [install Bicep manually with PowerShell](https://docs.microsoft.com/azure/azure-resource-manager/templates/bicep-install?tabs=azure-powershell#manual-with-powershell).
 1. [SQL Server Management Studio](https://msdn.microsoft.com/en-us/library/mt238290.aspx) - version 18.9.1 or later is recommended.
 
 ## Setup
@@ -43,8 +44,8 @@ You also need to make sure the following software is installed on your machine:
 1. Run the setup.ps1 PowerShell script. 
 1. When prompted, enter the following information:
     1. Your Azure subscription id. To determine your subscription id, see [Find your Azure subscription](https://docs.microsoft.com/en-us/azure/media-services/latest/setup-azure-subscription-how-to?tabs=portal).
-    1. The project name. The resources group containing all your demo resources will have that name. The project name will also be used as a prefix for the names of all demo resources. Please use only lowercase letters and numbers for the project name and make sure it is unique.
-    1. The location - it must the name of an Azure region that supports the [DC-series hardware generation](https://docs.microsoft.com/azure/azure-sql/database/service-tiers-vcore?tabs=azure-portal#dc-series-1) in Azure SQL Database.
+    1. The project name. The resource group containing all your demo resources will have that name. The project name will also be used as a prefix for the names of all demo resources. Please use only lowercase letters and numbers for the project name and make sure it is unique.
+    1. The location - it must be the name of an Azure region that supports the [DC-series hardware generation](https://docs.microsoft.com/azure/azure-sql/database/service-tiers-vcore?tabs=azure-portal#dc-series-1) in Azure SQL Database.
     1. The username and the password of the Azure SQL database server administrator. The setup script will create the server with these admin credentials and it will later use them to connect to the server using SQL authentication for some of the setup steps.
 1. When prompted, sign in to Azure. Once you sign in, the script will deploy the demo environment using the provided Bicep template, which may take a few minutes. After the deployment completes, the script performs post-deployment setup steps to configure the database and the attestation policy for Always Encrypted with secure enclaves.
 1. When prompted, sign in to Azure again, to enable the SqlServer PowerShell module to connect to the database.
