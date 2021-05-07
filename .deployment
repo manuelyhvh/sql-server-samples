@@ -1,0 +1,2 @@
+[config]
+project = samples/features/security/contoso-hr-sql-db/source/ContosoHR/ContosoHR.csproj
