@@ -1,2 +1,2 @@
 [config]
-project = source
+project = samples/features/security/contoso-hr-sql-db/source/ContosoHR
