@@ -1,2 +1,2 @@
 [config]
-project = sql-server-samples/samples/features/security/contoso-hr-sql-db/source/ContosoHR/ContosoHR.csproj
+project = samples/features/security/contoso-hr-sql-db/source/ContosoHR/ContosoHR.csproj
