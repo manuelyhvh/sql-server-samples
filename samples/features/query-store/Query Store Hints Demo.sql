@@ -8,12 +8,12 @@
 -- ************************************************************************ --
 
 /*
-	Demo prep, in PropertyMLS
+	Demo prep, connect to the PropertyMLS database
 */
 
 ALTER DATABASE [PropertyMLS] SET QUERY_STORE CLEAR;
-ALTER DATABASE current SET QUERY_STORE = ON;
-ALTER DATABASE current SET QUERY_STORE  (QUERY_CAPTURE_MODE = ALL);
+ALTER DATABASE CURRENT SET QUERY_STORE = ON;
+ALTER DATABASE CURRENT SET QUERY_STORE  (QUERY_CAPTURE_MODE = ALL);
 GO
 
 -- Should be READ_WRITE
@@ -67,10 +67,10 @@ WHERE query_sql_text like N'%ORDER BY ListingPrice DESC%' and query_sql_text not
 GO
 
 /*
-	 We can set the hint associated with the query_id 
+	 We can set the hint associated with the query_id returned in the previous result set, as below.
 	 Note, we can designate one or more query hints
 */
-EXEC sp_query_store_set_hints 10, N'OPTION(RECOMPILE)';
+EXEC sp_query_store_set_hints @query_id=5, @value = N'OPTION(RECOMPILE)';
 GO
 
 /*
