@@ -118,18 +118,17 @@ resource AssignAttestationReader_Resource 'Microsoft.Authorization/roleAssignmen
 ///////////////////////////////////
 
 // Create an App Service plan in Free tier
-resource WebAppServicePlan_Resource 'Microsoft.Web/serverfarms@2020-09-01' = {
+resource WebAppServicePlan_Resource 'Microsoft.Web/serverfarms@2020-12-01' = {
   name: '${projectName}plan'
  location: location
  properties: {}
   sku: {
-    name: 'F1'
-    tier: 'Free'
+    name: 'B1'
   }
 }
 
 // Create the App Service
-resource WebApp_Resource 'Microsoft.Web/sites@2020-09-01' = {
+resource WebApp_Resource 'Microsoft.Web/sites@2020-12-01' = {
   name: '${projectName}app'
   location: location
   identity: {
@@ -138,37 +137,53 @@ resource WebApp_Resource 'Microsoft.Web/sites@2020-09-01' = {
   properties: {
     serverFarmId: WebAppServicePlan_Resource.id    
  }
- dependsOn: [
-  WebAppServicePlan_Resource
-]
-}
-
-// Set the database connection string for the application
-resource WebAppConnectionString_Resource 'Microsoft.Web/sites/config@2020-09-01' = {
-  name: '${WebApp_Resource.name}/connectionstrings'
+ //Set the database connection string for the application
+ resource WebAppConnectionString_Resource 'config' = {
+  name: 'connectionstrings'
   properties: {
     ContosoHRDatabase: {
       value: 'Server=tcp:${Server_Name_resource.name}.database.windows.net;Database=ContosoHR;Column Encryption Setting=Enabled; Attestation Protocol = AAS; Enclave Attestation Url=${attestationProviderName_resource.properties.attestUri}/attest/SgxEnclave; Authentication=Active Directory Managed Identity'
       type: 'SQLAzure'
     }
+  }
+ } 
+ // Deploy the application
+  resource sourceControl 'sourcecontrols' = {
+    name: 'web'
+    properties: {
+      repoUrl: 'https://github.com/Pietervanhove/sql-server-samples.git'
+      branch: 'AESQLDBWithEnclavesDemo'
+      isManualIntegration: true
+    }
   } 
-  dependsOn: [
-    WebApp_Resource
-  ]
 }
 
-// Deploy the application
-resource siteName_web 'Microsoft.Web/sites/sourcecontrols@2015-04-01' = {
-  name: '${WebApp_Resource.name}/web'
-  properties: {
-    RepoUrl: 'https://github.com/Pietervanhove/AEDemo.git'
-    branch: 'master'
-    IsManualIntegration: true
-  }
-  dependsOn: [
-    WebApp_Resource
-  ]
-}
+// Set the database connection string for the application
+// resource WebAppConnectionString_Resource 'Microsoft.Web/sites/config@2020-09-01' = {
+//   name: '${WebApp_Resource.name}/connectionstrings'
+//   properties: {
+//     ContosoHRDatabase: {
+//       value: 'Server=tcp:${Server_Name_resource.name}.database.windows.net;Database=ContosoHR;Column Encryption Setting=Enabled; Attestation Protocol = AAS; Enclave Attestation Url=${attestationProviderName_resource.properties.attestUri}/attest/SgxEnclave; Authentication=Active Directory Managed Identity'
+//       type: 'SQLAzure'
+//     }
+//   } 
+//   dependsOn: [
+//     WebApp_Resource
+//   ]
+// }
+
+// // Deploy the application
+// resource siteName_web 'Microsoft.Web/sites/sourcecontrols@2015-04-01' = {
+//   name: '${WebApp_Resource.name}/web'
+//   properties: {
+//     RepoUrl: 'https://github.com/Pietervanhove/AEDemo.git'
+//     branch: 'master'
+//     IsManualIntegration: true
+//   }
+//   dependsOn: [
+//     WebApp_Resource
+//   ]
+// }
 
 
 //////////////////////////////////////
