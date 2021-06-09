@@ -33,15 +33,15 @@ You also need to make sure the following software is installed on your machine:
         Get-InstalledModule -Name SqlServer
         ```
 
-1. [Bicep](https://docs.microsoft.com/azure/azure-resource-manager/templates/bicep-overview) version 0.3.255 or later. You need install Bicep and ensure it can be invoked from PowerShell. The recommended way to achieve that is to [install Bicep manually with PowerShell](https://docs.microsoft.com/azure/azure-resource-manager/templates/bicep-install?tabs=azure-powershell#manual-with-powershell).
+1. [Bicep](https://docs.microsoft.com/azure/azure-resource-manager/templates/bicep-overview) version 0.4.63 or later. You need install Bicep and ensure it can be invoked from PowerShell. The recommended way to achieve that is to [install Bicep manually with PowerShell](https://docs.microsoft.com/azure/azure-resource-manager/templates/bicep-install?tabs=azure-powershell#manual-with-powershell).
 1. [SQL Server Management Studio](https://msdn.microsoft.com/en-us/library/mt238290.aspx) - version 18.9.1 or later is recommended.
 
 ## Setup
 
 1. Clone/download the repository.
 1. Open a PowerShell session.
-1. In the PowerShell session, change the directory to the Setup folder within this demo's directory.
-1. Run the setup.ps1 PowerShell script. 
+1. In the PowerShell session, change the directory to the setup folder within this demo's directory.
+1. Run the setup.ps1 PowerShell script.
 1. When prompted, enter the following information:
     1. Your Azure subscription id. To determine your subscription id, see [Find your Azure subscription](https://docs.microsoft.com/en-us/azure/media-services/latest/setup-azure-subscription-how-to?tabs=portal).
     1. The project name. The resource group containing all your demo resources will have that name. The project name will also be used as a prefix for the names of all demo resources. Please use only lowercase letters and numbers for the project name and make sure it is unique.

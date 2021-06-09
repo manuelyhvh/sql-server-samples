@@ -151,7 +151,7 @@ Set-AzAttestationPolicy -Name $attestationProviderName -ResourceGroupName $resou
 
 # Get the attestation URL
 $attestationProvider = Get-AzAttestation -Name $attestationProviderName -ResourceGroupName $resourceGroupName 
-$attestationUrl = $attestationProvider.AttestUri + “/attest/SgxEnclave”
+$attestationUrl = $attestationProvider.AttestUri
 
 ######################################################################
 # Print parameters for the demo

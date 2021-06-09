@@ -17,7 +17,7 @@ param sqlAdminUserName string
 @description('The password of the Azure SQL database server administrator for SQL authentication.')
 param sqlAdminPassword string
 
-@description('The IP address the user will connect from to the Azure SQL database server.')
+@description('The IP address the user will connect from to the logical server in Azure SQL Database.')
 param clientIP string 
 
 @description('The location (the Azure region) for all resources.')
@@ -27,7 +27,7 @@ param location string = resourceGroup().location
 param currentTime string = utcNow('u')
 
 ////////////////////////////////////////////
-// Create and configure a database server //
+// Create and configure a logical server //
 ////////////////////////////////////////////
 
 // Create the server
@@ -104,15 +104,6 @@ resource attestationProviderName_resource 'Microsoft.Attestation/attestationProv
   properties: {}
 }
 
-// Grant the database server access to the attestation provider
-resource AssignAttestationReader_Resource 'Microsoft.Authorization/roleAssignments@2020-04-01-preview' = {
-  name: guid(resourceGroup().id,currentTime)
-  properties: {
-    roleDefinitionId: '/subscriptions/${subscription().subscriptionId}/providers/Microsoft.Authorization/roleDefinitions/fd1bd22b-8476-40bc-a0bc-69b95687b9f3'
-    principalId: Server_Name_resource.identity.principalId
-  }
-}
-
 ///////////////////////////////////
 // Configure the web application //
 ///////////////////////////////////
@@ -137,16 +128,18 @@ resource WebApp_Resource 'Microsoft.Web/sites@2020-12-01' = {
   properties: {
     serverFarmId: WebAppServicePlan_Resource.id    
  }
+
  //Set the database connection string for the application
  resource WebAppConnectionString_Resource 'config' = {
   name: 'connectionstrings'
   properties: {
     ContosoHRDatabase: {
-      value: 'Server=tcp:${Server_Name_resource.name}.database.windows.net;Database=ContosoHR;Column Encryption Setting=Enabled; Attestation Protocol = AAS; Enclave Attestation Url=${attestationProviderName_resource.properties.attestUri}/attest/SgxEnclave; Authentication=Active Directory Managed Identity'
+      value: 'Server=tcp:${Server_Name_resource.name}.database.windows.net;Database=ContosoHR;Column Encryption Setting=Enabled; Attestation Protocol = AAS; Enclave Attestation Url=${attestationProviderName_resource.properties.attestUri}; Authentication=Active Directory Managed Identity'
       type: 'SQLAzure'
     }
   }
  } 
+ 
  // Deploy the application
   resource sourceControl 'sourcecontrols' = {
     name: 'web'
@@ -157,7 +150,6 @@ resource WebApp_Resource 'Microsoft.Web/sites@2020-12-01' = {
     }
   } 
 }
-
 
 //////////////////////////////////////
 // Create and configure a key vault //
