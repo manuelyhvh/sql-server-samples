@@ -117,7 +117,7 @@ resource AssignAttestationReader_Resource 'Microsoft.Authorization/roleAssignmen
 // Configure the web application //
 ///////////////////////////////////
 
-// Create an App Service plan in Free tier
+// Create an App Service plan 
 resource WebAppServicePlan_Resource 'Microsoft.Web/serverfarms@2020-12-01' = {
   name: '${projectName}plan'
  location: location
@@ -157,33 +157,6 @@ resource WebApp_Resource 'Microsoft.Web/sites@2020-12-01' = {
     }
   } 
 }
-
-// Set the database connection string for the application
-// resource WebAppConnectionString_Resource 'Microsoft.Web/sites/config@2020-09-01' = {
-//   name: '${WebApp_Resource.name}/connectionstrings'
-//   properties: {
-//     ContosoHRDatabase: {
-//       value: 'Server=tcp:${Server_Name_resource.name}.database.windows.net;Database=ContosoHR;Column Encryption Setting=Enabled; Attestation Protocol = AAS; Enclave Attestation Url=${attestationProviderName_resource.properties.attestUri}/attest/SgxEnclave; Authentication=Active Directory Managed Identity'
-//       type: 'SQLAzure'
-//     }
-//   } 
-//   dependsOn: [
-//     WebApp_Resource
-//   ]
-// }
-
-// // Deploy the application
-// resource siteName_web 'Microsoft.Web/sites/sourcecontrols@2015-04-01' = {
-//   name: '${WebApp_Resource.name}/web'
-//   properties: {
-//     RepoUrl: 'https://github.com/Pietervanhove/AEDemo.git'
-//     branch: 'master'
-//     IsManualIntegration: true
-//   }
-//   dependsOn: [
-//     WebApp_Resource
-//   ]
-// }
 
 
 //////////////////////////////////////
