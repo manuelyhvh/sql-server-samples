@@ -35,23 +35,23 @@ New-AzResourceGroup -Name $resourceGroupName -Location $location
 ######################################################################
 # Deploy the resources for the demo environment
 ######################################################################
-az deployment group create --name DeployAEWithEnclavesDemo --template-file $bicepFile --resource-group $resourceGroupName --parameters `
-projectName=$projectName `
-userObjectId=$userObjectId `
-userName=$userName `
-sqlAdminUserName=$sqlAdminUserName `
-sqlAdminPassword=$sqlAdminPassword `
-clientIP=$clientIP
+#az deployment group create --name DeployAEWithEnclavesDemo --template-file $bicepFile --resource-group $resourceGroupName --parameters `
+#projectName=$projectName `
+#userObjectId=$userObjectId `
+#userName=$userName `
+#sqlAdminUserName=$sqlAdminUserName `
+#sqlAdminPassword=$sqlAdminPassword `
+#clientIP=$clientIP
 
-#New-AzResourceGroupDeployment `
-#  -ResourceGroupName $resourceGroupName `
-#  -TemplateFile $bicepFile `
-#  -projectName $projectName `
-#  -userObjectId $userObjectId `
-#  -userName $userName `
-#  -sqlAdminUserName $sqlAdminUserName `
-#  -sqlAdminPassword $sqlAdminPassword `
-#  -clientIP $clientIP
+New-AzResourceGroupDeployment `
+  -ResourceGroupName $resourceGroupName `
+  -TemplateFile $bicepFile `
+  -projectName $projectName `
+  -userObjectId $userObjectId `
+  -userName $userName `
+  -sqlAdminUserName $sqlAdminUserName `
+  -sqlAdminPassword $sqlAdminPassword `
+  -clientIP $clientIP
 
 ######################################################################
 # Populate the database with data
