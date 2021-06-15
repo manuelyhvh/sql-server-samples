@@ -139,7 +139,12 @@ resource WebApp_Resource 'Microsoft.Web/sites@2020-12-01' = {
     }
   }
  } 
- 
+  //Define AppSetting to fetch the correct project from the GitHub Repository
+ resource AppSetting 'config' = {
+  name: 'appsettings'
+  properties: {
+    PROJECT: 'samples/features/security/contoso-hr-sql-db/source/ContosoHR/ContosoHR.csproj'
+  }
  // Deploy the application
   resource sourceControl 'sourcecontrols' = {
     name: 'web'
