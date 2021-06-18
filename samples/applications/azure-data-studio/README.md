@@ -12,7 +12,6 @@ Helpful notebooks for troubleshooting and new features in Azure Data Studio.
 [Before you begin](#before-you-begin)<br/>
 [Run this sample](#run-this-sample)<br/>
 [Sample details](#sample-details)<br/>
-[Disclaimers](#disclaimers)<br/>
 [Related links](#related-links)<br/>
 
 
