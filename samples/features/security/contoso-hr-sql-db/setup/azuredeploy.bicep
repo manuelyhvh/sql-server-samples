@@ -23,8 +23,6 @@ param clientIP string
 @description('The location (the Azure region) for all resources.')
 param location string = resourceGroup().location
 
-@description('The current time.')
-param currentTime string = utcNow('u')
 
 ////////////////////////////////////////////
 // Create and configure a logical server //
@@ -128,7 +126,7 @@ resource WebApp_Resource 'Microsoft.Web/sites@2020-12-01' = {
   properties: {
     serverFarmId: WebAppServicePlan_Resource.id    
  }
-
+ 
  //Set the database connection string for the application
  resource WebAppConnectionString_Resource 'config' = {
   name: 'connectionstrings'
@@ -154,6 +152,7 @@ resource WebApp_Resource 'Microsoft.Web/sites@2020-12-01' = {
       isManualIntegration: true
     }
   } 
+ }
 }
 
 //////////////////////////////////////
@@ -219,9 +218,10 @@ resource Key_Resource 'Microsoft.KeyVault/vaults/keys@2019-09-01' = {
   name: '${KeyVault_Resource.name}/CMK'
   tags: {}
   properties: {
+    attributes: {
+      enabled: true
+    }
     kty: 'RSA'
+    keySize: 4096
   }
-  dependsOn: [
-    KeyVault_Resource
-  ]
 }
