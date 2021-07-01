@@ -107,7 +107,7 @@ resource attestationProviderName_resource 'Microsoft.Attestation/attestationProv
 ///////////////////////////////////
 
 // Create an App Service plan 
-resource WebAppServicePlan_Resource 'Microsoft.Web/serverfarms@2020-12-01' = {
+resource WebAppServicePlan_Resource 'Microsoft.Web/serverfarms@2021-01-01' = {
   name: '${projectName}plan'
  location: location
  properties: {}
@@ -117,7 +117,7 @@ resource WebAppServicePlan_Resource 'Microsoft.Web/serverfarms@2020-12-01' = {
 }
 
 // Create the App Service
-resource WebApp_Resource 'Microsoft.Web/sites@2020-12-01' = {
+resource WebApp_Resource 'Microsoft.Web/sites@2021-01-01' = {
   name: '${projectName}app'
   location: location
   identity: {
@@ -143,17 +143,21 @@ resource WebApp_Resource 'Microsoft.Web/sites@2020-12-01' = {
   properties: {
     PROJECT: 'samples/features/security/contoso-hr-sql-db/source/ContosoHR/ContosoHR.csproj'
   }
- // Deploy the application
-  resource sourceControl 'sourcecontrols' = {
-    name: 'web'
-    properties: {
-      repoUrl: 'https://github.com/Pietervanhove/sql-server-samples.git'
-      branch: 'AESQLDBWithEnclavesDemo'
-      isManualIntegration: true
-    }
-  } 
  }
 }
+
+ // Deploy the application
+resource sourceControl 'Microsoft.Web/sites/sourcecontrols@2021-01-01' = {
+  name: '${projectName}app/web'
+  properties: {
+    repoUrl: 'https://github.com/Pietervanhove/sql-server-samples.git'
+    branch: 'AESQLDBWithEnclavesDemo'
+    isManualIntegration: true
+  }
+  dependsOn: [
+         Server_Name_resource
+       ]
+}  
 
 //////////////////////////////////////
 // Create and configure a key vault //
