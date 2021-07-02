@@ -30,18 +30,20 @@ Before you begin, you need an Azure subscription. If you don't already have an A
 You also need to make sure the following software is installed on your machine:
 
 1. PowerShell modules:
+
    1. Az version 5.6 or later. For details on how to install the Az PowerShell module, see [Install the Azure Az PowerShell module](https://docs.microsoft.com/powershell/azure/install-az-ps). To determine the version of the Az module installed on your machine, run the following command from a PowerShell session.
 
      ```powershell
      Get-InstalledModule -Name Az
      ```
-   1. Az.Attestation 0.1.8 or later. For details on how to install the Az.Attestation PowerShell module, see [Install Az.Attestation PowerShell module](https://docs.microsoft.com/azure/attestation/quickstart-powershell#install-azattestation-powershell-module). To determine the version of the Az.Attestation module installed on your machine, run the following command from a PowerShell session.
+
+   2. Az.Attestation 0.1.8 or later. For details on how to install the Az.Attestation PowerShell module, see [Install Az.Attestation PowerShell module](https://docs.microsoft.com/azure/attestation/quickstart-powershell#install-azattestation-powershell-module). To determine the version of the Az.Attestation module installed on your machine, run the following command from a PowerShell session.
 
      ```powershell
      Get-InstalledModule -Name Az.Attestation
      ```
 
-   1. SqlServer version 21.1.18245 or later. For details on how to install the SqlServer PowerShell module, see [Installing or updating the SqlServer module](https://docs.microsoft.com/sql/powershell/download-sql-server-ps-module#installing-or-updating-the-sqlserver-module). To determine the version the SqlServer module installed on your machine, run the following command from a PowerShell session.
+   3. SqlServer version 21.1.18245 or later. For details on how to install the SqlServer PowerShell module, see [Installing or updating the SqlServer module](https://docs.microsoft.com/sql/powershell/download-sql-server-ps-module#installing-or-updating-the-sqlserver-module). To determine the version the SqlServer module installed on your machine, run the following command from a PowerShell session.
 
      ```powershell
      Get-InstalledModule -Name SqlServer
@@ -63,7 +65,7 @@ Setup steps:
 
 1. Clone/download and unpack the repository.
 1. Open a PowerShell session.
-1. In the PowerShell session, change the directory to the setup folder within this demo's directory. For example, if you've unpacked the downloaded repository on a Windows machine in **C:\**, issue the following command:
+1. In the PowerShell session, change the directory to the setup folder within this demo's directory. For example, if you've unpacked the downloaded repository on a Windows machine in **C:\\**, issue the following command:
 
    ```powershell
    cd "C:\sql-server-samples\samples\features\security\always-encrypted-with-secure-enclaves\azure-sql-database\setup"
@@ -87,7 +89,7 @@ Setup steps:
 
 ## Demo 1
 
-During this demo, you will take a tour of the demo environment, in which Always Encrypted with secure enclaves is already set up and sensitive data columns in the database are already encrypted.
+In this demo, you will take a tour of the demo environment, in which Always Encrypted with secure enclaves is already set up and sensitive data columns in the database are already encrypted.
 
 ### Prepare for the demo
 
@@ -97,11 +99,11 @@ Perform the below steps before each demo presentation.
 1. Prepare a new instance of SSMS.
    1. Start SSMS.
    1. In the Connect to Server dialog:
-      1. In the main page of the dialog, enter your database server name. Set **Authentication** to **Azure Active Directory – Universal with MFA**. In the **User Name** field, enter your Azure AD username. You should enter the same username, you've used to sign in to Azure, when you set up your demo environment.
+      1. In the main page of the dialog, enter your database server name. Set **Authentication** to **Azure Active Directory – Universal with MFA**. In the **User Name** field, enter your Azure AD username. You should enter the same username, you used to sign in to Azure, when you set up your demo environment.
 
         ![Connect to Server](./img/ssms-connect-to-server-main-page.png)
 
-      1. Click Connect.
+      1. Click **Connect**.
       1. When prompted, sign in to Azure.
 1. Prepare your web browser.
    1. Open a new tab in the browser and point it to Azure Portal: **https://portal.azure.com**.
@@ -117,7 +119,7 @@ Perform the below steps before each demo presentation.
    - `<project name>app`- an app service hosting the Contoso HR web application.
    - `<project name>attest`- an attestation provider in Microsoft Azure Attestation for attesting the secure enclave for the **ContosoHR** database.
    - `<project name>identity` - a user-assigned managed identity that was used to deploy the web application.
-   - `<project name>plan` - am app service plan for the web application.
+   - `<project name>plan` - an app service plan for the web application.
    - `<project name>server`- a logical server in Azure SQL Database.
    - `<project name>vault` - a key vault in Azure Key Vault, containing the column master key for Always Encrypted.
    - `ContosoHR` - a database.
@@ -132,7 +134,7 @@ Perform the below steps before each demo presentation.
 
 1. Close the browser tab for the attestation provider. Right-click on the app service for the Contoso HR web application in your resource group and open its **Overview** blade in a new tab. Click on **Configuration** under **Settings**. In the **Connection strings** section, click **Advanced edit**. This will display the database connection string configured for the web application. There are three important things to call out in the database connection string:
 
-   - **Column Encryption Setting = Enabled** turns the Always Encrypted on in the client driver, allowing it to transparently encrypt query parameters and decrypt queries results.
+   - **Column Encryption Setting = Enabled** turns the Always Encrypted on in the client driver, allowing it to transparently encrypt query parameters and decrypt query results.
    - **Attestation Protocol = AAS** specifies Microsoft Azure Attestation is used for attesting the secure enclave for the **ContosoHR** database.
    - **Enclave Attestation Url** is an attest URI of the attestation provider. 
 
@@ -140,6 +142,7 @@ Perform the below steps before each demo presentation.
 
 1. Close the browser tab for the app service. Right-click on the key vault in your resource group and open its **Overview** blade in a new tab.
    1. Click on **Keys** under **Settings**. You should see the entry for the key, named **CMK** - this is your column master key for Always Encrypted.
+
        ![Connection string](./img/portal-key-vault-key.png)
 
    2. Click on **Access Policies** under **Settings**. You should see two access policy entries: one for your identity and one for the web app's identity. These policies grant you permissions necessary to perform key management operations and they grant the web app permissions required to decrypt column encryption keys, protecting the data.
@@ -166,7 +169,7 @@ Perform the below steps before you show the demo.
 1. Prepare a new instance of SSMS.
    1. Start SSMS.
    1. In the **Connect to Server** dialog:
-      1. In the main page of the dialog, enter your database server name. Set **Authentication** to **Azure Active Directory – Universal with MFA**. In the **User Name** field, enter your Azure AD username. You should enter the same username, you've used to sign in to Azure, when you set up your demo environment.
+      1. In the main page of the dialog, enter your database server name. Set **Authentication** to **Azure Active Directory – Universal with MFA**. In the **User Name** field, enter your Azure AD username. You should enter the same username, you used to sign in to Azure, when you set up your demo environment.
 
          ![Connect to Server](./img/ssms-connect-to-server-main-page.png)
 
@@ -178,7 +181,7 @@ Perform the below steps before you show the demo.
 
          ![Always Encrypted disabled](./img/ssms-connect-to-server-always-encrypted-disabled.png)
 
-      1. Click Connect.
+      1. Click **Connect**.
       1. When prompted, sign in to Azure.
    1. Configure query windows.
       1. In Object Explorer, find and select the **ContosoHR** database.
@@ -241,7 +244,7 @@ Perform the below steps before you show the demo.
 
          ![Connect to Server](./img/ssms-connect-to-server-main-page.png)
 
-      1. Click the **Options >>** button, select the **Connection Properties** tab and enter the database name(**ContosoHR**).
+      1. Click the **Options >>** button, select the **Connection Properties** tab and enter the database name (**ContosoHR**).
 
          ![Connection Properties](./img/ssms-connect-to-server-connection-properties-page.png)
 
@@ -249,7 +252,7 @@ Perform the below steps before you show the demo.
 
          ![Always Encrypted disabled](./img/ssms-connect-to-server-always-encrypted-disabled.png)
 
-      1. Click Connect.
+      1. Click **Connect**.
       1. When prompted, sign in to Azure.
    1. Configure query windows.
       1. In Object Explorer, find and select the **ContosoHR** database.
@@ -265,7 +268,7 @@ Perform the below steps before you show the demo.
 
          ![Connect to Server](./img/ssms-connect-to-server-main-page.png)
 
-      1. Click the **Options >>** button, select the **Connection Properties** tab and enter the database name(**ContosoHR**).
+      1. Click the **Options >>** button, select the **Connection Properties** tab and enter the database name (**ContosoHR**).
 
          ![Connection Properties](./img/ssms-connect-to-server-connection-properties-page.png)
 
@@ -273,7 +276,7 @@ Perform the below steps before you show the demo.
 
          ![Always Encrypted disabled](./img/ssms-connect-to-server-always-encrypted-enabled.png)
 
-      1. Click Connect.
+      1. Click **Connect**.
       1. When prompted, sign in to Azure.
    1. Configure query windows.
       1. In Object Explorer, find and select the **ContosoHR** database.

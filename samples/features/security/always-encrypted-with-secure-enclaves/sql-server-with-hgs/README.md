@@ -73,7 +73,7 @@ Perform the below steps before you show the demo.
    1. Start SSMS.
    1. In the **Connect to Server** dialog:
       1. In the main page of the dialog, enter your database server name. For example, enter `.` to connect to the default instance on the local machine. Set your authentication parameters.
-      1. Click the **Options >>** button, select the **Connection Properties** tab and enter the database name(**ContosoHR**).
+      1. Click the **Options >>** button, select the **Connection Properties** tab and enter the database name (**ContosoHR**).
 
          ![Connection Properties](./img/ssms-connect-to-server-connection-properties-page.png)
 
@@ -97,7 +97,7 @@ Perform the below steps before you show the demo.
    1. Start SSMS.
    1. In the **Connect to Server** dialog:
       1. In the main page of the dialog, enter your database server name. For example, enter `.` to connect to the default instance on the local machine. Set your authentication parameters.
-      1. Click the **Options >>** button, select the **Connection Properties** tab and enter the database name(**ContosoHR**).
+      1. Click the **Options >>** button, select the **Connection Properties** tab and enter the database name (**ContosoHR**).
 
         ![Connection Properties](./img/ssms-connect-to-server-connection-properties-page.png)
 
