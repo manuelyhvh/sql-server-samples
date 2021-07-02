@@ -30,12 +30,12 @@ Before you begin, you need an Azure subscription. If you don't already have an A
 You also need to make sure the following software is installed on your machine:
 
 1. PowerShell modules:
-   1. Az version 5.6 or later. For details on how to install the Az PowerShell module, see [Install the Azure Az PowerShell module](https://docs.microsoft.com/powershell/azure/install-az-ps). To determine the version the Az module installed on your machine, run the following command from a PowerShell session.
+   1. Az version 5.6 or later. For details on how to install the Az PowerShell module, see [Install the Azure Az PowerShell module](https://docs.microsoft.com/powershell/azure/install-az-ps). To determine the version of the Az module installed on your machine, run the following command from a PowerShell session.
 
      ```powershell
      Get-InstalledModule -Name Az
      ```
-   1. Az.Attestation 0.1.8 or later. For details on how to install the Az.Attestation PowerShell module, see [Install Az.Attestation PowerShell module](https://docs.microsoft.com/azure/attestation/quickstart-powershell#install-azattestation-powershell-module). To determine the version the Az.Attestation module installed on your machine, run the following command from a PowerShell session.
+   1. Az.Attestation 0.1.8 or later. For details on how to install the Az.Attestation PowerShell module, see [Install Az.Attestation PowerShell module](https://docs.microsoft.com/azure/attestation/quickstart-powershell#install-azattestation-powershell-module). To determine the version of the Az.Attestation module installed on your machine, run the following command from a PowerShell session.
 
      ```powershell
      Get-InstalledModule -Name Az.Attestation
@@ -47,7 +47,7 @@ You also need to make sure the following software is installed on your machine:
      Get-InstalledModule -Name SqlServer
      ```
 
-1. [Bicep](https://docs.microsoft.com/azure/azure-resource-manager/templates/bicep-overview) version 0.4.63 or later. You need install Bicep and ensure it can be invoked from PowerShell. The recommended way to achieve that is to [install Bicep manually with PowerShell](https://docs.microsoft.com/azure/azure-resource-manager/templates/bicep-install?tabs=azure-powershell#manual-with-powershell).
+1. [Bicep](https://docs.microsoft.com/azure/azure-resource-manager/templates/bicep-overview) version 0.4.63 or later. You need to install Bicep and ensure it can be invoked from PowerShell. The recommended way to achieve that is to [install Bicep manually with PowerShell](https://docs.microsoft.com/azure/azure-resource-manager/templates/bicep-install?tabs=azure-powershell#manual-with-powershell).
 1. [SQL Server Management Studio](https://msdn.microsoft.com/en-us/library/mt238290.aspx) - version 18.9.1 or later is recommended.
 
 ## Setup

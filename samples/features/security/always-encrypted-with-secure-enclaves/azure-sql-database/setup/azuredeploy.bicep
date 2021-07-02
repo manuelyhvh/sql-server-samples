@@ -141,7 +141,7 @@ resource WebApp_Resource 'Microsoft.Web/sites@2021-01-01' = {
  resource AppSetting 'config' = {
   name: 'appsettings'
   properties: {
-    PROJECT: 'samples/features/security/samples/AE New/source/ContosoHR/ContosoHR.csproj'
+    PROJECT: 'samples/features/security/always-encrypted-with-secure-enclaves/source/ContosoHR/ContosoHR.csproj'
   }
  }
 }
