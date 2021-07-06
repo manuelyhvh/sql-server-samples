@@ -1,4 +1,4 @@
-:::image type="content" source="../../../manage/sql-server-extended-security-updates/media/solutions-microsoft-logo-small.png" alt-text="solutions-microsoft-logo-small":::
+![](../../../manage/sql-server-extended-security-updates/media/solutions-microsoft-logo-small.png)
 
 # Demos of Always Encrypted with secure enclaves
 
