@@ -8,7 +8,7 @@ sys.path.append('./model')
 from constants import ConfigurationConstants, Operations
 import utils
 from json_objects import EncryptDecryptRequest
-import custom_softhsm
+import custom_softhsm as custom
 
 def handler(operation, payload, pin, key_attributes, version):
     """
