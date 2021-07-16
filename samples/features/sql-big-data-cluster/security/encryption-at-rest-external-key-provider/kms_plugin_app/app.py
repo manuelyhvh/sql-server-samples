@@ -8,7 +8,7 @@ sys.path.append('./model')
 from constants import ConfigurationConstants, Operations
 import utils
 from json_objects import EncryptDecryptRequest
-import custom2
+import custom
 
 def handler(operation, payload, pin, key_attributes, version):
     """
@@ -45,16 +45,16 @@ def get_key(json_key_attributes_dict, pin, version):
     """
     Call in to the custom key store module to get the key.
     """
-    return custom2.get_key(json_key_attributes_dict, pin, version)
+    return custom.get_key(json_key_attributes_dict, pin, version)
 
 def wrap_key(request, json_key_attributes_dict, pin, version):
     """
     Call in to the custom key store module to encrypt.
     """
-    return custom2.encrypt(request, json_key_attributes_dict, pin, version)
+    return custom.encrypt(request, json_key_attributes_dict, pin, version)
 
 def unwrap_key(request, json_key_attributes_dict, pin, version):
     """
     Call in to the custom key store module to decrypt.
     """
-    return custom2.decrypt(request, json_key_attributes_dict, pin, version)
+    return custom.decrypt(request, json_key_attributes_dict, pin, version)

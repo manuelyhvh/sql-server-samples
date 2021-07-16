@@ -1,6 +1,6 @@
 # SQL Server BDC Encryption at Rest
 
-This folder contains the AppDeploy template application for integration with external key providers (such as HSMs, HashiCorp Vault, etc).
+This folder contains the AppDeploy template application for integration with external key providers (such as HSMs, HashiCorp Vault, Azure Key Vault, etc).
 
 The folder kms_plugin_app should be downloaded as a zip file for usage in respect of the instructions at [External Key Providers](https://docs.microsoft.com/sql/big-data-cluster/encryption-at-rest-external-provider).
 
