@@ -34,8 +34,8 @@ export DEBIAN_FRONTEND=noninteractive
 
 # Kube version.
 #
-KUBE_DPKG_VERSION=1.16.3-00
-KUBE_VERSION=1.16.3
+KUBE_DPKG_VERSION=1.18.3-00
+KUBE_VERSION=1.18.3
 
 # Wait for 5 minutes for the cluster to be ready.
 #
@@ -205,7 +205,7 @@ apt-get install -q -y kubelet=$KUBE_DPKG_VERSION kubeadm=$KUBE_DPKG_VERSION kube
 # Holding the version of kube packages.
 #
 apt-mark hold kubelet kubeadm kubectl
-curl https://raw.githubusercontent.com/kubernetes/helm/master/scripts/get | bash
+curl https://raw.githubusercontent.com/kubernetes/helm/master/scripts/get-helm-3 | bash
 
 . /etc/os-release
 if [ "$UBUNTU_CODENAME" == "bionic" ]; then
