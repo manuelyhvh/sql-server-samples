@@ -22,7 +22,7 @@ export RESOURCE_GROUP=$resourcegroup
 export KUBERNETES_VERSION=$version
 export SUBNET_NAME=aks-subnet
 export VNET_NAME=bdc-vnet
-export AKS_NAME=bdcaksprivatecluster
+export AKS_NAME=bdcakscluster
  
 #Set Azure subscription current in use
 az account set --subscription $subscription
@@ -49,9 +49,8 @@ SUBNET_ID=$(az network vnet subnet show \
 az aks create \
     --resource-group $RESOURCE_GROUP \
     --name $AKS_NAME \
-    --load-balancer-sku standard \
-    --enable-private-cluster \
     --kubernetes-version $version \
+    --load-balancer-sku standard \
     --network-plugin azure \
     --vnet-subnet-id $SUBNET_ID \
     --docker-bridge-address 172.17.0.1/16 \
