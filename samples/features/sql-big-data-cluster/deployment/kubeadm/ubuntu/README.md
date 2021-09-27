@@ -1,6 +1,6 @@
-# Create a Kubernetes cluster using Kubeadm on Ubuntu 16.04 LTS or 18.04 LTS
+# Create a Kubernetes cluster using Kubeadm on Ubuntu 20.04 LTS
 
-In this example, we will deploy Kubernetes over multiple Linux machines (physical or virtualized) using kubeadm utility. These instructions have been tested primarily with Ubuntu 16.04 LTS & 18.04 LTS versions.
+In this example, we will deploy Kubernetes over multiple Linux machines (physical or virtualized) using kubeadm utility. These instructions have been tested primarily with Ubuntu20.04 LTS version.
 
 ## Pre-requisites
 
