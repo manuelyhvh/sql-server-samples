@@ -1,5 +1,7 @@
 # Deploy BDC in private AKS cluster with Advanced Networking (CNI)
 
+SQL Server Big Data Clusters allow you to deploy scalable clusters of SQL Server, Spark, and HDFS containers running on Kubernetes, it allows you to easily combine and analyze your high-value relational data with high-volume big data.
+
 This repository contains the scripts that you can use to deploy a BDC cluster in Azure Kubernetes Service (AKS) private cluster with advanced networking ( CNI ). 
 
 This repository contains 3 bash scripts : 
@@ -7,7 +9,7 @@ This repository contains 3 bash scripts :
 
 - **deploy-private-aks-udr.sh** : You can use it to deploy private AKS cluster with private endpoint, it fits the use case that you need to deploy BDC with AKS private cluster and limit egress traffic with UDR ( User-defined Routes ). 
 
-- **deploy-bdc.sh** : You can use it to deploy Big Data Clusters ( BDC ) in private deployment mode on private AKS cluster with or without User-defined routes based on your project requirements.  **Note** : Please use this scripts in the Azure VM which manages your AKS private cluster. 
+- **deploy-bdc.sh** : You can use it to deploy Big Data Clusters ( BDC ) in private deployment mode on private AKS cluster with or without user-defined routes based on your project requirements.  **Note** : Please use this scripts in the Azure VM or Azure Bastion instance which manages your AKS private cluster. 
 
 
 ## Prerequisites
