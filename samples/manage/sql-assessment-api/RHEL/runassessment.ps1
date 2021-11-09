@@ -1,3 +1,5 @@
+[CmdletBinding()] param ()
+
 $Error.Clear()
 
 # Create output directory if not exists
@@ -14,7 +16,7 @@ function ConvertTo-LogOutput {
     param (
         [Parameter(ValueFromPipeline=$true)]
         $input
-    ) 
+    )
     process {
         switch($input){
             { $_ -is [System.Management.Automation.WarningRecord] }{
@@ -59,34 +61,80 @@ function Get-TargetsRecursive {
     )
 
     $server
-    $server.Databases 
+    $server.Databases
+}
+
+function Get-ConfSetting{
+    [CmdletBinding()]
+    param (
+        $confFile,
+        $section,
+        $name,
+        $defaultValue=$null
+    )
+
+    $inSection = $false
+
+    switch -regex -file $confFile{
+        "^\s*\[\s*(.+?)\s*\]"{
+            $inSection = $matches[1] -eq $section
+        }
+        "^\s*$($name)\s*=\s*(.+?)\s*$"{
+            if($inSection){
+                return $matches[1]
+            }
+        }
+    }
+
+    return $defaultValue
 }
 
 try {
+
+    Write-Verbose "Acquiring credentials"
+
     $login, $pwd    = Get-Content '/var/opt/mssql/secrets/assessment' -Encoding UTF8NoBOM -TotalCount 2
     $securePassword = ConvertTo-SecureString $pwd -AsPlainText -Force
     $credential     = New-Object System.Management.Automation.PSCredential ($login, $securePassword)
 
-    $serverName = (Invoke-SqlCmd -ServerInstance . -Credential $credential -Query "SELECT @@SERVERNAME")[0]
-    $hostName   = (Invoke-SqlCmd -ServerInstance . -Credential $credential -Query "SELECT HOST_NAME()")[0]
+    Write-Verbose "Acquired credentials"
+
+    $serverInstance = '.'
+
+    if(Test-Path /var/opt/mssql/mssql.conf) {
+        $port = Get-ConfSetting /var/opt/mssql/mssql.conf network tcpport
+
+
+        if(-not [string]::IsNullOrWhiteSpace($port)) {
+            Write-Verbose "Using port $($port)"
+            $serverInstance = "$($serverInstance),$($port)"
+        }
+    }
+
+    $serverName = (Invoke-SqlCmd -ServerInstance $serverInstance -Credential $credential -Query "SELECT @@SERVERNAME")[0]
+    $hostName   = (Invoke-SqlCmd -ServerInstance $serverInstance -Credential $credential -Query "SELECT HOST_NAME()")[0]
 
     # Invoke assessment and store results.
     # Replace 'ConvertTo-Json' with 'ConvertTo-Csv' to change output format.
     # Available output formats: JSON, CSV, XML.
     # Encoding parameter is optional.
 
-    Get-SqlInstance -ServerInstance . -Credential $credential -ErrorAction Stop
+    Get-SqlInstance -ServerInstance $serverInstance -Credential $credential -ErrorAction Stop
     | Get-TargetsRecursive
+    | %{ Write-Verbose "Invoke assessment on $($_.Urn)"; $_ }
     | Invoke-SqlAssessment 3>&1
     | ConvertTo-LogOutput
     | ConvertTo-Json -AsArray
     | Set-Content $outPath -Encoding UTF8NoBOM
 }
 finally {
+
+    Write-Verbose "Error count: $($Error.Count)"
+
     if ($Error) {
-        $Error 
-        | ForEach-Object { @{ 'TimeStamp' = $(Get-Date).ToString("O"); 'Message' = $_.ToString() } } 
-        | ConvertTo-Json -AsArray 
+        $Error
+        | ForEach-Object { @{ 'TimeStamp' = $(Get-Date).ToString("O"); 'Message' = $_.ToString() } }
+        | ConvertTo-Json -AsArray
         | Set-Content $errorPath -Encoding UTF8NoBOM
     }
 }
