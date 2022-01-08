@@ -14,6 +14,62 @@ Download: [SMO NuGet Package](https://www.nuget.org/packages/Microsoft.SqlServer
 
 You can use GitHub issues to provide feedback to the product team.
 
+## December 2021 - 1.1.0
+
+Version: SqlServer PowerShell module, SqlManagementObjects (SMO) package: not updated
+
+### What's new
+
+- Added .NET 451 support
+- The SQL Assessment API engine accepts a 'DbConnection' object as a target specification
+- Added the 'CloneConnection' property to the engine configuration
+- New rules:
+  - Cache needs to be cleared of single-use plans
+  - Instant file initialization (IFI) is disabled
+  - Tempdb files on Azure temp drive
+  - Error log and default trace files on Azure data disk
+  - Data files on Azure data disks
+  - Storage spaces disk column count
+  - Azure disk caching for data files
+  - Azure disk caching for transaction logs
+  - Database default locations
+  - Lock pages in memory
+  - Use premium SSDs for SQL Server data files
+- New probes:
+  - ServiceInfo returns the state of selected Windows service (WMI)
+  - AzStorage returns information about disks and volumes on the Azure VM hosting the target object (WMI)
+  - AzDiskMetadata probe returns information about storage devices present on the Azure VM hosting the target object (IMDS)
+  - DatabaseFilesLocation lists volumes hosting database files (T-SQL)
+  - DbFilesDefaultLocation returns the default data file location for new databases (registry)
+- Added 'sql_memory_model' to the 'SysDmOsSysInfo' probe
+- Added 'expandData' transformation
+- Added support for direct WMI and registry access
+- Added support for Azure Instance Metadata
+- Added custom data sources to the assessment target specification
+- Added CIM namespace support to WMI probes
+- Added support for PowerShell scripts returning arrays
+- Added the 'timeout' property to SQL probes for long-running queries (default value is 30 seconds)
+
+### Bug fixes and improvements
+
+- Changed severity levels to Information, Low, Medium, and High
+- The SQL Assessment API engine can now detect target's version, platform, engine edition, machine type, and server name automatically
+- Improved performance of the 'DeprecatedFeaturesInModules' check. Now it groups results by feature
+- Fixed 'CpuUsage' returning 'null' for a short time after a restart of SQL Server
+- Fixed crash on missing 'rules' ruleset property
+- The 'ErrorLogInfo' probe now uses a temporary table instead of direct stored procedure call
+- Fixed missing warnings on inaccessible WMI, registry, or Azure data
+- 'LoginNoPassword' and 'LoginEqPassword' checks are now merged with 'WeakPassword'
+- 'PlansUseRatio' check now uses the 'optimize_for_ad_hoc_workloads' configuration option
+- Azure-related probes now use Azure Instance Metadata directly or emulated with Azure Resource Graph
+- 'AgentSvcStopped', 'BrowserSvcStopped', 'DtcSvcStopped', 'FullTextSvcStopped', and 'RsSvcStopped' checks now use the WMI-based 'ServiceInfo' probe instead of the 'ServiceControl' PowerShell script
+- 'UnusedIndexes' check now displays the affected table name
+- NTFS Block size check now uses the device ID instead of the volume name
+- 'TempDBFilesMultiple4' message was updated with more details
+- A number of checks were made available for Linux
+- 'OnPremises' engine edition group was renamed to 'SqlServer'
+- 'AzureSQL' VM type was renamed to 'AzureVM'
+
 ## March 2021 - 1.0.305
 
 Version: SqlServer PowerShell module 21.1.18245, SqlManagementObjects (SMO) package wasn't updated
