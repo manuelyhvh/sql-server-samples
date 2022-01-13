@@ -5,20 +5,21 @@
 #!/bin/bash
 #Get Subscription ID and resource groups. It is used as default for controller, SQL Server Master instance (sa account) and Knox.
 #
-while true; do
-    read -s -p "Your Azure Subscription: " subscription
-    echo
-    read -s -p "Your Resource Group Name: " resourcegroup
-    echo
-    read -s -p "In which region you're deploying " region
-    echo
-done
+
+read -p "Your Azure Subscription: " subscription
+echo
+read -p "Your Resource Group Name: " resourcegroup
+echo
+read -p "In which region you're deploying: " region
+echo
+
 
 #Define a set of environment variables to be used in resource creations.
 export SUBID=$subscription
 
 export REGION_NAME=$region
 export RESOURCE_GROUP=$resourcegroup
+export KUBERNETES_VERSION=$version
 export SUBNET_NAME=aks-subnet
 export VNET_NAME=bdc-vnet
 export AKS_NAME=bdcaksprivatecluster
@@ -50,6 +51,7 @@ az aks create \
     --name $AKS_NAME \
     --load-balancer-sku standard \
     --enable-private-cluster \
+    --kubernetes-version $version \
     --network-plugin azure \
     --vnet-subnet-id $SUBNET_ID \
     --docker-bridge-address 172.17.0.1/16 \
@@ -58,3 +60,5 @@ az aks create \
     --node-vm-size Standard_D13_v2 \
     --node-count 2 \
     --generate-ssh-keys
+
+az aks get-credentials -g $RESOURCE_GROUP -n $AKS_NAME

@@ -1,8 +1,12 @@
 # Release notes for SQL Assessment API
 
-This article provides details about updates, improvements, and bug fixes for the current and previous versions of SQL Assessment API. SQL Assessment API is part of the SQL Server Management Objects (SMO) and the SQL Server PowerShell module. To start working with the API, install the SQL Assessment Extention to Azure Data Studio or utilize either the SqlServer module or SMO.
+This article provides details about updates, improvements, and bug fixes for the current and previous versions of SQL Assessment API. 
+
+To start working with the API, install the SQL Assessment Extention to Azure Data Studio or utilize either the SqlServer module or SMO.
 
 Installing SQL Assessment Extension: [SQL Server Assessment Extension for Azure Data Studio (Public Preview)](https://techcommunity.microsoft.com/t5/sql-server/released-sql-server-assessment-extension-for-azure-data-studio/ba-p/1470603)
+
+Download: [SQL Assessment NuGet package](https://www.nuget.org/packages/Microsoft.SqlServer.Assessment)
 
 Download: [Download SqlServer module](https://www.powershellgallery.com/packages/SqlServer)
 
@@ -10,7 +14,136 @@ Download: [SMO NuGet Package](https://www.nuget.org/packages/Microsoft.SqlServer
 
 You can use GitHub issues to provide feedback to the product team.
 
-## July 2020 - 21.1.18226
+## December 2021 - 1.1.0
+
+Version: SqlServer PowerShell module, SqlManagementObjects (SMO) package: not updated
+
+### What's new
+
+- Added .NET 451 support
+- The SQL Assessment API engine accepts a 'DbConnection' object as a target specification
+- Added the 'CloneConnection' property to the engine configuration
+- New rules:
+  - Cache needs to be cleared of single-use plans
+  - Instant file initialization (IFI) is disabled
+  - Tempdb files on Azure temp drive
+  - Error log and default trace files on Azure data disk
+  - Data files on Azure data disks
+  - Storage spaces disk column count
+  - Azure disk caching for data files
+  - Azure disk caching for transaction logs
+  - Database default locations
+  - Lock pages in memory
+  - Use premium SSDs for SQL Server data files
+- New probes:
+  - ServiceInfo returns the state of selected Windows service (WMI)
+  - AzStorage returns information about disks and volumes on the Azure VM hosting the target object (WMI)
+  - AzDiskMetadata probe returns information about storage devices present on the Azure VM hosting the target object (IMDS)
+  - DatabaseFilesLocation lists volumes hosting database files (T-SQL)
+  - DbFilesDefaultLocation returns the default data file location for new databases (registry)
+- Added 'sql_memory_model' to the 'SysDmOsSysInfo' probe
+- Added 'expandData' transformation
+- Added support for direct WMI and registry access
+- Added support for Azure Instance Metadata
+- Added custom data sources to the assessment target specification
+- Added CIM namespace support to WMI probes
+- Added support for PowerShell scripts returning arrays
+- Added the 'timeout' property to SQL probes for long-running queries (default value is 30 seconds)
+
+### Bug fixes and improvements
+
+- Changed severity levels to Information, Low, Medium, and High
+- The SQL Assessment API engine can now detect target's version, platform, engine edition, machine type, and server name automatically
+- Improved performance of the 'DeprecatedFeaturesInModules' check. Now it groups results by feature
+- Fixed 'CpuUsage' returning 'null' for a short time after a restart of SQL Server
+- Fixed crash on missing 'rules' ruleset property
+- The 'ErrorLogInfo' probe now uses a temporary table instead of direct stored procedure call
+- Fixed missing warnings on inaccessible WMI, registry, or Azure data
+- 'LoginNoPassword' and 'LoginEqPassword' checks are now merged with 'WeakPassword'
+- 'PlansUseRatio' check now uses the 'optimize_for_ad_hoc_workloads' configuration option
+- Azure-related probes now use Azure Instance Metadata directly or emulated with Azure Resource Graph
+- 'AgentSvcStopped', 'BrowserSvcStopped', 'DtcSvcStopped', 'FullTextSvcStopped', and 'RsSvcStopped' checks now use the WMI-based 'ServiceInfo' probe instead of the 'ServiceControl' PowerShell script
+- 'UnusedIndexes' check now displays the affected table name
+- NTFS Block size check now uses the device ID instead of the volume name
+- 'TempDBFilesMultiple4' message was updated with more details
+- A number of checks were made available for Linux
+- 'OnPremises' engine edition group was renamed to 'SqlServer'
+- 'AzureSQL' VM type was renamed to 'AzureVM'
+
+## March 2021 - 1.0.305
+
+Version: SqlServer PowerShell module 21.1.18245, SqlManagementObjects (SMO) package wasn't updated
+
+### Bug fixes and improvements
+
+- Fixed an issue that may cause the 'ReplErrors24H' check to fail on case-sensitive SQL Server instances with Distributor databases
+
+## March 2021 - 1.0.304
+
+Version: SqlServer PowerShell module wasn't updated, SqlManagementObjects (SMO) package wasn't updated
+
+### What's new
+
+- Added the 'MachineType' property to Target that is used for making rules specific to SQL Server on Azure Virtual Machine
+- Added the ability to pass data among multiple probes and invoke probes one by one
+- Added rules:
+  - [SQL Server on Azure VM] VM size is not memory-optimized - checks the virtual machine size and recommends to use memory-optimized VM series for the best performance of SQL Server workloads
+  - 'SQL Server Agent' service uses non-recommended account
+  - 'SQL Server Agent' service uses not supported account
+  - 'SQL Server Agent' and 'SQL Server Database Engine' use same account
+  - 'SQL Server Agent' service is stopped
+  - 'SQL Server Browser' and 'SQL Server Database Engine' use same account
+  - 'SQL Server Browser' service is stopped
+  - 'Integration Services' and 'SQL Server Database Engine' use same account
+  - 'Integration Services' service is stopped
+  - 'Full-text search' service uses non-recommended account
+  - 'Full-text search' and 'SQL Server Database Engine' use same account
+  - 'Full-text search' service is stopped
+  - 'Analysis Services' and 'SQL Server Database Engine' use same account
+  - 'Analysis Services' service is stopped
+  - 'Reporting Services' and 'SQL Server Database Engine' use same account
+  - 'Reporting Services' service is stopped
+  - 'SQL Server Database Engine' service uses non-recommended account
+  - 'SQL Server Database Engine' service uses not supported account
+
+### Bug fixes and improvements
+
+- Updated the 'LatestCU' rule with the latest CU versions 
+- Updated the 'ReplErrors24H' rule to collect information for all 'Publisher' databases 
+- Fixed an issue with local variables used for displaying extended details in messages 
+- Fixed an issue with the wrong Linux target type for the 'PriorityBoostOn' rule
+
+## December 2020 - 1.0.302
+
+Version: SqlServer PowerShell module wasn't updated, SqlManagementObjects (SMO) package wasn't updated
+
+### What's new
+
+- Added rules:
+  - 'Max server memory' and 'Max server memory exceeds system memory' that check if the 'max server memory' setting falls within the recommended range
+  - 'Error log file is too big' that checks if there are any big error log files
+- 'Disk fragmentation analysis' that checks if a disk needs to be defragmented
+- New features for custom configuration files:
+  - Added new 'defaultValue' data transformation functions
+  - Added new functions:
+    - 'max' and 'min' functions that return maximum and minimum values of their arguments
+    - 'ieq' and 'ine' case-insensitive functions that check if the given arguments are equal
+    - 'iin' case-insensitive function that checks if a value is present in the given set
+    - 'interval' function that finds an interval into which the given argument falls and returns an associated value.
+    - 'startswith' and 'endswith' functions that check if one string starts or ends with another one, and their case-insensitive variants 'istartswith' and 'iendswith'
+    - 'indexof' function that finds the first occurrence of a substring, and its case-insensitive variant 'iindexof'
+  - Added local variables to assessment rules which can be used to show more details in messages
+  - Added WMI method call support to custom WMI probes
+
+### Bug fixes and improvements
+
+- Removed non-informative errors thrown from recursive assessment of SQL Server Registered Groups
+- Improved query performance for probes used in the 'Replication errors in the last 24 hours' rule
+- Updated MaxDOP related rules to follow the best practice recommendations
+- Fixed an issue that may occur when the 'automatic_soft_NUMA_disabled' configuration setting value was not returned by some SQL Server instances
+- Fixed an issue that may occur when the 'sql_memory_model' value was not returned by some SQL Server instances
+
+## July 2020 - 1.0.265
 
 Version: SqlServer module 21.1.18226, SqlManagementObjects (SMO) package wasn't updated
 
@@ -55,7 +188,7 @@ Version: SqlServer module 21.1.18226, SqlManagementObjects (SMO) package wasn't 
   - Option 'max worker threads' set to recommended value on x86 system
   - Option 'xp_cmdshell' is disabled
 
-## March 2020 - 21.1.18221
+## March 2020 - 1.0.246
 
 Version: SqlServer module 21.1.18221, SqlManagementObjects (SMO) package 160.2004021.0
 
@@ -81,7 +214,7 @@ Version: SqlServer module 21.1.18221, SqlManagementObjects (SMO) package 160.200
 - Wrong help link in XTPHashAvgChainBuckets rule
 - Occasional error "There is already an open DataReader associated with this Command which must be closed first" on PowerShell 7
 
-## December 2019 - 21.1.18218
+## December 2019 - 1.0.220
 
 Version: SqlServer module 21.1.18206, SqlManagementObjects (SMO) package wasn't updated
 
@@ -100,7 +233,7 @@ Version: SqlServer module 21.1.18206, SqlManagementObjects (SMO) package wasn't 
 - FullBackup rule has threshold in days but gets backup age in hours
 - When database can't be accessed and it's disabled for assessment, it throws access errors when performing assessment
 
-## GA - November 2019 - 21.1.18206
+## GA - November 2019 - 1.0.216
 
 Version: SqlServer module 21.1.18206, SqlManagementObjects (SMO) package 150.208.0
 

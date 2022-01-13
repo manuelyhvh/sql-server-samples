@@ -1,17 +1,19 @@
 #!/bin/bash
 #Get Subscription ID and Azure service principal as input. It is used as default for controller, SQL Server Master instance (sa account) and Knox.
+##
+#You can also create service principal instead of using an existing one
+#az ad sp create-for-rbac -n "bdcaks-sp" --skip-assignment
 #
-while true; do
-    read -s -p "Your Azure Subscription: " subscription
-    echo
-    read -s -p "Your Resource Group Name: " resourcegroup
-    echo
-    read -s -p "In which region you're deploying: " region
-    echo
-    read -s -p "Your Azure service principal ID: " sp_id
-    echo
-    read -s -p "Your Azure service principal Password: " sp_pwd
-done
+read -p "Your Azure Subscription: " subscription
+echo
+read -p "Your Resource Group Name: " resourcegroup
+echo
+read -p "In which region you're deploying: " region
+echo
+read -p "Your Azure service principal ID: " sp_id
+echo
+read -p "Your Azure service principal Password: " sp_pwd
+
 
 #Define a set of environment variables to be used in resource creations.
 export SUBID=$subscription
@@ -60,7 +62,7 @@ az network vnet subnet create \
     --resource-group $RESOURCE_GROUP \
     --vnet-name $VNET_NAME \
     --name AzureFirewallSubnet \
-    --address-prefix 10.2.0.0/24
+    --address-prefix 10.3.0.0/24
 
 #Create Azure firewall 
 az network firewall create -g $RESOURCE_GROUP -n $FWNAME -l $REGION_NAME --enable-dns-proxy true
@@ -101,8 +103,6 @@ az network vnet subnet update -g $RESOURCE_GROUP --vnet-name $VNET_NAME --name $
 
 
 #Create SP and Assign Permission to Virtual Network
-az ad sp create-for-rbac -n "bdcaks-sp" --skip-assignment
-
 export APPID=$sp_id
 export PASSWORD=$sp_pwd
 export VNETID=$(az network vnet show -g $RESOURCE_GROUP --name $VNET_NAME --query id -o tsv)
@@ -135,4 +135,4 @@ az aks create \
     --generate-ssh-keys
 
 
-
+az aks get-credentials -g $RESOURCE_GROUP -n $AKS_NAME

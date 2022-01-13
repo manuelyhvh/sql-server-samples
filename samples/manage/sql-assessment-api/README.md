@@ -10,6 +10,31 @@ If you are into Azure Data Studio, you can evaluate your SQL Server right from i
 
 Learn how to assess your SQL Server configuration for best practices in 2 simple steps.
 
+## Watch Demos of SQL Assessment API and SQL Assessment Extension for Azure Data Studio
+
+You can watch the recording of Azure Data Exposed Live broadcast episode where we demo'ed both the api and the extension: [Best Practices Assessment for Azure SQL VMs, Managed Instances, and SQL Servers | Data Exposed Live - YouTube](https://www.youtube.com/watch?v=iJvkVhV93ag&feature=emb_logo)
+
+[0:00](https://www.youtube.com/watch?v=iJvkVhV93ag&list=PL3EZ3A8mHh0zShlR5z5n3r0HWHdx7pr3m&index=1&t=0s) Show begins
+
+[1:16](https://www.youtube.com/watch?v=iJvkVhV93ag&list=PL3EZ3A8mHh0zShlR5z5n3r0HWHdx7pr3m&index=1&t=76s) Introductions
+
+[3:05](https://www.youtube.com/watch?v=iJvkVhV93ag&list=PL3EZ3A8mHh0zShlR5z5n3r0HWHdx7pr3m&index=1&t=185s) SQL Assessment API Overview
+
+[6:30](https://www.youtube.com/watch?v=iJvkVhV93ag&list=PL3EZ3A8mHh0zShlR5z5n3r0HWHdx7pr3m&index=1&t=390s) Results of an assessment
+
+[11:38](https://www.youtube.com/watch?v=iJvkVhV93ag&list=PL3EZ3A8mHh0zShlR5z5n3r0HWHdx7pr3m&index=1&t=698s) Demo: SQL Assessment API
+
+[20:35](https://www.youtube.com/watch?v=iJvkVhV93ag&list=PL3EZ3A8mHh0zShlR5z5n3r0HWHdx7pr3m&index=1&t=1235s) Try for yourself in Github
+
+[23:00](https://www.youtube.com/watch?v=iJvkVhV93ag&list=PL3EZ3A8mHh0zShlR5z5n3r0HWHdx7pr3m&index=1&t=1380s) Demo: SQL Assessment Extension for ADS (for those who prefer a GUI solution rather than scripting with Powershell)
+
+[31:48](https://www.youtube.com/watch?v=iJvkVhV93ag&list=PL3EZ3A8mHh0zShlR5z5n3r0HWHdx7pr3m&index=1&t=1908s) Demo: How to customize existing ruleset to fits your needs (Powershell and JSON)
+
+[50:00](https://www.youtube.com/watch?v=iJvkVhV93ag&list=PL3EZ3A8mHh0zShlR5z5n3r0HWHdx7pr3m&index=1&t=3000s) Getting started
+
+[53:40](https://www.youtube.com/watch?v=iJvkVhV93ag&list=PL3EZ3A8mHh0zShlR5z5n3r0HWHdx7pr3m&index=1&t=3220s) Q&A
+
+
 ## ruleset.json
 
 This is the default set of rules shipped with SQL Assessment API. Feel free to open issues to have us fix or add rules. Also, we're happy to see your pull requests to this file.
